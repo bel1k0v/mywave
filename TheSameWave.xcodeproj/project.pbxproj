@@ -1,0 +1,305 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		688453C6172182260092260B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 688453C5172182260092260B /* UIKit.framework */; };
+		688453C8172182260092260B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 688453C7172182260092260B /* Foundation.framework */; };
+		688453CA172182260092260B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 688453C9172182260092260B /* CoreGraphics.framework */; };
+		688453D0172182260092260B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 688453CE172182260092260B /* InfoPlist.strings */; };
+		688453D2172182260092260B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 688453D1172182260092260B /* main.m */; };
+		688453D6172182260092260B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 688453D5172182260092260B /* AppDelegate.m */; };
+		688453D8172182260092260B /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 688453D7172182260092260B /* Default.png */; };
+		688453DA172182260092260B /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 688453D9172182260092260B /* Default@2x.png */; };
+		688453DC172182260092260B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 688453DB172182260092260B /* Default-568h@2x.png */; };
+		688453DF172182260092260B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 688453DE172182260092260B /* ViewController.m */; };
+		688453E2172182260092260B /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 688453E0172182260092260B /* ViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		688453C2172182260092260B /* TheSameWave.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TheSameWave.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		688453C5172182260092260B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		688453C7172182260092260B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		688453C9172182260092260B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		688453CD172182260092260B /* TheSameWave-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TheSameWave-Info.plist"; sourceTree = "<group>"; };
+		688453CF172182260092260B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		688453D1172182260092260B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		688453D3172182260092260B /* TheSameWave-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TheSameWave-Prefix.pch"; sourceTree = "<group>"; };
+		688453D4172182260092260B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		688453D5172182260092260B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		688453D7172182260092260B /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		688453D9172182260092260B /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		688453DB172182260092260B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		688453DD172182260092260B /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		688453DE172182260092260B /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		688453E1172182260092260B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		688453BF172182260092260B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				688453C6172182260092260B /* UIKit.framework in Frameworks */,
+				688453C8172182260092260B /* Foundation.framework in Frameworks */,
+				688453CA172182260092260B /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		688453B9172182250092260B = {
+			isa = PBXGroup;
+			children = (
+				688453CB172182260092260B /* TheSameWave */,
+				688453C4172182260092260B /* Frameworks */,
+				688453C3172182260092260B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		688453C3172182260092260B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				688453C2172182260092260B /* TheSameWave.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		688453C4172182260092260B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				688453C5172182260092260B /* UIKit.framework */,
+				688453C7172182260092260B /* Foundation.framework */,
+				688453C9172182260092260B /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		688453CB172182260092260B /* TheSameWave */ = {
+			isa = PBXGroup;
+			children = (
+				688453D4172182260092260B /* AppDelegate.h */,
+				688453D5172182260092260B /* AppDelegate.m */,
+				688453DD172182260092260B /* ViewController.h */,
+				688453DE172182260092260B /* ViewController.m */,
+				688453E0172182260092260B /* ViewController.xib */,
+				688453CC172182260092260B /* Supporting Files */,
+			);
+			path = TheSameWave;
+			sourceTree = "<group>";
+		};
+		688453CC172182260092260B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				688453CD172182260092260B /* TheSameWave-Info.plist */,
+				688453CE172182260092260B /* InfoPlist.strings */,
+				688453D1172182260092260B /* main.m */,
+				688453D3172182260092260B /* TheSameWave-Prefix.pch */,
+				688453D7172182260092260B /* Default.png */,
+				688453D9172182260092260B /* Default@2x.png */,
+				688453DB172182260092260B /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		688453C1172182260092260B /* TheSameWave */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 688453E5172182260092260B /* Build configuration list for PBXNativeTarget "TheSameWave" */;
+			buildPhases = (
+				688453BE172182260092260B /* Sources */,
+				688453BF172182260092260B /* Frameworks */,
+				688453C0172182260092260B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TheSameWave;
+			productName = TheSameWave;
+			productReference = 688453C2172182260092260B /* TheSameWave.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		688453BA172182250092260B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = SameWave;
+			};
+			buildConfigurationList = 688453BD172182250092260B /* Build configuration list for PBXProject "TheSameWave" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 688453B9172182250092260B;
+			productRefGroup = 688453C3172182260092260B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				688453C1172182260092260B /* TheSameWave */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		688453C0172182260092260B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				688453D0172182260092260B /* InfoPlist.strings in Resources */,
+				688453D8172182260092260B /* Default.png in Resources */,
+				688453DA172182260092260B /* Default@2x.png in Resources */,
+				688453DC172182260092260B /* Default-568h@2x.png in Resources */,
+				688453E2172182260092260B /* ViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		688453BE172182260092260B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				688453D2172182260092260B /* main.m in Sources */,
+				688453D6172182260092260B /* AppDelegate.m in Sources */,
+				688453DF172182260092260B /* ViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		688453CE172182260092260B /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				688453CF172182260092260B /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		688453E0172182260092260B /* ViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				688453E1172182260092260B /* en */,
+			);
+			name = ViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		688453E3172182260092260B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		688453E4172182260092260B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		688453E6172182260092260B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TheSameWave/TheSameWave-Prefix.pch";
+				INFOPLIST_FILE = "TheSameWave/TheSameWave-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		688453E7172182260092260B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TheSameWave/TheSameWave-Prefix.pch";
+				INFOPLIST_FILE = "TheSameWave/TheSameWave-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		688453BD172182250092260B /* Build configuration list for PBXProject "TheSameWave" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				688453E3172182260092260B /* Debug */,
+				688453E4172182260092260B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		688453E5172182260092260B /* Build configuration list for PBXNativeTarget "TheSameWave" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				688453E6172182260092260B /* Debug */,
+				688453E7172182260092260B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 688453BA172182250092260B /* Project object */;
+}
