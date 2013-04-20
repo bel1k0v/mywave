@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Vkontakte.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <VkontakteDelegate>
+{
+    IBOutlet UIButton *_loginButton;
+    Vkontakte *_vkInstance;
+}
 
+- (IBAction)loginButtonPressed:(id)sender;
 @end
