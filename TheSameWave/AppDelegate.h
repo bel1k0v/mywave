@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Vkontakte.h"
 
 @class ViewController;
 
@@ -14,6 +15,7 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (strong, nonatomic) ViewController *viewController;
+//@property (strong, nonatomic) ViewController *viewController;
+@property (strong, nonatomic) UINavigationController *navigationController;
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "MusicViewController.h";
 
 @implementation ViewController
 
@@ -15,7 +16,7 @@
     [super viewDidLoad];
 	_vkInstance = [Vkontakte sharedInstance];
     _vkInstance.delegate = self;
-    
+    self.view.backgroundColor = [UIColor whiteColor];
     [self refreshButtonState];
 }
 
@@ -55,6 +56,7 @@
 
 - (void)vkontakteDidFailedWithError:(NSError *)error
 {
+    NSLog(@"Error");
 }
 
 - (void)showVkontakteAuthController:(UIViewController *)controller
@@ -64,12 +66,19 @@
 
 - (void)vkontakteAuthControllerDidCancelled
 {
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 - (void)vkontakteDidFinishLogin:(Vkontakte *)vkontakte
 {
+    [self dismissModalViewControllerAnimated:YES];
     [self refreshButtonState];
+    MusicViewController* musicViewController = [MusicViewController new];
+    musicViewController.data = [vkontakte getUserAudio];
+    
+    [self.navigationController pushViewController:musicViewController animated:YES];
 }
+
 
 - (void)vkontakteDidFinishLogOut:(Vkontakte *)vkontakte
 {

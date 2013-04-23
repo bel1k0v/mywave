@@ -114,7 +114,7 @@
         
         NSString *errorMsg = [[dict objectForKey:@"error"] objectForKey:@"error_msg"];
         
-        NSLog(@"Server response: %@ \nError: %@", dict, errorMsg);
+        //NSLog(@"Server response: %@ \nError: %@", dict, errorMsg);
         
         if([errorMsg isEqualToString:@"Captcha needed"])
         {
@@ -258,7 +258,6 @@ NSString * const vkRedirectUrl = @"http://oauth.vk.com/blank.html";
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(showVkontakteAuthController:)])
     {
-        NSLog(@"Calling controller");
         [self.delegate showVkontakteAuthController:navController];
     }
 }
@@ -382,20 +381,54 @@ NSString * const vkRedirectUrl = @"http://oauth.vk.com/blank.html";
     }
 }
 
-- (void) getUserAudio {
-    if (![self isAuthorized]) return;
+- (NSArray *) getUserAudio {
+    if (![self isAuthorized]) return NULL;
     
-    NSString *sendTextMessage = [NSString stringWithFormat:@"https://api.vk.com/method/audio.get?oid=%@&access_token=%@", userId, accessToken];
-    NSLog(@"action URL: %@", sendTextMessage);
+    NSString *url = [NSString stringWithFormat:@"https://api.vk.com/method/audio.get?oid=%@&access_token=%@", userId, accessToken];
+    NSLog(@"action URL: %@", url);
     
-    NSDictionary *result = [self sendRequest:sendTextMessage withCaptcha:NO];
+    NSDictionary *parsedDictionary = [self sendRequest:url withCaptcha:NO];
+
+    NSArray *array = [parsedDictionary objectForKey:@"response"];
     
-    NSLog(@"result: %@", result);
+    if ([parsedDictionary objectForKey:@"response"])
+    {
+        NSRange range;
+        range.location = 1;
+        range.length = [array count] - 1;
+        NSArray *music = [array subarrayWithRange:range];
+        
+        return music;
+        /*
+        if ([self.delegate respondsToSelector:@selector(vkontakteDidFinishGettinMusic:)])
+        {
+            [self.delegate vkontakteDidFinishGettinMusic:music];
+        }
+         */
+    }
+    else
+    {
+        NSDictionary *errorDict = [parsedDictionary objectForKey:@"error"];
+        
+        if ([self.delegate respondsToSelector:@selector(vkontakteDidFailedWithError:)])
+        {
+            NSError *error = [NSError errorWithDomain:@"http://api.vk.com/method"
+                                                 code:[[errorDict objectForKey:@"error_code"] intValue]
+                                             userInfo:errorDict];
+            
+            if (error.code == 5)
+            {
+                [self logout];
+            }
+            
+            return NULL;
+        }
+    }
 }
 
 #pragma mark - VkontakteViewControllerDelegate
 
-- (void)authorizationDidSucceedWithToke:(NSString *)_accessToken
+- (void)authorizationDidSucceedWithToken:(NSString *)_accessToken
                                  userId:(NSString *)_userId
                                 expDate:(NSDate *)_expDate
 

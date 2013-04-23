@@ -25,7 +25,7 @@
 
 @protocol VkontakteViewControllerDelegate <NSObject>
 @optional
-- (void)authorizationDidSucceedWithToke:(NSString *)accessToken
+- (void)authorizationDidSucceedWithToken:(NSString *)accessToken
                                  userId:(NSString *)userId
                                 expDate:(NSDate *)expDate;
 - (void)authorizationDidFailedWithError:(NSError *)error;

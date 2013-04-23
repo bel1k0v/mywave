@@ -12,8 +12,12 @@
 @interface ViewController : UIViewController <VkontakteDelegate>
 {
     IBOutlet UIButton *_loginButton;
+    IBOutlet UITableView *_tableView;
+    
     Vkontakte *_vkInstance;
 }
 
 - (IBAction)loginButtonPressed:(id)sender;
+
 @end
+

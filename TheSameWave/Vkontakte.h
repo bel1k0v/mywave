@@ -24,10 +24,11 @@ extern NSString * const vkRedirectUrl;
 - (void)authenticate;
 - (void)logout;
 - (void)getUserInfo;
-- (void)getUserAudio;
+- (NSArray* )getUserAudio;
 
 @end
 
+// Протокол делегата контроллера: вызываем метод Vkontakte который возвращает массивы или словари
 @protocol VkontakteDelegate <NSObject>
 @required
 - (void)vkontakteDidFailedWithError:(NSError *)error;
@@ -38,6 +39,7 @@ extern NSString * const vkRedirectUrl;
 - (void)vkontakteDidFinishLogOut:(Vkontakte *)vkontakte;
 
 - (void)vkontakteDidFinishGettinUserInfo:(NSDictionary *)info;
+- (void)vkontakteDidFinishGettinMusic:(NSDictionary *)music;
 - (void)vkontakteDidFinishPostingToWall:(NSDictionary *)responce;
 
 @end

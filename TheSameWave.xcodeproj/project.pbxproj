@@ -22,6 +22,8 @@
 		688453EE172183970092260B /* Vkontakte.m in Sources */ = {isa = PBXBuildFile; fileRef = 688453ED172183970092260B /* Vkontakte.m */; };
 		688453F21721848B0092260B /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 688453F11721848B0092260B /* MBProgressHUD.m */; };
 		688453F5172185E70092260B /* VkontakteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 688453F4172185E70092260B /* VkontakteViewController.m */; };
+		68ED980D1726D6AC0009C2F6 /* MusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68ED980B1726D6AC0009C2F6 /* MusicViewController.m */; };
+		68ED980E1726D6AC0009C2F6 /* MusicViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68ED980C1726D6AC0009C2F6 /* MusicViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +51,9 @@
 		688453F11721848B0092260B /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		688453F3172185E70092260B /* VkontakteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VkontakteViewController.h; sourceTree = "<group>"; };
 		688453F4172185E70092260B /* VkontakteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VkontakteViewController.m; sourceTree = "<group>"; };
+		68ED980A1726D6AC0009C2F6 /* MusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicViewController.h; sourceTree = "<group>"; };
+		68ED980B1726D6AC0009C2F6 /* MusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicViewController.m; sourceTree = "<group>"; };
+		68ED980C1726D6AC0009C2F6 /* MusicViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MusicViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +108,9 @@
 				688453DE172182260092260B /* ViewController.m */,
 				688453E0172182260092260B /* ViewController.xib */,
 				688453CC172182260092260B /* Supporting Files */,
+				68ED980A1726D6AC0009C2F6 /* MusicViewController.h */,
+				68ED980B1726D6AC0009C2F6 /* MusicViewController.m */,
+				68ED980C1726D6AC0009C2F6 /* MusicViewController.xib */,
 			);
 			path = TheSameWave;
 			sourceTree = "<group>";
@@ -199,6 +207,7 @@
 				688453DA172182260092260B /* Default@2x.png in Resources */,
 				688453DC172182260092260B /* Default-568h@2x.png in Resources */,
 				688453E2172182260092260B /* ViewController.xib in Resources */,
+				68ED980E1726D6AC0009C2F6 /* MusicViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,6 +225,7 @@
 				688453EE172183970092260B /* Vkontakte.m in Sources */,
 				688453F21721848B0092260B /* MBProgressHUD.m in Sources */,
 				688453F5172185E70092260B /* VkontakteViewController.m in Sources */,
+				68ED980D1726D6AC0009C2F6 /* MusicViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,6 +348,7 @@
 				688453E7172182260092260B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

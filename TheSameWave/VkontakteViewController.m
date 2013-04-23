@@ -135,9 +135,9 @@
             }
         }
         
-        if (self.delegate && [self.delegate respondsToSelector:@selector(authorizationDidSucceedWithToke:userId:expDate:)])
+        if (self.delegate && [self.delegate respondsToSelector:@selector(authorizationDidSucceedWithToken:userId:expDate:)])
         {
-            [self.delegate authorizationDidSucceedWithToke:accessToken
+            [self.delegate authorizationDidSucceedWithToken:accessToken
                                                     userId:user_id
                                                    expDate:expirationDate];
         }
