@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "ViewController.h"
+#import "AuthViewController.h"
 
 @implementation AppDelegate
 
@@ -16,7 +16,7 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
-    ViewController *authViewController = [[ViewController alloc] initWithNibName:@"ViewController" bundle:nil];
+    AuthViewController *authViewController = [[AuthViewController alloc] initWithNibName:@"AuthViewController" bundle:nil];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:authViewController];
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];

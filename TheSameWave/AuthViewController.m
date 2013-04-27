@@ -6,10 +6,10 @@
 //  Copyright (c) 2013 SameWave. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "AuthViewController.h"
 #import "MusicViewController.h";
 
-@implementation ViewController
+@implementation AuthViewController
 
 - (void)viewDidLoad
 {
@@ -34,6 +34,18 @@
     else
     {
         [_vkInstance logout];
+    }
+}
+
+- (void)musicButtonPressed:(id)sender
+{
+    if([_vkInstance isAuthorized])
+    {
+        [self vkontakteDidFinishLogin:_vkInstance];
+    }
+    else
+    {
+        NSLog(@"Authorize please");
     }
 }
 

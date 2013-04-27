@@ -7,6 +7,7 @@
 //
 
 #import "MusicViewController.h"
+#import "StreamingPlayerViewController.h"
 
 @interface MusicViewController ()
 
@@ -71,7 +72,11 @@
         }
         NSDictionary *song = [_data objectAtIndex:indexPath.row];
 
-        cell.textLabel.text = [song objectForKey:@"title"];
+        CGFloat fontSize = 14.0f;
+        cell.textLabel.font = [UIFont fontWithName:@"Times New Roman" size:fontSize];
+        cell.textLabel.text = [NSString stringWithFormat:@"%@ - %@",
+                               [song objectForKey:@"artist"],
+                               [song objectForKey:@"title"]];
     }
     
     return cell;
@@ -120,13 +125,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    StreamingPlayerViewController *playerViewController = [[StreamingPlayerViewController alloc] initWithNibName:@"StreamingPlayerViewController" bundle:nil];
+    NSDictionary *song = [_data objectAtIndex:indexPath.row];
+
+    playerViewController.songUrl = [song objectForKey:@"url"];
+    [self.navigationController pushViewController:playerViewController animated:YES];
+     
 }
 
 @end

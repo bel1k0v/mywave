@@ -47,11 +47,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "TheSameWave/ViewController.m"
-         timestampString = "388422043.681756"
+         timestampString = "388425367.147284"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "64"
-         endingLineNumber = "64"
+         startingLineNumber = "76"
+         endingLineNumber = "76"
          landmarkName = "-showVkontakteAuthController:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -60,11 +60,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "TheSameWave/ViewController.m"
-         timestampString = "388422043.681756"
+         timestampString = "388425367.147284"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "65"
-         endingLineNumber = "65"
+         startingLineNumber = "77"
+         endingLineNumber = "77"
          landmarkName = "-showVkontakteAuthController:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -86,11 +86,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "TheSameWave/ViewController.m"
-         timestampString = "388423366.845618"
+         timestampString = "388425367.147284"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "75"
-         endingLineNumber = "75"
+         startingLineNumber = "87"
+         endingLineNumber = "87"
          landmarkName = "-vkontakteDidFinishLogin:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -125,11 +125,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "TheSameWave/MusicViewController.m"
-         timestampString = "388424695.164314"
+         timestampString = "388747669.391889"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "112"
-         endingLineNumber = "112"
+         startingLineNumber = "117"
+         endingLineNumber = "117"
          landmarkName = "@implementation MusicViewController"
          landmarkType = "3">
       </FileBreakpoint>
@@ -138,11 +138,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "TheSameWave/MusicViewController.m"
-         timestampString = "388424703.613929"
+         timestampString = "388747669.391889"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "105"
-         endingLineNumber = "105"
+         startingLineNumber = "110"
+         endingLineNumber = "110"
          landmarkName = "@implementation MusicViewController"
          landmarkType = "3">
       </FileBreakpoint>
@@ -151,13 +151,52 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "TheSameWave/MusicViewController.m"
-         timestampString = "388424704.261873"
+         timestampString = "388747669.391889"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "106"
-         endingLineNumber = "106"
+         startingLineNumber = "111"
+         endingLineNumber = "111"
          landmarkName = "@implementation MusicViewController"
          landmarkType = "3">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "TheSameWave/IphoneStreamingPlayerViewController.m"
+         timestampString = "388739498.833428"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "80"
+         endingLineNumber = "80"
+         landmarkName = "-createStreamer"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "TheSameWave/IphoneStreamingPlayerViewController.m"
+         timestampString = "388739498.833428"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "298"
+         endingLineNumber = "298"
+         landmarkName = "-dealloc"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "TheSameWave/IphoneStreamingPlayerViewController.m"
+         timestampString = "388739498.833428"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "113"
+         endingLineNumber = "113"
+         landmarkName = "-viewDidLoad"
+         landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
 </Bucket>

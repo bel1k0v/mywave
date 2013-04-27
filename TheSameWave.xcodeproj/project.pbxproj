@@ -16,14 +16,21 @@
 		688453D8172182260092260B /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 688453D7172182260092260B /* Default.png */; };
 		688453DA172182260092260B /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 688453D9172182260092260B /* Default@2x.png */; };
 		688453DC172182260092260B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 688453DB172182260092260B /* Default-568h@2x.png */; };
-		688453DF172182260092260B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 688453DE172182260092260B /* ViewController.m */; };
-		688453E2172182260092260B /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 688453E0172182260092260B /* ViewController.xib */; };
+		688453DF172182260092260B /* AuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 688453DE172182260092260B /* AuthViewController.m */; };
+		688453E2172182260092260B /* AuthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 688453E0172182260092260B /* AuthViewController.xib */; };
 		688453EB172182FF0092260B /* NSString+Gender.m in Sources */ = {isa = PBXBuildFile; fileRef = 688453EA172182FF0092260B /* NSString+Gender.m */; };
 		688453EE172183970092260B /* Vkontakte.m in Sources */ = {isa = PBXBuildFile; fileRef = 688453ED172183970092260B /* Vkontakte.m */; };
 		688453F21721848B0092260B /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 688453F11721848B0092260B /* MBProgressHUD.m */; };
 		688453F5172185E70092260B /* VkontakteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 688453F4172185E70092260B /* VkontakteViewController.m */; };
 		68ED980D1726D6AC0009C2F6 /* MusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68ED980B1726D6AC0009C2F6 /* MusicViewController.m */; };
 		68ED980E1726D6AC0009C2F6 /* MusicViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68ED980C1726D6AC0009C2F6 /* MusicViewController.xib */; };
+		68ED98181729AD630009C2F6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED98171729AD630009C2F6 /* AudioToolbox.framework */; };
+		68ED981A1729AD8D0009C2F6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */; };
+		68ED981C1729ADC90009C2F6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED981B1729ADC90009C2F6 /* CFNetwork.framework */; };
+		68ED981F1729AE090009C2F6 /* AudioStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = 68ED981E1729AE090009C2F6 /* AudioStreamer.m */; };
+		68ED9827172B13ED0009C2F6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED9826172B13ED0009C2F6 /* QuartzCore.framework */; };
+		68ED982B172BB3480009C2F6 /* StreamingPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68ED9829172BB3480009C2F6 /* StreamingPlayerViewController.m */; };
+		68ED982C172BB3480009C2F6 /* StreamingPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68ED982A172BB3480009C2F6 /* StreamingPlayerViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,9 +47,9 @@
 		688453D7172182260092260B /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		688453D9172182260092260B /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		688453DB172182260092260B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		688453DD172182260092260B /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		688453DE172182260092260B /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		688453E1172182260092260B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
+		688453DD172182260092260B /* AuthViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AuthViewController.h; sourceTree = "<group>"; };
+		688453DE172182260092260B /* AuthViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AuthViewController.m; sourceTree = "<group>"; };
+		688453E1172182260092260B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AuthViewController.xib; sourceTree = "<group>"; };
 		688453E9172182FF0092260B /* NSString+Gender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Gender.h"; sourceTree = "<group>"; };
 		688453EA172182FF0092260B /* NSString+Gender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Gender.m"; sourceTree = "<group>"; };
 		688453EC172183970092260B /* Vkontakte.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vkontakte.h; sourceTree = "<group>"; };
@@ -54,6 +61,16 @@
 		68ED980A1726D6AC0009C2F6 /* MusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicViewController.h; sourceTree = "<group>"; };
 		68ED980B1726D6AC0009C2F6 /* MusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicViewController.m; sourceTree = "<group>"; };
 		68ED980C1726D6AC0009C2F6 /* MusicViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MusicViewController.xib; sourceTree = "<group>"; };
+		68ED981417270D190009C2F6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		68ED98171729AD630009C2F6 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		68ED981B1729ADC90009C2F6 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		68ED981D1729AE090009C2F6 /* AudioStreamer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioStreamer.h; sourceTree = "<group>"; };
+		68ED981E1729AE090009C2F6 /* AudioStreamer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioStreamer.m; sourceTree = "<group>"; };
+		68ED9826172B13ED0009C2F6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		68ED9828172BB3480009C2F6 /* StreamingPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamingPlayerViewController.h; sourceTree = "<group>"; };
+		68ED9829172BB3480009C2F6 /* StreamingPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamingPlayerViewController.m; sourceTree = "<group>"; };
+		68ED982A172BB3480009C2F6 /* StreamingPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StreamingPlayerViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,9 +78,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68ED9827172B13ED0009C2F6 /* QuartzCore.framework in Frameworks */,
+				68ED981C1729ADC90009C2F6 /* CFNetwork.framework in Frameworks */,
+				688453CA172182260092260B /* CoreGraphics.framework in Frameworks */,
+				68ED981A1729AD8D0009C2F6 /* MediaPlayer.framework in Frameworks */,
+				68ED98181729AD630009C2F6 /* AudioToolbox.framework in Frameworks */,
 				688453C6172182260092260B /* UIKit.framework in Frameworks */,
 				688453C8172182260092260B /* Foundation.framework in Frameworks */,
-				688453CA172182260092260B /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,6 +94,11 @@
 		688453B9172182250092260B = {
 			isa = PBXGroup;
 			children = (
+				68ED9826172B13ED0009C2F6 /* QuartzCore.framework */,
+				68ED981B1729ADC90009C2F6 /* CFNetwork.framework */,
+				68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */,
+				68ED98171729AD630009C2F6 /* AudioToolbox.framework */,
+				68ED981417270D190009C2F6 /* AVFoundation.framework */,
 				688453CB172182260092260B /* TheSameWave */,
 				688453C4172182260092260B /* Frameworks */,
 				688453C3172182260092260B /* Products */,
@@ -100,17 +126,9 @@
 		688453CB172182260092260B /* TheSameWave */ = {
 			isa = PBXGroup;
 			children = (
-				688453EF172184530092260B /* MBProgressHUD */,
-				688453E81721824E0092260B /* Vkontakte */,
-				688453D4172182260092260B /* AppDelegate.h */,
-				688453D5172182260092260B /* AppDelegate.m */,
-				688453DD172182260092260B /* ViewController.h */,
-				688453DE172182260092260B /* ViewController.m */,
-				688453E0172182260092260B /* ViewController.xib */,
+				68ED9825172B109B0009C2F6 /* Resources */,
+				68ED98161729ACF40009C2F6 /* Classes */,
 				688453CC172182260092260B /* Supporting Files */,
-				68ED980A1726D6AC0009C2F6 /* MusicViewController.h */,
-				68ED980B1726D6AC0009C2F6 /* MusicViewController.m */,
-				68ED980C1726D6AC0009C2F6 /* MusicViewController.xib */,
 			);
 			path = TheSameWave;
 			sourceTree = "<group>";
@@ -149,6 +167,35 @@
 				688453F11721848B0092260B /* MBProgressHUD.m */,
 			);
 			name = MBProgressHUD;
+			sourceTree = "<group>";
+		};
+		68ED98161729ACF40009C2F6 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				688453D4172182260092260B /* AppDelegate.h */,
+				688453D5172182260092260B /* AppDelegate.m */,
+				68ED9828172BB3480009C2F6 /* StreamingPlayerViewController.h */,
+				68ED9829172BB3480009C2F6 /* StreamingPlayerViewController.m */,
+				68ED981E1729AE090009C2F6 /* AudioStreamer.m */,
+				68ED981D1729AE090009C2F6 /* AudioStreamer.h */,
+				688453DE172182260092260B /* AuthViewController.m */,
+				688453DD172182260092260B /* AuthViewController.h */,
+				68ED980A1726D6AC0009C2F6 /* MusicViewController.h */,
+				68ED980B1726D6AC0009C2F6 /* MusicViewController.m */,
+				688453E81721824E0092260B /* Vkontakte */,
+				688453EF172184530092260B /* MBProgressHUD */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		68ED9825172B109B0009C2F6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				68ED982A172BB3480009C2F6 /* StreamingPlayerViewController.xib */,
+				688453E0172182260092260B /* AuthViewController.xib */,
+				68ED980C1726D6AC0009C2F6 /* MusicViewController.xib */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -206,8 +253,9 @@
 				688453D8172182260092260B /* Default.png in Resources */,
 				688453DA172182260092260B /* Default@2x.png in Resources */,
 				688453DC172182260092260B /* Default-568h@2x.png in Resources */,
-				688453E2172182260092260B /* ViewController.xib in Resources */,
+				688453E2172182260092260B /* AuthViewController.xib in Resources */,
 				68ED980E1726D6AC0009C2F6 /* MusicViewController.xib in Resources */,
+				68ED982C172BB3480009C2F6 /* StreamingPlayerViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -220,12 +268,14 @@
 			files = (
 				688453D2172182260092260B /* main.m in Sources */,
 				688453D6172182260092260B /* AppDelegate.m in Sources */,
-				688453DF172182260092260B /* ViewController.m in Sources */,
+				688453DF172182260092260B /* AuthViewController.m in Sources */,
 				688453EB172182FF0092260B /* NSString+Gender.m in Sources */,
 				688453EE172183970092260B /* Vkontakte.m in Sources */,
 				688453F21721848B0092260B /* MBProgressHUD.m in Sources */,
 				688453F5172185E70092260B /* VkontakteViewController.m in Sources */,
 				68ED980D1726D6AC0009C2F6 /* MusicViewController.m in Sources */,
+				68ED981F1729AE090009C2F6 /* AudioStreamer.m in Sources */,
+				68ED982B172BB3480009C2F6 /* StreamingPlayerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,12 +290,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		688453E0172182260092260B /* ViewController.xib */ = {
+		688453E0172182260092260B /* AuthViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				688453E1172182260092260B /* en */,
 			);
-			name = ViewController.xib;
+			name = AuthViewController.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

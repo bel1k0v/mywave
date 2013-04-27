@@ -9,15 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "Vkontakte.h"
 
-@interface ViewController : UIViewController <VkontakteDelegate>
+@interface AuthViewController : UIViewController <VkontakteDelegate>
 {
     IBOutlet UIButton *_loginButton;
-    IBOutlet UITableView *_tableView;
+    IBOutlet UIButton *_musicButton;
     
     Vkontakte *_vkInstance;
 }
 
 - (IBAction)loginButtonPressed:(id)sender;
+- (IBAction)musicButtonPressed:(id)sender;
 
 @end
 
