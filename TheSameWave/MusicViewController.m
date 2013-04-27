@@ -129,6 +129,9 @@
     NSDictionary *song = [_data objectAtIndex:indexPath.row];
 
     playerViewController.songUrl = [song objectForKey:@"url"];
+    playerViewController.songName = [NSString stringWithFormat:@"%@ - %@",
+                                          [song objectForKey:@"artist"],
+                                          [song objectForKey:@"title"]];
     [self.navigationController pushViewController:playerViewController animated:YES];
      
 }

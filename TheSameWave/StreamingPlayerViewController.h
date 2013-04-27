@@ -13,6 +13,8 @@
 @interface StreamingPlayerViewController : UIViewController
 
 @property (nonatomic, strong) NSString *songUrl;
+@property (nonatomic, strong) NSString *songName;
 @property (nonatomic, strong) AudioStreamer *streamer;
+@property (weak, nonatomic) IBOutlet UILabel *songNameLabel;
 
 @end

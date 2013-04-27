@@ -27,6 +27,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.songNameLabel setText:self.songName];
     NSURL *url = [NSURL URLWithString:self.songUrl];
 	self.streamer = [[AudioStreamer alloc] initWithURL:url];
     NSLog(@"%@", self.songUrl);
