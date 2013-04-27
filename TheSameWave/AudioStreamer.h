@@ -116,6 +116,7 @@ extern NSString * const ASStatusChangedNotification;
 	size_t packetsFilled;			// how many packets have been filled
 	bool inuse[kNumAQBufs];			// flags to indicate that a buffer is still in use
 	NSInteger buffersUsed;
+    NSDictionary *httpHeaders;
 	
 	AudioStreamerState state;
 	AudioStreamerStopReason stopReason;
@@ -130,12 +131,15 @@ extern NSString * const ASStatusChangedNotification;
 	CFReadStreamRef stream;
 	NSNotificationCenter *notificationCenter;
 	
-	NSUInteger dataOffset;
+	NSUInteger dataOffset;		// Offset of the first audio packet in the stream
+	NSUInteger fileLength;		// Length of the file in bytes
 	UInt32 bitRate;
 	
 	bool seekNeeded;
 	double seekTime;
 	double sampleRate;
+    
+    double packetDuration;	
 	double lastProgress;
 	int numBuffersToEnqueueLater;
 }
@@ -143,6 +147,7 @@ extern NSString * const ASStatusChangedNotification;
 @property AudioStreamerErrorCode errorCode;
 @property (readonly, nonatomic) AudioStreamerState state;
 @property (readonly) double progress;
+@property (readonly) double duration;
 @property (readwrite) UInt32 bitRate;
 
 - (id)initWithURL:(NSURL *)aURL;

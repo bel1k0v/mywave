@@ -3,6 +3,9 @@
 #import <CFNetwork/CFNetwork.h>
 #endif
 
+#define BitRateEstimationMaxPackets 5000
+#define BitRateEstimationMinPackets 50
+
 NSString * const ASStatusChangedNotification = @"ASStatusChangedNotification";
 
 NSString * const AS_NO_ERROR_STRING = @"No error.";
@@ -1013,6 +1016,39 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 	return lastProgress;
 }
 
+- (double)calculatedBitRate
+{
+    @synchronized(self) {
+        if (bitRate)
+        {
+            return (double)bitRate;
+        }
+    }
+    
+	return 0;
+}
+
+//
+// duration
+//
+// Calculates the duration of available audio from the bitRate and fileLength.
+//
+// returns the calculated duration in seconds.
+//
+- (double)duration
+{
+    @synchronized(self) {
+        double calculatedBitRate = [self calculatedBitRate];
+        
+        if (calculatedBitRate == 0 || fileLength == 0)
+        {
+            return 0.0;
+        }
+        
+        return (fileLength - dataOffset) / (calculatedBitRate * 0.125);
+    }
+}
+
 //
 // pause
 //
@@ -1188,6 +1224,23 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 	}
 	else if (eventType == kCFStreamEventHasBytesAvailable)
 	{
+        if (!httpHeaders)
+		{
+			CFTypeRef message =
+            CFReadStreamCopyProperty(stream, kCFStreamPropertyHTTPResponseHeader);
+			httpHeaders =
+            (__bridge NSDictionary *)CFHTTPMessageCopyAllHeaderFields((CFHTTPMessageRef)message);
+			CFRelease(message);
+			
+			//
+			// Only read the content length if we seeked to time zero, otherwise
+			// we only have a subset of the total bytes.
+			//
+			
+            fileLength = [[httpHeaders objectForKey:@"Content-Length"] integerValue];
+			NSLog(@"%d", fileLength / 1024);
+		}
+        
 		UInt8 bytes[kAQBufSize];
 		CFIndex length;
 		@synchronized(self)
@@ -1365,6 +1418,7 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 			}
 			
 			sampleRate = asbd.mSampleRate;
+            packetDuration = asbd.mFramesPerPacket / sampleRate;
 			
 			// create the audio queue
 			err = AudioQueueNewOutput(&asbd, MyAudioQueueOutputCallback, (__bridge void*)self, NULL, NULL, 0, &audioQueue);
@@ -1425,7 +1479,7 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 			SInt64 offset;
 			UInt32 offsetSize = sizeof(offset);
 			err = AudioFileStreamGetProperty(inAudioFileStream, kAudioFileStreamProperty_DataOffset, &offsetSize, &offset);
-			dataOffset = offset;
+			//dataOffset = offset;
 			if (err)
 			{
 				[self failWithErrorCode:AS_FILE_STREAM_GET_PROPERTY_FAILED];

@@ -127,6 +127,8 @@
 {
     StreamingPlayerViewController *playerViewController = [[StreamingPlayerViewController alloc] initWithNibName:@"StreamingPlayerViewController" bundle:nil];
     NSDictionary *song = [_data objectAtIndex:indexPath.row];
+    
+    NSLog(@"%@", song);
 
     playerViewController.songUrl = [song objectForKey:@"url"];
     playerViewController.songName = [NSString stringWithFormat:@"%@ - %@",
