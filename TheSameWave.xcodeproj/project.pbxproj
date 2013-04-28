@@ -27,10 +27,12 @@
 		68ED98181729AD630009C2F6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED98171729AD630009C2F6 /* AudioToolbox.framework */; };
 		68ED981A1729AD8D0009C2F6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */; };
 		68ED981C1729ADC90009C2F6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED981B1729ADC90009C2F6 /* CFNetwork.framework */; };
-		68ED981F1729AE090009C2F6 /* AudioStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = 68ED981E1729AE090009C2F6 /* AudioStreamer.m */; };
+		68ED981F1729AE090009C2F6 /* AudioStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = 68ED981E1729AE090009C2F6 /* AudioStreamer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		68ED9827172B13ED0009C2F6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED9826172B13ED0009C2F6 /* QuartzCore.framework */; };
 		68ED982B172BB3480009C2F6 /* StreamingPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68ED9829172BB3480009C2F6 /* StreamingPlayerViewController.m */; };
 		68ED982C172BB3480009C2F6 /* StreamingPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68ED982A172BB3480009C2F6 /* StreamingPlayerViewController.xib */; };
+		68ED987C172D67180009C2F6 /* bg-splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 68ED987A172D67180009C2F6 /* bg-splash.png */; };
+		68ED987D172D67180009C2F6 /* bg-splash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68ED987B172D67180009C2F6 /* bg-splash@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -71,6 +73,8 @@
 		68ED9828172BB3480009C2F6 /* StreamingPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamingPlayerViewController.h; sourceTree = "<group>"; };
 		68ED9829172BB3480009C2F6 /* StreamingPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamingPlayerViewController.m; sourceTree = "<group>"; };
 		68ED982A172BB3480009C2F6 /* StreamingPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StreamingPlayerViewController.xib; sourceTree = "<group>"; };
+		68ED987A172D67180009C2F6 /* bg-splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg-splash.png"; sourceTree = "<group>"; };
+		68ED987B172D67180009C2F6 /* bg-splash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg-splash@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +140,8 @@
 		688453CC172182260092260B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				68ED987A172D67180009C2F6 /* bg-splash.png */,
+				68ED987B172D67180009C2F6 /* bg-splash@2x.png */,
 				688453CD172182260092260B /* TheSameWave-Info.plist */,
 				688453CE172182260092260B /* InfoPlist.strings */,
 				688453D1172182260092260B /* main.m */,
@@ -256,6 +262,8 @@
 				688453E2172182260092260B /* AuthViewController.xib in Resources */,
 				68ED980E1726D6AC0009C2F6 /* MusicViewController.xib in Resources */,
 				68ED982C172BB3480009C2F6 /* StreamingPlayerViewController.xib in Resources */,
+				68ED987C172D67180009C2F6 /* bg-splash.png in Resources */,
+				68ED987D172D67180009C2F6 /* bg-splash@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

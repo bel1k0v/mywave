@@ -18,6 +18,8 @@
 
 @implementation StreamingPlayerViewController
 
+@synthesize songNameLabel, playingTimeLabel;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -30,7 +32,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.songNameLabel setText:self.songName];
+    self.songNameLabel = [self createLabelWithFrame:CGRectMake(42, 91, 238, 55) andFontSize:19 andText:self.songName];
+    self.playingTimeLabel = [self createLabelWithFrame:CGRectMake(42, 162, 238, 55) andFontSize:18 andText:@"Enjoy the music"];
+    [self.view addSubview:self.songNameLabel];
+    [self.view addSubview:self.playingTimeLabel];
+    UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-splash.png"]];
+    [self.view setBackgroundColor:backgroundColor];
+    
     [self createStreamer];
     [self.streamer start];
 }
@@ -51,7 +59,7 @@
 	if (self.streamer.duration)
 	{
 		double newSeekTime = (aSlider.value / 100.0) * self.streamer.duration;
-		//[self.streamer seekToTime:newSeekTime];
+        [self.streamer seekToTime:newSeekTime];
 	}
 }
 
@@ -114,15 +122,23 @@
 	{
 		double progress = self.streamer.progress;
 		double duration = self.streamer.duration;
-		
+        //NSLog(@"Progress %f Duration: %f", progress, duration);
+		//NSLog(@"Progress %f percents", 100 * (progress / duration));
+        int minutes = (int) (floor(duration/60) - (int) floor(progress/60));
+        int seconds = (int)(duration - floor(duration / 60) * 60);
+        int progressMinutes = (int) floor(progress/60);
+        int progressSeconds = (int)(progress - floor(progress / 60) * 60);
 		if (duration > 0)
 		{
 			[self.playingTimeLabel setText:
-             [NSString stringWithFormat:@"Time Played: %.1f/%.1f seconds",
-              progress,
-              duration]];
+             [NSString stringWithFormat:@"%d:%02d - %d:%02d",
+              progressMinutes,
+              progressSeconds,
+              minutes - progressMinutes,
+              seconds - progressSeconds]];
 			[self.progressSlider setEnabled:YES];
-			[self.progressSlider setValue:100 * progress / duration];
+            self.progressSlider.maximumValue = 100;
+			[self.progressSlider setValue:(100 * (progress / duration))];
 		}
 		else
 		{
@@ -150,6 +166,20 @@
 		[self destroyStreamer];
 		NSLog(@"Idle");
 	}
+}
+
+-(UILabel*)createLabelWithFrame:(CGRect)frame andFontSize:(float)fontSize andText:(NSString*)text
+{
+    UILabel *label = [[UILabel alloc]initWithFrame:frame];
+    [label setFont:[UIFont systemFontOfSize:fontSize]];
+    [label setTextColor:[UIColor whiteColor]];
+    [label setShadowColor:[UIColor blackColor]];
+    [label setShadowOffset:CGSizeMake(0, -1)];
+    [label setTextAlignment:UITextAlignmentCenter];
+    [label setBackgroundColor:[UIColor clearColor]];
+    [label setText:text];
+    
+    return label;
 }
 
 @end

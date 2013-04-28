@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *songNameLabel;
 @property (weak, nonatomic) IBOutlet UISlider *progressSlider;
 
+- (IBAction)sliderMoved:(UISlider *)aSlider;
 -(void) updateProgress:(NSTimer *)aNotification;
 @property (weak, nonatomic) IBOutlet UILabel *playingTimeLabel;
 
