@@ -178,16 +178,16 @@
 {
 	if ([self.streamer isWaiting])
 	{
-        NSLog(@"Loading");
+        //[self setButtonWithLabel:@"loading"];
     }
 	else if ([self.streamer isPlaying])
 	{
-		NSLog(@"Playing");
+		[self setButtonWithLabel:@"stop"];
 	}
 	else if ([self.streamer isIdle])
 	{
 		[self destroyStreamer];
-		NSLog(@"Idle");
+		[self setButtonWithLabel:@"play"];
 	}
 }
 
