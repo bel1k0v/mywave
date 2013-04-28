@@ -18,7 +18,7 @@
 
 @implementation StreamingPlayerViewController
 
-@synthesize songNameLabel, playingTimeLabel;
+@synthesize songNameLabel, playingTimeLabel, playButton;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -32,10 +32,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.songNameLabel = [self createLabelWithFrame:CGRectMake(42, 91, 238, 55) andFontSize:19 andText:self.songName];
-    self.playingTimeLabel = [self createLabelWithFrame:CGRectMake(42, 162, 238, 55) andFontSize:18 andText:@"Enjoy the music"];
+    self.songNameLabel = [self createLabelWithFrame:CGRectMake(42, 61, 238, 85) andFontSize:16 andText:self.songName];
+    self.playingTimeLabel = [self createLabelWithFrame:CGRectMake(42, 162, 238, 55) andFontSize:14 andText:@"Enjoy the music"];
     [self.view addSubview:self.songNameLabel];
     [self.view addSubview:self.playingTimeLabel];
+    [self setButtonWithLabel:@"stop"];
+
     UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-splash.png"]];
     [self.view setBackgroundColor:backgroundColor];
     
@@ -60,6 +62,22 @@
 	{
 		double newSeekTime = (aSlider.value / 100.0) * self.streamer.duration;
         [self.streamer seekToTime:newSeekTime];
+	}
+}
+
+- (IBAction)buttonPressed:(id)sender
+{
+    NSLog(@"Button pressed, player state is %@", self.playerState);
+	if ([self.playerState isEqual:@"play"])
+	{
+		[self createStreamer];
+        [self setButtonWithLabel:@"stop"];
+		[self.streamer start];
+	}
+	else
+	{
+        [self setButtonWithLabel:@"play"];
+		[self.streamer stop];
 	}
 }
 
@@ -122,20 +140,25 @@
 	{
 		double progress = self.streamer.progress;
 		double duration = self.streamer.duration;
-        //NSLog(@"Progress %f Duration: %f", progress, duration);
-		//NSLog(@"Progress %f percents", 100 * (progress / duration));
-        int minutes = (int) (floor(duration/60) - (int) floor(progress/60));
-        int seconds = (int)(duration - floor(duration / 60) * 60);
+        double secondsLeft = duration - progress;
+
+        int minutesLeft = (int) floor(secondsLeft/60);
+        int minuteSecondsLeft = (int) (secondsLeft - minutesLeft * 60);
+        
         int progressMinutes = (int) floor(progress/60);
-        int progressSeconds = (int)(progress - floor(progress / 60) * 60);
+        int progressMinuteSeconds = (int) progress;
+        if (progressMinutes > 1) {
+            progressMinuteSeconds = (int)(progress - progressMinutes * 60);
+        }
+        
 		if (duration > 0)
 		{
 			[self.playingTimeLabel setText:
              [NSString stringWithFormat:@"%d:%02d - %d:%02d",
               progressMinutes,
-              progressSeconds,
-              minutes - progressMinutes,
-              seconds - progressSeconds]];
+              progressMinuteSeconds,
+              minutesLeft,
+              minuteSecondsLeft]];
 			[self.progressSlider setEnabled:YES];
             self.progressSlider.maximumValue = 100;
 			[self.progressSlider setValue:(100 * (progress / duration))];
@@ -147,7 +170,7 @@
 	}
 	else
 	{
-		[self.playingTimeLabel  setText:@"Time Played:"];
+		[self.playingTimeLabel  setText:@"Загружаю твою любимую музыку"];
 	}
 }
 
@@ -180,6 +203,19 @@
     [label setText:text];
     
     return label;
+}
+
+- (void)setButtonWithLabel:(NSString *)label
+{
+	if (!label)
+	{
+		label = @"playFirstTime";
+	}
+
+	self.playerState = label;
+	
+	[self.playButton.layer removeAllAnimations];
+	[self.playButton setTitle:label.uppercaseString forState:0];
 }
 
 @end

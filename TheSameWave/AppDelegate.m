@@ -18,6 +18,7 @@
     
     AuthViewController *authViewController = [[AuthViewController alloc] initWithNibName:@"AuthViewController" bundle:nil];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:authViewController];
+    [self.navigationController.navigationBar setTintColor:[UIColor blackColor]];
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
     return YES;

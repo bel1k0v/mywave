@@ -18,6 +18,8 @@
 @property (nonatomic, strong) AudioStreamer *streamer;
 @property (weak, nonatomic) IBOutlet UILabel *songNameLabel;
 @property (weak, nonatomic) IBOutlet UISlider *progressSlider;
+@property (weak, nonatomic) IBOutlet UIButton *playButton;
+@property (nonatomic, strong) NSString *playerState;
 
 - (IBAction)sliderMoved:(UISlider *)aSlider;
 -(void) updateProgress:(NSTimer *)aNotification;
