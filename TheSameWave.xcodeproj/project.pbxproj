@@ -33,6 +33,12 @@
 		68ED982C172BB3480009C2F6 /* StreamingPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68ED982A172BB3480009C2F6 /* StreamingPlayerViewController.xib */; };
 		68ED987C172D67180009C2F6 /* bg-splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 68ED987A172D67180009C2F6 /* bg-splash.png */; };
 		68ED987D172D67180009C2F6 /* bg-splash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68ED987B172D67180009C2F6 /* bg-splash@2x.png */; };
+		68F7B7B517343D99003B27C7 /* arrow_left.png in Resources */ = {isa = PBXBuildFile; fileRef = 68F7B7AF17343D99003B27C7 /* arrow_left.png */; };
+		68F7B7B617343D99003B27C7 /* arrow_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 68F7B7B017343D99003B27C7 /* arrow_right.png */; };
+		68F7B7B717343D99003B27C7 /* pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 68F7B7B117343D99003B27C7 /* pause.png */; };
+		68F7B7B817343D99003B27C7 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 68F7B7B217343D99003B27C7 /* play.png */; };
+		68F7B7B917343D99003B27C7 /* position.png in Resources */ = {isa = PBXBuildFile; fileRef = 68F7B7B317343D99003B27C7 /* position.png */; };
+		68F7B7BA17343D99003B27C7 /* stop.png in Resources */ = {isa = PBXBuildFile; fileRef = 68F7B7B417343D99003B27C7 /* stop.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,6 +81,12 @@
 		68ED982A172BB3480009C2F6 /* StreamingPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StreamingPlayerViewController.xib; sourceTree = "<group>"; };
 		68ED987A172D67180009C2F6 /* bg-splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg-splash.png"; sourceTree = "<group>"; };
 		68ED987B172D67180009C2F6 /* bg-splash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg-splash@2x.png"; sourceTree = "<group>"; };
+		68F7B7AF17343D99003B27C7 /* arrow_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_left.png; sourceTree = "<group>"; };
+		68F7B7B017343D99003B27C7 /* arrow_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_right.png; sourceTree = "<group>"; };
+		68F7B7B117343D99003B27C7 /* pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pause.png; sourceTree = "<group>"; };
+		68F7B7B217343D99003B27C7 /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
+		68F7B7B317343D99003B27C7 /* position.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = position.png; sourceTree = "<group>"; };
+		68F7B7B417343D99003B27C7 /* stop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stop.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +152,12 @@
 		688453CC172182260092260B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				68F7B7AF17343D99003B27C7 /* arrow_left.png */,
+				68F7B7B017343D99003B27C7 /* arrow_right.png */,
+				68F7B7B117343D99003B27C7 /* pause.png */,
+				68F7B7B217343D99003B27C7 /* play.png */,
+				68F7B7B317343D99003B27C7 /* position.png */,
+				68F7B7B417343D99003B27C7 /* stop.png */,
 				68ED987A172D67180009C2F6 /* bg-splash.png */,
 				68ED987B172D67180009C2F6 /* bg-splash@2x.png */,
 				688453CD172182260092260B /* TheSameWave-Info.plist */,
@@ -264,6 +282,12 @@
 				68ED982C172BB3480009C2F6 /* StreamingPlayerViewController.xib in Resources */,
 				68ED987C172D67180009C2F6 /* bg-splash.png in Resources */,
 				68ED987D172D67180009C2F6 /* bg-splash@2x.png in Resources */,
+				68F7B7B517343D99003B27C7 /* arrow_left.png in Resources */,
+				68F7B7B617343D99003B27C7 /* arrow_right.png in Resources */,
+				68F7B7B717343D99003B27C7 /* pause.png in Resources */,
+				68F7B7B817343D99003B27C7 /* play.png in Resources */,
+				68F7B7B917343D99003B27C7 /* position.png in Resources */,
+				68F7B7BA17343D99003B27C7 /* stop.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

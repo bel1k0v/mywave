@@ -18,7 +18,7 @@
 
 @implementation StreamingPlayerViewController
 
-@synthesize songNameLabel, playingTimeLabel, playButton;
+@synthesize songNameLabel, playingTimeLabel, playButton, progressSlider, volumeSlider;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -32,12 +32,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self createPlayerPannel];
+    
     self.songNameLabel = [self createLabelWithFrame:CGRectMake(42, 61, 238, 85) andFontSize:16 andText:self.songName];
     self.playingTimeLabel = [self createLabelWithFrame:CGRectMake(42, 162, 238, 55) andFontSize:14 andText:@"Enjoy the music"];
+    self.progressSlider = [self createSliderWithFrame:CGRectMake(60, 122, 200, 18)];
+    self.volumeSlider = [self createSliderWithFrame:CGRectMake(60, 222, 200, 20)];
     [self.view addSubview:self.songNameLabel];
     [self.view addSubview:self.playingTimeLabel];
+    [self.progressSlider addTarget:self action:@selector(sliderMoved:) forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:self.progressSlider];
+    [self.view addSubview:self.volumeSlider];
     [self setButtonWithLabel:@"stop"];
-
+    [self setVolumeSlider];
     UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-splash.png"]];
     [self.view setBackgroundColor:backgroundColor];
     
@@ -54,6 +61,15 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [self destroyStreamer];
+}
+
+-(void)createPlayerPannel
+{
+    self.playButton = [self createButtonWithFrame:CGRectMake(20, 40, 100, 100)];
+    [self.playButton setTitle:@"Play" forState:UIControlStateNormal];
+    [self.playButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.view addSubview:self.playButton];
 }
 
 - (IBAction)sliderMoved:(UISlider *)aSlider
@@ -205,6 +221,18 @@
     return label;
 }
 
+-(UIButton*)createButtonWithFrame:(CGRect)frame
+{
+    UIButton *button = [[UIButton alloc] initWithFrame:frame];
+    return button;
+}
+
+- (UISlider*)createSliderWithFrame:(CGRect)frame
+{
+    UISlider *slider = [[UISlider alloc]initWithFrame:frame];
+    return slider;
+}
+
 - (void)setButtonWithLabel:(NSString *)label
 {
 	if (!label)
@@ -216,6 +244,25 @@
 	
 	[self.playButton.layer removeAllAnimations];
 	[self.playButton setTitle:label.uppercaseString forState:0];
+}
+
+-(void) setVolumeSlider{
+    self.volumeView = [[MPVolumeView alloc] initWithFrame:[self.volumeSlider frame]];
+    NSArray *tempArray = self.volumeView.subviews;
+    
+    for (id current in tempArray){
+        if ([current isKindOfClass:[UISlider class]]){
+            UISlider *tempSlider = (UISlider *) current;
+            UIImage *img = [UIImage imageNamed:@"trackImage.png"];
+            img = [img stretchableImageWithLeftCapWidth:5.0 topCapHeight:0];
+            [tempSlider setMinimumTrackImage:img forState:UIControlStateNormal];
+            
+            [tempSlider setThumbImage:[UIImage imageNamed:@"thumbImage.png"] forState:UIControlStateNormal];
+            
+        }
+    }
+    //[self.volumeSlider removeFromSuperview];
+    [self.view addSubview:self.volumeView];
 }
 
 @end
