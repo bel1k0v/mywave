@@ -7,7 +7,7 @@
 //
 
 #import "AuthViewController.h"
-#import "MusicViewController.h";
+#import "MusicViewController.h"
 
 @implementation AuthViewController
 
@@ -16,7 +16,7 @@
     [super viewDidLoad];
 	_vkInstance = [Vkontakte sharedInstance];
     _vkInstance.delegate = self;
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.navigationItem.title = @"The Same Wave";
     [self refreshButtonState];
 }
 
@@ -53,12 +53,12 @@
 {
     if (![_vkInstance isAuthorized])
     {
-        [_loginButton setTitle:@"Войти"
+        [_loginButton setTitle:@"Login"
                  forState:UIControlStateNormal];
     }
     else
     {
-        [_loginButton setTitle:@"Выйти"
+        [_loginButton setTitle:@"Logout"
                  forState:UIControlStateNormal];
         [_vkInstance getUserInfo];
     }
@@ -73,17 +73,17 @@
 
 - (void)showVkontakteAuthController:(UIViewController *)controller
 {
-    [self presentModalViewController:controller animated:YES];
+    [self presentViewController:controller animated:YES completion:nil];
 }
 
 - (void)vkontakteAuthControllerDidCancelled
 {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)vkontakteDidFinishLogin:(Vkontakte *)vkontakte
 {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
     [self refreshButtonState];
     MusicViewController* musicViewController = [MusicViewController new];
     musicViewController.data = [vkontakte getUserAudio];

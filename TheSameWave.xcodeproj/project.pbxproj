@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		68787D901826533700FC3FFF /* PlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787D8E1826533700FC3FFF /* PlayerViewController.m */; };
+		68787D911826533700FC3FFF /* PlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68787D8F1826533700FC3FFF /* PlayerViewController.xib */; };
+		68787D9218265B3D00FC3FFF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED981417270D190009C2F6 /* AVFoundation.framework */; };
+		68787D9418265B7C00FC3FFF /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68787D9318265B7C00FC3FFF /* CoreMedia.framework */; };
 		688453C6172182260092260B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 688453C5172182260092260B /* UIKit.framework */; };
 		688453C8172182260092260B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 688453C7172182260092260B /* Foundation.framework */; };
 		688453CA172182260092260B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 688453C9172182260092260B /* CoreGraphics.framework */; };
@@ -27,10 +31,7 @@
 		68ED98181729AD630009C2F6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED98171729AD630009C2F6 /* AudioToolbox.framework */; };
 		68ED981A1729AD8D0009C2F6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */; };
 		68ED981C1729ADC90009C2F6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED981B1729ADC90009C2F6 /* CFNetwork.framework */; };
-		68ED981F1729AE090009C2F6 /* AudioStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = 68ED981E1729AE090009C2F6 /* AudioStreamer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		68ED9827172B13ED0009C2F6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED9826172B13ED0009C2F6 /* QuartzCore.framework */; };
-		68ED982B172BB3480009C2F6 /* StreamingPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68ED9829172BB3480009C2F6 /* StreamingPlayerViewController.m */; };
-		68ED982C172BB3480009C2F6 /* StreamingPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68ED982A172BB3480009C2F6 /* StreamingPlayerViewController.xib */; };
 		68ED987C172D67180009C2F6 /* bg-splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 68ED987A172D67180009C2F6 /* bg-splash.png */; };
 		68ED987D172D67180009C2F6 /* bg-splash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68ED987B172D67180009C2F6 /* bg-splash@2x.png */; };
 		68F7B7B517343D99003B27C7 /* arrow_left.png in Resources */ = {isa = PBXBuildFile; fileRef = 68F7B7AF17343D99003B27C7 /* arrow_left.png */; };
@@ -42,6 +43,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		68787D8D1826533700FC3FFF /* PlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerViewController.h; sourceTree = "<group>"; };
+		68787D8E1826533700FC3FFF /* PlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerViewController.m; sourceTree = "<group>"; };
+		68787D8F1826533700FC3FFF /* PlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlayerViewController.xib; sourceTree = "<group>"; };
+		68787D9318265B7C00FC3FFF /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		688453C2172182260092260B /* TheSameWave.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TheSameWave.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		688453C5172182260092260B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		688453C7172182260092260B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -73,12 +78,7 @@
 		68ED98171729AD630009C2F6 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		68ED981B1729ADC90009C2F6 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		68ED981D1729AE090009C2F6 /* AudioStreamer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioStreamer.h; sourceTree = "<group>"; };
-		68ED981E1729AE090009C2F6 /* AudioStreamer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioStreamer.m; sourceTree = "<group>"; };
 		68ED9826172B13ED0009C2F6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		68ED9828172BB3480009C2F6 /* StreamingPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamingPlayerViewController.h; sourceTree = "<group>"; };
-		68ED9829172BB3480009C2F6 /* StreamingPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamingPlayerViewController.m; sourceTree = "<group>"; };
-		68ED982A172BB3480009C2F6 /* StreamingPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StreamingPlayerViewController.xib; sourceTree = "<group>"; };
 		68ED987A172D67180009C2F6 /* bg-splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg-splash.png"; sourceTree = "<group>"; };
 		68ED987B172D67180009C2F6 /* bg-splash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg-splash@2x.png"; sourceTree = "<group>"; };
 		68F7B7AF17343D99003B27C7 /* arrow_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_left.png; sourceTree = "<group>"; };
@@ -94,6 +94,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68787D9418265B7C00FC3FFF /* CoreMedia.framework in Frameworks */,
+				68787D9218265B3D00FC3FFF /* AVFoundation.framework in Frameworks */,
 				68ED9827172B13ED0009C2F6 /* QuartzCore.framework in Frameworks */,
 				68ED981C1729ADC90009C2F6 /* CFNetwork.framework in Frameworks */,
 				688453CA172182260092260B /* CoreGraphics.framework in Frameworks */,
@@ -132,6 +134,7 @@
 		688453C4172182260092260B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				68787D9318265B7C00FC3FFF /* CoreMedia.framework */,
 				688453C5172182260092260B /* UIKit.framework */,
 				688453C7172182260092260B /* Foundation.framework */,
 				688453C9172182260092260B /* CoreGraphics.framework */,
@@ -196,14 +199,12 @@
 		68ED98161729ACF40009C2F6 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				68787D8D1826533700FC3FFF /* PlayerViewController.h */,
+				68787D8E1826533700FC3FFF /* PlayerViewController.m */,
 				688453D4172182260092260B /* AppDelegate.h */,
 				688453D5172182260092260B /* AppDelegate.m */,
-				68ED9828172BB3480009C2F6 /* StreamingPlayerViewController.h */,
-				68ED9829172BB3480009C2F6 /* StreamingPlayerViewController.m */,
-				68ED981E1729AE090009C2F6 /* AudioStreamer.m */,
-				68ED981D1729AE090009C2F6 /* AudioStreamer.h */,
-				688453DE172182260092260B /* AuthViewController.m */,
 				688453DD172182260092260B /* AuthViewController.h */,
+				688453DE172182260092260B /* AuthViewController.m */,
 				68ED980A1726D6AC0009C2F6 /* MusicViewController.h */,
 				68ED980B1726D6AC0009C2F6 /* MusicViewController.m */,
 				688453E81721824E0092260B /* Vkontakte */,
@@ -215,7 +216,7 @@
 		68ED9825172B109B0009C2F6 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				68ED982A172BB3480009C2F6 /* StreamingPlayerViewController.xib */,
+				68787D8F1826533700FC3FFF /* PlayerViewController.xib */,
 				688453E0172182260092260B /* AuthViewController.xib */,
 				68ED980C1726D6AC0009C2F6 /* MusicViewController.xib */,
 			);
@@ -278,8 +279,8 @@
 				688453DA172182260092260B /* Default@2x.png in Resources */,
 				688453DC172182260092260B /* Default-568h@2x.png in Resources */,
 				688453E2172182260092260B /* AuthViewController.xib in Resources */,
+				68787D911826533700FC3FFF /* PlayerViewController.xib in Resources */,
 				68ED980E1726D6AC0009C2F6 /* MusicViewController.xib in Resources */,
-				68ED982C172BB3480009C2F6 /* StreamingPlayerViewController.xib in Resources */,
 				68ED987C172D67180009C2F6 /* bg-splash.png in Resources */,
 				68ED987D172D67180009C2F6 /* bg-splash@2x.png in Resources */,
 				68F7B7B517343D99003B27C7 /* arrow_left.png in Resources */,
@@ -306,8 +307,7 @@
 				688453F21721848B0092260B /* MBProgressHUD.m in Sources */,
 				688453F5172185E70092260B /* VkontakteViewController.m in Sources */,
 				68ED980D1726D6AC0009C2F6 /* MusicViewController.m in Sources */,
-				68ED981F1729AE090009C2F6 /* AudioStreamer.m in Sources */,
-				68ED982B172BB3480009C2F6 /* StreamingPlayerViewController.m in Sources */,
+				68787D901826533700FC3FFF /* PlayerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

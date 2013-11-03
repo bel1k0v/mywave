@@ -9,19 +9,24 @@
 #import "AppDelegate.h"
 #import "AuthViewController.h"
 
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
-    
+
     AuthViewController *authViewController = [[AuthViewController alloc] initWithNibName:@"AuthViewController" bundle:nil];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:authViewController];
     [self.navigationController.navigationBar setTintColor:[UIColor blackColor]];
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
     return YES;
+}
+
+- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
+{
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

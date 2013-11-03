@@ -7,7 +7,7 @@
 //
 
 #import "MusicViewController.h"
-#import "StreamingPlayerViewController.h"
+#import "PlayerViewController.h"
 
 @interface MusicViewController ()
 
@@ -29,7 +29,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationItem.title = @"Своя волна";
+    self.navigationItem.title = @"Music";
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
@@ -74,7 +74,7 @@
         NSDictionary *song = [_data objectAtIndex:indexPath.row];
 
         CGFloat fontSize = 14.0f;
-        cell.textLabel.font = [UIFont fontWithName:@"Times New Roman" size:fontSize];
+        cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:fontSize];
         cell.textLabel.text = [NSString stringWithFormat:@"%@ - %@",
                                [song objectForKey:@"artist"],
                                [song objectForKey:@"title"]];
@@ -126,6 +126,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    /*
     StreamingPlayerViewController *playerViewController = [[StreamingPlayerViewController alloc] initWithNibName:@"StreamingPlayerViewController" bundle:nil];
     NSDictionary *song = [_data objectAtIndex:indexPath.row];
     
@@ -135,6 +136,10 @@
     playerViewController.songName = [NSString stringWithFormat:@"%@ - %@",
                                           [song objectForKey:@"artist"],
                                           [song objectForKey:@"title"]];
+    playerViewController.duration = [song objectForKey:@"duration"];
+    */
+    PlayerViewController *playerViewController = [[PlayerViewController alloc]initWithNibName:@"PlayerViewController" bundle:nil];
+    playerViewController.song =[_data objectAtIndex:indexPath.row];
     [self.navigationController pushViewController:playerViewController animated:YES];
      
 }
