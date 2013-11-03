@@ -10,6 +10,7 @@
                 <outlet property="btnPlayPause" destination="PMW-ZT-byD" id="7Eh-cQ-hoL"/>
                 <outlet property="lblMusicName" destination="dvT-wi-Skc" id="c7v-2K-jXW"/>
                 <outlet property="lblMusicTime" destination="lrj-Eq-siJ" id="iUN-8o-QPo"/>
+                <outlet property="scrubber" destination="76i-b1-YPp" id="1LQ-AB-LBM"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>
@@ -38,6 +39,7 @@
                     <rect key="frame" x="117" y="288" width="86" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="24"/>
+                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <state key="normal" title="Play">
                         <color key="titleColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="titleShadowColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -46,6 +48,18 @@
                         <action selector="didTapPlayPause:" destination="-1" eventType="touchUpInside" id="zxr-8c-sjY"/>
                     </connections>
                 </button>
+                <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="76i-b1-YPp">
+                    <rect key="frame" x="18" y="223" width="284" height="34"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <connections>
+                        <action selector="beginScrubbing:" destination="-1" eventType="touchDown" id="ekY-B1-rwE"/>
+                        <action selector="endScrubbing:" destination="-1" eventType="touchUpOutside" id="F2r-gM-Qe5"/>
+                        <action selector="endScrubbing:" destination="-1" eventType="touchCancel" id="yo1-ez-dIe"/>
+                        <action selector="endScrubbing:" destination="-1" eventType="touchUpInside" id="zRF-Nq-X1c"/>
+                        <action selector="scrub:" destination="-1" eventType="valueChanged" id="wNj-vx-pTE"/>
+                        <action selector="scrub:" destination="-1" eventType="touchDragInside" id="x1Q-Z4-whX"/>
+                    </connections>
+                </slider>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
