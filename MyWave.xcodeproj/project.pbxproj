@@ -110,14 +110,14 @@
 		68787EE61828373700FC3FFF /* MusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicViewController.h; sourceTree = "<group>"; };
 		68787EE71828373700FC3FFF /* MusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicViewController.m; sourceTree = "<group>"; };
 		68787EE91828374400FC3FFF /* MusicViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MusicViewController.xib; sourceTree = "<group>"; };
-		688453C2172182260092260B /* TheSameWave.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TheSameWave.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		688453C2172182260092260B /* MyWave.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyWave.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		688453C5172182260092260B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		688453C7172182260092260B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		688453C9172182260092260B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		688453CD172182260092260B /* TheSameWave-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TheSameWave-Info.plist"; sourceTree = "<group>"; };
+		688453CD172182260092260B /* MyWave-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MyWave-Info.plist"; sourceTree = "<group>"; };
 		688453CF172182260092260B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		688453D1172182260092260B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		688453D3172182260092260B /* TheSameWave-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TheSameWave-Prefix.pch"; sourceTree = "<group>"; };
+		688453D3172182260092260B /* MyWave-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MyWave-Prefix.pch"; sourceTree = "<group>"; };
 		688453D4172182260092260B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		688453D5172182260092260B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		688453D7172182260092260B /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
@@ -246,7 +246,7 @@
 				68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */,
 				68ED98171729AD630009C2F6 /* AudioToolbox.framework */,
 				68ED981417270D190009C2F6 /* AVFoundation.framework */,
-				688453CB172182260092260B /* TheSameWave */,
+				688453CB172182260092260B /* MyWave */,
 				688453C4172182260092260B /* Frameworks */,
 				688453C3172182260092260B /* Products */,
 			);
@@ -255,7 +255,7 @@
 		688453C3172182260092260B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				688453C2172182260092260B /* TheSameWave.app */,
+				688453C2172182260092260B /* MyWave.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -277,7 +277,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		688453CB172182260092260B /* TheSameWave */ = {
+		688453CB172182260092260B /* MyWave */ = {
 			isa = PBXGroup;
 			children = (
 				68787E8E1827999E00FC3FFF /* AFNetworking */,
@@ -285,7 +285,7 @@
 				68ED98161729ACF40009C2F6 /* Classes */,
 				688453CC172182260092260B /* Supporting Files */,
 			);
-			path = TheSameWave;
+			path = MyWave;
 			sourceTree = "<group>";
 		};
 		688453CC172182260092260B /* Supporting Files */ = {
@@ -294,10 +294,10 @@
 				68787EB518281FED00FC3FFF /* Images */,
 				68F7B7AF17343D99003B27C7 /* arrow_left.png */,
 				68F7B7B017343D99003B27C7 /* arrow_right.png */,
-				688453CD172182260092260B /* TheSameWave-Info.plist */,
+				688453CD172182260092260B /* MyWave-Info.plist */,
 				688453CE172182260092260B /* InfoPlist.strings */,
 				688453D1172182260092260B /* main.m */,
-				688453D3172182260092260B /* TheSameWave-Prefix.pch */,
+				688453D3172182260092260B /* MyWave-Prefix.pch */,
 				688453D7172182260092260B /* Default.png */,
 				688453D9172182260092260B /* Default@2x.png */,
 				688453DB172182260092260B /* Default-568h@2x.png */,
@@ -354,9 +354,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		688453C1172182260092260B /* TheSameWave */ = {
+		688453C1172182260092260B /* MyWave */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 688453E5172182260092260B /* Build configuration list for PBXNativeTarget "TheSameWave" */;
+			buildConfigurationList = 688453E5172182260092260B /* Build configuration list for PBXNativeTarget "MyWave" */;
 			buildPhases = (
 				688453BE172182260092260B /* Sources */,
 				688453BF172182260092260B /* Frameworks */,
@@ -366,9 +366,9 @@
 			);
 			dependencies = (
 			);
-			name = TheSameWave;
+			name = MyWave;
 			productName = TheSameWave;
-			productReference = 688453C2172182260092260B /* TheSameWave.app */;
+			productReference = 688453C2172182260092260B /* MyWave.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -380,7 +380,7 @@
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = SameWave;
 			};
-			buildConfigurationList = 688453BD172182250092260B /* Build configuration list for PBXProject "TheSameWave" */;
+			buildConfigurationList = 688453BD172182250092260B /* Build configuration list for PBXProject "MyWave" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -392,7 +392,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				688453C1172182260092260B /* TheSameWave */,
+				688453C1172182260092260B /* MyWave */,
 			);
 		};
 /* End PBXProject section */
@@ -537,9 +537,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "TheSameWave/TheSameWave-Prefix.pch";
-				INFOPLIST_FILE = "TheSameWave/TheSameWave-Info.plist";
-				PRODUCT_NAME = TheSameWave;
+				GCC_PREFIX_HEADER = "MyWave/MyWave-Prefix.pch";
+				INFOPLIST_FILE = "MyWave/MyWave-Info.plist";
+				PRODUCT_NAME = MyWave;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -548,9 +548,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "TheSameWave/TheSameWave-Prefix.pch";
-				INFOPLIST_FILE = "TheSameWave/TheSameWave-Info.plist";
-				PRODUCT_NAME = TheSameWave;
+				GCC_PREFIX_HEADER = "MyWave/MyWave-Prefix.pch";
+				INFOPLIST_FILE = "MyWave/MyWave-Info.plist";
+				PRODUCT_NAME = MyWave;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -558,7 +558,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		688453BD172182250092260B /* Build configuration list for PBXProject "TheSameWave" */ = {
+		688453BD172182250092260B /* Build configuration list for PBXProject "MyWave" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				688453E3172182260092260B /* Debug */,
@@ -567,7 +567,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		688453E5172182260092260B /* Build configuration list for PBXNativeTarget "TheSameWave" */ = {
+		688453E5172182260092260B /* Build configuration list for PBXNativeTarget "MyWave" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				688453E6172182260092260B /* Debug */,

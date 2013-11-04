@@ -13,7 +13,7 @@
 {
     IBOutlet UIButton *_musicButton;
     IBOutlet UIButton *_downloadedButton;
-    UIBarButtonItem *loginBarButtonItem;
+    UIBarButtonItem *_loginBarButtonItem;
     
     Vkontakte *_vkInstance;
 }

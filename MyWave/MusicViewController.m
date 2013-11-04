@@ -1,20 +1,22 @@
 //
-//  DownloadedViewController.m
+//  MusicViewController.m
 //  TheSameWave
 //
-//  Created by Дмитрий on 03.11.13.
+//  Created by Дмитрий on 23.04.13.
 //  Copyright (c) 2013 SameWave. All rights reserved.
 //
 
-#import "DownloadedViewController.h"
+#import "MusicViewController.h"
 #import "PlayerViewController.h"
-#import "DBManager.h"
+#import <AVFoundation/AVPlayerItem.h>
 
-@interface DownloadedViewController ()
+@interface MusicViewController ()
 
 @end
 
-@implementation DownloadedViewController
+@implementation MusicViewController
+
+@synthesize data = _data;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -25,22 +27,11 @@
     return self;
 }
 
-
-- (void)setupData
-{
-    DBManager *db = [DBManager getSharedInstance];
-    NSArray *data = [db findAll];
-    self.data = nil;
-    self.data = data;
-}
-
 - (void)viewDidLoad
 {
-    [self setupData];
-    [self.navigationItem setTitle:@"Downloaded"];
     [super viewDidLoad];
+    self.navigationItem.title = @"VK";
 }
-
 
 - (void)didReceiveMemoryWarning
 {
@@ -56,21 +47,34 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.data count];
+    return [_data count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
-    NSString *cellTitle = [NSString stringWithFormat:@"%@ - %@", [[self.data objectAtIndex:indexPath.row]objectAtIndex:0], [[self.data objectAtIndex:indexPath.row]objectAtIndex:1]];
-    cell.textLabel.text = cellTitle;
-    CGFloat fontSize = 14.0f;
-    cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:fontSize];
+    
+    if ([tableView isEqual:self.tableView])
+    {
+        static NSString *TableViewCellIdentifier = @"Cell";
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier];
+        
+        if (cell == nil)
+        {
+            cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault
+                                           reuseIdentifier:TableViewCellIdentifier];
+        }
+        NSDictionary *song = [_data objectAtIndex:indexPath.row];
 
+        CGFloat fontSize = 14.0f;
+        cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:fontSize];
+        cell.textLabel.text = [NSString stringWithFormat:@"%@ - %@",
+                               [song objectForKey:@"artist"],
+                               [song objectForKey:@"title"]];
+    }
+    
     return cell;
 }
 
@@ -113,30 +117,24 @@
 }
 */
 
-
 #pragma mark - Table view delegate
 
-// In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PlayerViewController *playerViewController = [[PlayerViewController alloc]initWithNibName:@"PlayerViewController" bundle:nil];
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    
-    NSString *songPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, [[self.data objectAtIndex:indexPath.row]objectAtIndex:3]];
-    NSArray *keys = [NSArray arrayWithObjects:@"url", @"artist", @"title", @"duration", nil];
-    NSArray *values = [NSArray arrayWithObjects:songPath, [[self.data objectAtIndex:indexPath.row]objectAtIndex:0], [[self.data objectAtIndex:indexPath.row]objectAtIndex:1], [[self.data objectAtIndex:indexPath.row]objectAtIndex:2], nil];
-    NSLog(@"%@", songPath);
-    NSDictionary *song = [[NSDictionary alloc] initWithObjects:values forKeys:keys];
-    playerViewController.song = song;
-    
-    
-    
+    playerViewController.song =[_data objectAtIndex:indexPath.row];
+    NSMutableArray *songs = [[NSMutableArray alloc]init];
+    NSMutableArray *playlist = [[NSMutableArray alloc]init];
+    for (int i = indexPath.row; i < [_data count] -1; ++i) {
+        NSDictionary *song = [_data objectAtIndex:i];
+        [songs addObject:song];
+        AVPlayerItem *item = [AVPlayerItem playerItemWithURL:[song objectForKey:@"url"]];
+        [playlist addObject:item];
+    }
+    playerViewController.songs = songs;
+    playerViewController.playlist = playlist;
     [self.navigationController pushViewController:playerViewController animated:YES];
-    
+     
 }
-
-
-
 
 @end

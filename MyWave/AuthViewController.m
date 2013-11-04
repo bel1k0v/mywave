@@ -17,9 +17,9 @@
     [super viewDidLoad];
 	_vkInstance = [Vkontakte sharedInstance];
     _vkInstance.delegate = self;
-    self.navigationItem.title = @"The Same Wave";
-    self.loginBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Login" style:UIBarButtonItemStylePlain target:self action:@selector(loginBarButtonItemPressed:)];
-    self.navigationItem.rightBarButtonItem = self.loginBarButtonItem;
+    self.navigationItem.title = @"";
+    _loginBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Войти" style:UIBarButtonItemStylePlain target:self action:@selector(loginBarButtonItemPressed:)];
+    self.navigationItem.rightBarButtonItem = _loginBarButtonItem;
     [self refreshButtonState];
 }
 
@@ -63,12 +63,12 @@
 {
     if (![_vkInstance isAuthorized])
     {
-        self.loginBarButtonItem.title = @"Login";
+        _loginBarButtonItem.title = @"Войти";
     }
     else
     {
-        [_vkInstance getUserInfo];
-        self.loginBarButtonItem.title = @"Logout";
+        //[_vkInstance getUserInfo];
+        _loginBarButtonItem.title = @"Выйти";
     }
 }
 

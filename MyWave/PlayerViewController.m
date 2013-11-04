@@ -22,7 +22,8 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.title = NSLocalizedString(@"Audio", @"Audio");
+        self.title = @"Плеер";
+        
     }
     return self;
 }
@@ -150,6 +151,7 @@
 
 - (IBAction)didTapDownload:(id)sender
 {
+    [self.btnDownload setEnabled:NO];
     NSLog(@"Download %@", [self.song objectForKey:@"url"]);
     NSURL *url = [NSURL URLWithString:[self.song objectForKey:@"url"]];
     NSString *filename = [NSString stringWithFormat:@"%@ - %@.mp3", [self.song objectForKey:@"artist"], [self.song objectForKey:@"title"]];
@@ -173,10 +175,13 @@
         NSString *successMessage = [NSString stringWithFormat:@"Successfully downloaded file to %@", path];
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Downloaded" message:successMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
         [alert show];
+        
+        [self.btnDownload setEnabled:YES];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSString *errorMessage = [NSString stringWithFormat:@"Something wrong happened"];
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Fail!" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
         [alert show];
+        [self.btnDownload setEnabled:YES];
     }];
     
     [operation start];
