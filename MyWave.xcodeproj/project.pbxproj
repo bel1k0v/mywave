@@ -241,11 +241,6 @@
 		688453B9172182250092260B = {
 			isa = PBXGroup;
 			children = (
-				68ED9826172B13ED0009C2F6 /* QuartzCore.framework */,
-				68ED981B1729ADC90009C2F6 /* CFNetwork.framework */,
-				68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */,
-				68ED98171729AD630009C2F6 /* AudioToolbox.framework */,
-				68ED981417270D190009C2F6 /* AVFoundation.framework */,
 				688453CB172182260092260B /* MyWave */,
 				688453C4172182260092260B /* Frameworks */,
 				688453C3172182260092260B /* Products */,
@@ -263,6 +258,11 @@
 		688453C4172182260092260B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				68ED981B1729ADC90009C2F6 /* CFNetwork.framework */,
+				68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */,
+				68ED98171729AD630009C2F6 /* AudioToolbox.framework */,
+				68ED981417270D190009C2F6 /* AVFoundation.framework */,
+				68ED9826172B13ED0009C2F6 /* QuartzCore.framework */,
 				68787EAB1827A7BF00FC3FFF /* libsqlite3.0.dylib */,
 				68787E6F18278A1800FC3FFF /* MobileCoreServices.framework */,
 				68787E67182789F100FC3FFF /* CoreFoundation.framework */,
@@ -378,7 +378,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0460;
-				ORGANIZATIONNAME = SameWave;
+				ORGANIZATIONNAME = "";
 			};
 			buildConfigurationList = 688453BD172182250092260B /* Build configuration list for PBXProject "MyWave" */;
 			compatibilityVersion = "Xcode 3.2";
