@@ -11,14 +11,16 @@
 
 @interface AuthViewController : UIViewController <VkontakteDelegate>
 {
-    IBOutlet UIButton *_loginButton;
     IBOutlet UIButton *_musicButton;
     IBOutlet UIButton *_downloadedButton;
+    UIBarButtonItem *loginBarButtonItem;
     
     Vkontakte *_vkInstance;
 }
 
-- (IBAction)loginButtonPressed:(id)sender;
+@property (nonatomic, strong) UIBarButtonItem *loginBarButtonItem;
+
+- (IBAction)loginBarButtonItemPressed:(id)sender;
 - (IBAction)musicButtonPressed:(id)sender;
 - (IBAction)downloaderButtonPressed:(id)sender;
 @end

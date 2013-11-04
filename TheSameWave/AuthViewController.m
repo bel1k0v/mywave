@@ -18,6 +18,8 @@
 	_vkInstance = [Vkontakte sharedInstance];
     _vkInstance.delegate = self;
     self.navigationItem.title = @"The Same Wave";
+    self.loginBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Login" style:UIBarButtonItemStylePlain target:self action:@selector(loginBarButtonItemPressed:)];
+    self.navigationItem.rightBarButtonItem = self.loginBarButtonItem;
     [self refreshButtonState];
 }
 
@@ -26,7 +28,7 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)loginButtonPressed:(id)sender
+- (IBAction)loginBarButtonItemPressed:(id)sender
 {
     if ((BOOL)[_vkInstance isAuthorized] == FALSE)
     {
@@ -46,13 +48,13 @@
     }
     else
     {
-        NSLog(@"Authorize please");
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Fail!" message:@"Authorize please!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
     }
 }
 
 - (void)downloaderButtonPressed:(id)sender
 {
-    NSLog(@"Downloaded button pressed");
     DownloadedViewController* downloadedViewController = [DownloadedViewController new];
     [self.navigationController pushViewController:downloadedViewController animated:YES];
 }
@@ -61,14 +63,12 @@
 {
     if (![_vkInstance isAuthorized])
     {
-        [_loginButton setTitle:@"Login"
-                 forState:UIControlStateNormal];
+        self.loginBarButtonItem.title = @"Login";
     }
     else
     {
-        [_loginButton setTitle:@"Logout"
-                 forState:UIControlStateNormal];
         [_vkInstance getUserInfo];
+        self.loginBarButtonItem.title = @"Logout";
     }
 }
 
@@ -76,7 +76,8 @@
 
 - (void)vkontakteDidFailedWithError:(NSError *)error
 {
-    NSLog(@"Error");
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Fail!" message:@"VK Error" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    [alert show];
 }
 
 - (void)showVkontakteAuthController:(UIViewController *)controller

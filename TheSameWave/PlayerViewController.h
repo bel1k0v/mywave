@@ -13,6 +13,7 @@
     float restoreAfterScrubbingRate;
 }
 
+@property (strong, nonatomic) IBOutlet UILabel *lblMusicArtist;
 @property (strong, nonatomic) IBOutlet UILabel *lblMusicName;
 @property (strong, nonatomic) IBOutlet UILabel *lblMusicTime;
 @property (strong, nonatomic) IBOutlet UIButton *btnPlayPause;
@@ -22,6 +23,8 @@
 
 
 @property (strong, nonatomic) NSDictionary *song;
+@property (strong, nonatomic) NSArray *songs;
+@property (strong, nonatomic) NSArray *playlist;
 - (IBAction)didTapPlayPause:(id)sender;
 - (IBAction)didTapDownload:(id)sender;
 - (IBAction)beginScrubbing:(id)sender;

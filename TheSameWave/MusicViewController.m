@@ -8,6 +8,7 @@
 
 #import "MusicViewController.h"
 #import "PlayerViewController.h"
+#import <AVFoundation/AVPlayerItem.h>
 
 @interface MusicViewController ()
 
@@ -128,6 +129,16 @@
 {
     PlayerViewController *playerViewController = [[PlayerViewController alloc]initWithNibName:@"PlayerViewController" bundle:nil];
     playerViewController.song =[_data objectAtIndex:indexPath.row];
+    NSMutableArray *songs = [[NSMutableArray alloc]init];
+    NSMutableArray *playlist = [[NSMutableArray alloc]init];
+    for (int i = indexPath.row; i < [_data count] -1; ++i) {
+        NSDictionary *song = [_data objectAtIndex:i];
+        [songs addObject:song];
+        AVPlayerItem *item = [AVPlayerItem playerItemWithURL:[song objectForKey:@"url"]];
+        [playlist addObject:item];
+    }
+    playerViewController.songs = songs;
+    playerViewController.playlist = playlist;
     [self.navigationController pushViewController:playerViewController animated:YES];
      
 }

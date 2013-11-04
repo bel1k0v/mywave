@@ -8,8 +8,10 @@
 #import "AppDelegate.h"
 #import "PlayerViewController.h"
 #import "AFHTTPRequestOperation.h"
+#import "DBManager.h"
 
 @interface PlayerViewController ()
+
 @property (nonatomic, strong) AVQueuePlayer *player;
 @property (nonatomic, strong) id timeObserver;
 @property (nonatomic, strong) id progressObserver;
@@ -28,7 +30,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationItem.title = [self.song objectForKey:@"artist"];
     // Set AVAudioSession
     NSError *sessionError = nil;
     [[AVAudioSession sharedInstance] setDelegate:self];
@@ -38,19 +39,38 @@
     UInt32 doChangeDefaultRoute = 1;
     AudioSessionSetProperty(kAudioSessionProperty_OverrideCategoryDefaultToSpeaker, sizeof(doChangeDefaultRoute), &doChangeDefaultRoute);
     
+    
+    self.lblMusicArtist.text = [NSString stringWithFormat:@"%@",
+                                [self.song objectForKey:@"artist"]];
     self.lblMusicName.text = [NSString stringWithFormat:@"%@",
                               [self.song objectForKey:@"title"]];
-    AVPlayerItem *item = [AVPlayerItem playerItemWithURL:[NSURL URLWithString:[self.song objectForKey:@"url"]]];
-    //AVPlayerItem *item = [AVPlayerItem playerItemWithURL:[NSURL fileURLWithPath:[self.song objectForKey:@"url"]]];
-    //NSArray *queue = @[item];
+    [self.scrubber setThumbImage:[UIImage imageNamed:@"position"] forState:UIControlStateNormal];
     
-    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    self.player = app.player;
-    [self.player removeAllItems];
+    NSURL *filePath;
+    if ([NSURL URLWithString:[self.song objectForKey:@"url"]])
+    {
+        filePath = [NSURL URLWithString:[self.song objectForKey:@"url"]];
+    }
+    else
+    {
+        filePath = [NSURL fileURLWithPath:[self.song objectForKey:@"url"]];
+        [self.btnDownload setEnabled:NO];
+        [self.btnDownload setTitle:@"" forState:UIControlStateDisabled];
+    }
+    AVPlayerItem *item = [AVPlayerItem playerItemWithURL:filePath];
+    
+    if (!self.player)
+    {
+        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        self.player = app.player;
+        
+    }
+    
     [self.player pause];
+    
     [self.player replaceCurrentItemWithPlayerItem:item];
     self.player.actionAtItemEnd = AVPlayerActionAtItemEndAdvance;
-
+    
     [self.player addObserver:self
                   forKeyPath:@"currentItem"
                      options:NSKeyValueObservingOptionNew
@@ -66,11 +86,6 @@
         
         int progressMinutes = (int) floor(progress/60);
         int progressMinuteSeconds = (int) progress - progressMinutes * 60;
-        
-        if (leftMinutes <= 0 && leftMinuteSeconds <= 0)
-        {
-            [self.player pause];
-        }
         
         NSString *timeString = [NSString stringWithFormat:@"%d:%02d - %d:%02d",
                                 progressMinutes,
@@ -93,35 +108,31 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ([keyPath isEqualToString:@"currentItem"])
+    if ([keyPath isEqualToString:@"currentItem"]) // Item Changed
     {
-        AVPlayerItem *item = ((AVPlayer *)object).currentItem;
-        //self.lblMusicName.text = ((AVURLAsset*)item.asset).URL.pathComponents.lastObject;
-        //NSLog(@"New music name: %@", self.lblMusicName.text);
     }
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (IBAction)didTapPlayPause:(id)sender
 {
     self.btnPlayPause.selected = !self.btnPlayPause.selected;
-
+    
     if (self.btnPlayPause.selected)
     {
         [self.player play];
-        [self.btnPlayPause setTitle:@"Pause" forState:UIControlStateNormal];
-
+        [self.btnPlayPause setBackgroundImage:[UIImage imageNamed:@"pause"] forState:UIControlStateSelected];
+        
         CMTime playerDuration = [self playerItemDuration];
         if (CMTIME_IS_INVALID(playerDuration))
         {
             return;
         }
-            
+        
         double duration = CMTimeGetSeconds(playerDuration);
         if (isfinite(duration))
         {
@@ -133,7 +144,7 @@
     else
     {
         [self.player pause];
-        [self.btnPlayPause setTitle:@"Play" forState:UIControlStateNormal];
+        [self.btnPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
     }
 }
 
@@ -152,12 +163,24 @@
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"Successfully downloaded file to %@", path);
+        
+        DBManager *db = [DBManager getSharedInstance];
+        if ([db saveData:[self.song objectForKey:@"artist"] title:[self.song objectForKey:@"title"] duration:[self.song objectForKey:@"duration"] filename:filename] == YES)
+        {
+            NSLog(@"Successfully saved to database");
+        }
+        
+        NSString *successMessage = [NSString stringWithFormat:@"Successfully downloaded file to %@", path];
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Downloaded" message:successMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
+        NSString *errorMessage = [NSString stringWithFormat:@"Something wrong happened"];
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Fail!" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
     }];
     
     [operation start];
-
+    
 }
 
 /* ---------------------------------------------------------
@@ -169,20 +192,6 @@
 	AVPlayerItem *playerItem = [self.player currentItem];
 	if (playerItem.status == AVPlayerItemStatusReadyToPlay)
 	{
-        /*
-         NOTE:
-         Because of the dynamic nature of HTTP Live Streaming Media, the best practice
-         for obtaining the duration of an AVPlayerItem object has changed in iOS 4.3.
-         Prior to iOS 4.3, you would obtain the duration of a player item by fetching
-         the value of the duration property of its associated AVAsset object. However,
-         note that for HTTP Live Streaming Media the duration of a player item during
-         any particular playback session may differ from the duration of its asset. For
-         this reason a new key-value observable duration property has been defined on
-         AVPlayerItem.
-         
-         See the AV Foundation Release Notes for iOS 4.3 for more information.
-         */
-        
 		return([playerItem duration]);
 	}
 	
@@ -303,7 +312,7 @@
     {
         return;
     }
-		
+    
     double duration = CMTimeGetSeconds(playerDuration);
     if (isfinite(duration))
     {

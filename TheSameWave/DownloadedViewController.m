@@ -8,6 +8,7 @@
 
 #import "DownloadedViewController.h"
 #import "PlayerViewController.h"
+#import "DBManager.h"
 
 @interface DownloadedViewController ()
 
@@ -27,26 +28,10 @@
 
 - (void)setupData
 {
-    NSFileManager *filemgr;
-    NSArray *filelist;
-    int count;
-    int i;
-    
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
-
-    filemgr =[NSFileManager defaultManager];
-    filelist = [filemgr contentsOfDirectoryAtPath:documentsDirectory error:NULL];
-    count = [filelist count];
-    for (i = 0; i < count; i++)
-        NSLog(@"%@", [filelist objectAtIndex: i]);
-    
-    
+    DBManager *db = [DBManager getSharedInstance];
+    NSArray *data = [db findAll];
     self.data = nil;
-    self.data = filelist;
-
-    //NSLog(@"Data: %@", self.data);
+    self.data = data;
 }
 
 - (void)viewDidLoad
@@ -60,14 +45,12 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
     return 1;
 }
 
@@ -83,9 +66,11 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-    cell.textLabel.text = [self.data objectAtIndex:indexPath.row];
-    // Configure the cell...
-    //cellt.textLabel.text =
+    NSString *cellTitle = [NSString stringWithFormat:@"%@ - %@", [[self.data objectAtIndex:indexPath.row]objectAtIndex:0], [[self.data objectAtIndex:indexPath.row]objectAtIndex:1]];
+    cell.textLabel.text = cellTitle;
+    CGFloat fontSize = 14.0f;
+    cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:fontSize];
+
     return cell;
 }
 
@@ -138,12 +123,15 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     
-    NSString *songPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, [self.data objectAtIndex:indexPath.row]];
-    NSArray *keys = [NSArray arrayWithObjects:@"url", nil];
-    NSArray *values = [NSArray arrayWithObjects:songPath, nil];
+    NSString *songPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, [[self.data objectAtIndex:indexPath.row]objectAtIndex:3]];
+    NSArray *keys = [NSArray arrayWithObjects:@"url", @"artist", @"title", @"duration", nil];
+    NSArray *values = [NSArray arrayWithObjects:songPath, [[self.data objectAtIndex:indexPath.row]objectAtIndex:0], [[self.data objectAtIndex:indexPath.row]objectAtIndex:1], [[self.data objectAtIndex:indexPath.row]objectAtIndex:2], nil];
     NSLog(@"%@", songPath);
     NSDictionary *song = [[NSDictionary alloc] initWithObjects:values forKeys:keys];
     playerViewController.song = song;
+    
+    
+    
     [self.navigationController pushViewController:playerViewController animated:YES];
     
 }
