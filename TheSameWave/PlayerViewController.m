@@ -7,7 +7,7 @@
 //
 #import "AppDelegate.h"
 #import "PlayerViewController.h"
-
+#import "AFHTTPRequestOperation.h"
 
 @interface PlayerViewController ()
 @property (nonatomic, strong) AVQueuePlayer *player;
@@ -28,7 +28,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationItem.leftBarButtonItem.title = @"Back";
     self.navigationItem.title = [self.song objectForKey:@"artist"];
     // Set AVAudioSession
     NSError *sessionError = nil;
@@ -42,7 +41,7 @@
     self.lblMusicName.text = [NSString stringWithFormat:@"%@",
                               [self.song objectForKey:@"title"]];
     AVPlayerItem *item = [AVPlayerItem playerItemWithURL:[NSURL URLWithString:[self.song objectForKey:@"url"]]];
-    
+    //AVPlayerItem *item = [AVPlayerItem playerItemWithURL:[NSURL fileURLWithPath:[self.song objectForKey:@"url"]]];
     //NSArray *queue = @[item];
     
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -136,6 +135,29 @@
         [self.player pause];
         [self.btnPlayPause setTitle:@"Play" forState:UIControlStateNormal];
     }
+}
+
+- (IBAction)didTapDownload:(id)sender
+{
+    NSLog(@"Download %@", [self.song objectForKey:@"url"]);
+    NSURL *url = [NSURL URLWithString:[self.song objectForKey:@"url"]];
+    NSString *filename = [NSString stringWithFormat:@"%@ - %@.mp3", [self.song objectForKey:@"artist"], [self.song objectForKey:@"title"]];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = [[paths objectAtIndex:0] stringByAppendingPathComponent:filename];
+    operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"Successfully downloaded file to %@", path);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+    [operation start];
+
 }
 
 /* ---------------------------------------------------------

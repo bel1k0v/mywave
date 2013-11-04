@@ -1,21 +1,19 @@
 //
-//  MusicViewController.m
+//  DownloadedViewController.m
 //  TheSameWave
 //
-//  Created by Дмитрий on 23.04.13.
+//  Created by Дмитрий on 03.11.13.
 //  Copyright (c) 2013 SameWave. All rights reserved.
 //
 
-#import "MusicViewController.h"
+#import "DownloadedViewController.h"
 #import "PlayerViewController.h"
 
-@interface MusicViewController ()
+@interface DownloadedViewController ()
 
 @end
 
-@implementation MusicViewController
-
-@synthesize data = _data;
+@implementation DownloadedViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -26,16 +24,38 @@
     return self;
 }
 
+
+- (void)setupData
+{
+    NSFileManager *filemgr;
+    NSArray *filelist;
+    int count;
+    int i;
+    
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
+
+    filemgr =[NSFileManager defaultManager];
+    filelist = [filemgr contentsOfDirectoryAtPath:documentsDirectory error:NULL];
+    count = [filelist count];
+    for (i = 0; i < count; i++)
+        NSLog(@"%@", [filelist objectAtIndex: i]);
+    
+    
+    self.data = nil;
+    self.data = filelist;
+
+    //NSLog(@"Data: %@", self.data);
+}
+
 - (void)viewDidLoad
 {
+    [self setupData];
+    [self.navigationItem setTitle:@"Downloaded"];
     [super viewDidLoad];
-    self.navigationItem.title = @"Music";
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -47,39 +67,25 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [_data count];
+    return [self.data count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
-    if ([tableView isEqual:self.tableView])
-    {
-        static NSString *TableViewCellIdentifier = @"Cell";
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier];
-        
-        if (cell == nil)
-        {
-            cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault
-                                           reuseIdentifier:TableViewCellIdentifier];
-        }
-        NSDictionary *song = [_data objectAtIndex:indexPath.row];
-
-        CGFloat fontSize = 14.0f;
-        cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:fontSize];
-        cell.textLabel.text = [NSString stringWithFormat:@"%@ - %@",
-                               [song objectForKey:@"artist"],
-                               [song objectForKey:@"title"]];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-    
+    cell.textLabel.text = [self.data objectAtIndex:indexPath.row];
+    // Configure the cell...
+    //cellt.textLabel.text =
     return cell;
 }
 
@@ -122,14 +128,27 @@
 }
 */
 
+
 #pragma mark - Table view delegate
 
+// In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PlayerViewController *playerViewController = [[PlayerViewController alloc]initWithNibName:@"PlayerViewController" bundle:nil];
-    playerViewController.song =[_data objectAtIndex:indexPath.row];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    
+    NSString *songPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, [self.data objectAtIndex:indexPath.row]];
+    NSArray *keys = [NSArray arrayWithObjects:@"url", nil];
+    NSArray *values = [NSArray arrayWithObjects:songPath, nil];
+    NSLog(@"%@", songPath);
+    NSDictionary *song = [[NSDictionary alloc] initWithObjects:values forKeys:keys];
+    playerViewController.song = song;
     [self.navigationController pushViewController:playerViewController animated:YES];
-     
+    
 }
+
+
+
 
 @end

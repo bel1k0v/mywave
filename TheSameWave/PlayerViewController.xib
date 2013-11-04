@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PlayerViewController">
             <connections>
+                <outlet property="btnDownload" destination="y83-zq-kJj" id="1fP-pm-fiI"/>
                 <outlet property="btnPlayPause" destination="PMW-ZT-byD" id="7Eh-cQ-hoL"/>
                 <outlet property="lblMusicName" destination="dvT-wi-Skc" id="c7v-2K-jXW"/>
                 <outlet property="lblMusicTime" destination="lrj-Eq-siJ" id="iUN-8o-QPo"/>
@@ -60,6 +61,18 @@
                         <action selector="scrub:" destination="-1" eventType="touchDragInside" id="x1Q-Z4-whX"/>
                     </connections>
                 </slider>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y83-zq-kJj">
+                    <rect key="frame" x="127" y="371" width="66" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                    <state key="normal" title="Download">
+                        <color key="titleColor" red="0.098039217293262482" green="0.098039217293262482" blue="0.098039217293262482" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="didTapDownload:" destination="-1" eventType="touchUpInside" id="FfC-eY-dzw"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>

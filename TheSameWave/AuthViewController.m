@@ -8,6 +8,7 @@
 
 #import "AuthViewController.h"
 #import "MusicViewController.h"
+#import "DownloadedViewController.h"
 
 @implementation AuthViewController
 
@@ -47,6 +48,13 @@
     {
         NSLog(@"Authorize please");
     }
+}
+
+- (void)downloaderButtonPressed:(id)sender
+{
+    NSLog(@"Downloaded button pressed");
+    DownloadedViewController* downloadedViewController = [DownloadedViewController new];
+    [self.navigationController pushViewController:downloadedViewController animated:YES];
 }
 
 - (void)refreshButtonState

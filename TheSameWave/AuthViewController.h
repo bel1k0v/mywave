@@ -13,12 +13,13 @@
 {
     IBOutlet UIButton *_loginButton;
     IBOutlet UIButton *_musicButton;
+    IBOutlet UIButton *_downloadedButton;
     
     Vkontakte *_vkInstance;
 }
 
 - (IBAction)loginButtonPressed:(id)sender;
 - (IBAction)musicButtonPressed:(id)sender;
-
+- (IBAction)downloaderButtonPressed:(id)sender;
 @end
 
