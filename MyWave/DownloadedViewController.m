@@ -9,6 +9,7 @@
 #import "DownloadedViewController.h"
 #import "PlayerViewController.h"
 #import "DBManager.h"
+#import <AVFoundation/AVFoundation.h>
 
 @interface DownloadedViewController ()
 
@@ -122,15 +123,32 @@
     PlayerViewController *playerViewController = [[PlayerViewController alloc]initWithNibName:@"PlayerViewController" bundle:nil];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSMutableArray *songs = [[NSMutableArray alloc]init];
+    NSMutableArray *playlist = [[NSMutableArray alloc]init];
     
-    NSString *songPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, [[self.data objectAtIndex:indexPath.row]objectAtIndex:3]];
-    NSArray *keys = [NSArray arrayWithObjects:@"url", @"artist", @"title", @"duration", nil];
-    NSArray *values = [NSArray arrayWithObjects:songPath, [[self.data objectAtIndex:indexPath.row]objectAtIndex:0], [[self.data objectAtIndex:indexPath.row]objectAtIndex:1], [[self.data objectAtIndex:indexPath.row]objectAtIndex:2], nil];
-    NSLog(@"%@", songPath);
-    NSDictionary *song = [[NSDictionary alloc] initWithObjects:values forKeys:keys];
+    for(int i = 0; i < [_data count]; ++i)
+    {
+        NSString *artist = [[_data objectAtIndex:i]objectAtIndex:0];
+        NSString *title = [[_data objectAtIndex:i]objectAtIndex:1];
+        NSString *duration = [[_data objectAtIndex:i]objectAtIndex:2];
+        NSString *songPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, [[_data objectAtIndex:i]objectAtIndex:3]];
+        
+        NSArray *keys = [NSArray arrayWithObjects:@"url", @"artist", @"title", @"duration", nil];
+        NSArray *values = [NSArray arrayWithObjects:songPath, artist, title, duration, nil];
+        NSDictionary *song = [[NSDictionary alloc] initWithObjects:values forKeys:keys];
+        
+        [songs addObject:song];
+        
+        AVPlayerItem *item = [AVPlayerItem playerItemWithURL:[song objectForKey:@"url"]];
+        [playlist addObject:item];
+    }
+    
+    NSDictionary *song = [songs objectAtIndex:indexPath.row];
+    
     playerViewController.song = song;
-    
-    
+    playerViewController.songs = songs;
+    playerViewController.playlist = playlist;
+    playerViewController->currentSong = indexPath.row;
     
     [self.navigationController pushViewController:playerViewController animated:YES];
     

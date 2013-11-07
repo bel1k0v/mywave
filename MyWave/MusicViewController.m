@@ -125,7 +125,7 @@
     playerViewController.song =[_data objectAtIndex:indexPath.row];
     NSMutableArray *songs = [[NSMutableArray alloc]init];
     NSMutableArray *playlist = [[NSMutableArray alloc]init];
-    for (int i = indexPath.row; i < [_data count] -1; ++i) {
+    for (int i = 0; i < [_data count]; ++i) {
         NSDictionary *song = [_data objectAtIndex:i];
         [songs addObject:song];
         AVPlayerItem *item = [AVPlayerItem playerItemWithURL:[song objectForKey:@"url"]];
@@ -133,6 +133,7 @@
     }
     playerViewController.songs = songs;
     playerViewController.playlist = playlist;
+    playerViewController->currentSong = indexPath.row;
     [self.navigationController pushViewController:playerViewController animated:YES];
      
 }

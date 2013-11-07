@@ -5,7 +5,7 @@
 //  Created by Дмитрий on 03.11.13.
 //  Copyright (c) 2013 SameWave. All rights reserved.
 //
-#import "AppDelegate.h"
+//#import "AppDelegate.h"
 #import "PlayerViewController.h"
 #import "AFHTTPRequestOperation.h"
 #import "DBManager.h"
@@ -28,54 +28,116 @@
     return self;
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self dismissViewControllerAnimated:animated completion:nil];
+    [_player removeAllItems];
+    _player = nil;
+}
+
+- (BOOL)increaseSongNumber
+{
+    int temp;
+    temp = self->currentSong +1;
+    if (temp >= 0 && (temp <= ([_songs count] -1)))
+    {
+        self->currentSong++;
+        return YES;
+    }
+    else
+    {
+        NSLog(@"Wrong song number");
+    }
+    return NO;
+}
+
+- (void)itemDidFinishPlaying
+{
+    if ([self increaseSongNumber] == YES)
+    {
+        [self removePlayerProgressObserver];
+        [_player pause];
+        _song = [_songs objectAtIndex:self->currentSong];
+        
+        AVPlayerItem *item = [AVPlayerItem playerItemWithURL:[self getSongFilePath]];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemDidFinishPlaying) name:AVPlayerItemDidPlayToEndTimeNotification object:item];
+        
+        [self updateUserInterface];
+        
+        _player = nil;
+        _player = [[AVQueuePlayer alloc]initWithPlayerItem:item];
+        _player.actionAtItemEnd = AVPlayerActionAtItemEndAdvance;
+        
+        [_player addObserver:self
+                  forKeyPath:@"currentItem"
+                     options:NSKeyValueObservingOptionNew
+                     context:nil];
+        
+        [self setTimer];
+        [_player play];
+    }
+}
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     // Set AVAudioSession
     NSError *sessionError = nil;
     [[AVAudioSession sharedInstance] setDelegate:self];
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&sessionError];
-    
     // Change the default output audio route
     UInt32 doChangeDefaultRoute = 1;
     AudioSessionSetProperty(kAudioSessionProperty_OverrideCategoryDefaultToSpeaker, sizeof(doChangeDefaultRoute), &doChangeDefaultRoute);
     
+    UInt32 otherAudioIsPlaying;
+    UInt32 propertySize = sizeof (otherAudioIsPlaying);
+    AudioSessionGetProperty(kAudioSessionProperty_OtherAudioIsPlaying, &propertySize, &otherAudioIsPlaying);
     
+    if (otherAudioIsPlaying) {
+        NSLog(@"Audio");
+        [[AVAudioSession sharedInstance]
+         setCategory: AVAudioSessionCategoryAmbient
+         error: nil];
+    } else {
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&sessionError];
+    }
+    
+    [self updateUserInterface];
+    [self.scrubber setThumbImage:[UIImage imageNamed:@"position"] forState:UIControlStateNormal];
+    
+    AVPlayerItem *item = [AVPlayerItem playerItemWithURL:[self getSongFilePath]];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemDidFinishPlaying) name:AVPlayerItemDidPlayToEndTimeNotification object:item];
+
+    _player = [[AVQueuePlayer alloc]initWithPlayerItem:item];
+    _player.actionAtItemEnd = AVPlayerActionAtItemEndAdvance;
+    [_player addObserver:self
+              forKeyPath:@"currentItem"
+                 options:NSKeyValueObservingOptionNew
+                 context:nil];
+    
+    [self setTimer];
+}
+
+-(void)updateUserInterface
+{
     self.lblMusicArtist.text = [NSString stringWithFormat:@"%@",
                                 [self.song objectForKey:@"artist"]];
     self.lblMusicName.text = [NSString stringWithFormat:@"%@",
                               [self.song objectForKey:@"title"]];
-    [self.scrubber setThumbImage:[UIImage imageNamed:@"position"] forState:UIControlStateNormal];
     
-    NSURL *filePath;
-    if ([NSURL URLWithString:[self.song objectForKey:@"url"]])
+    //[self.btnDownload setEnabled:NO];
+    //[self.btnDownload setTitle:@"" forState:UIControlStateDisabled];
+    [self.scrubber setValue:0];
+    [self.lblMusicTime setText:@"0:00 - 0:00"];
+}
+
+-(void)setTimer
+{
+    if(self.timeObserver)
     {
-        filePath = [NSURL URLWithString:[self.song objectForKey:@"url"]];
+        _timeObserver = nil;
     }
-    else
-    {
-        filePath = [NSURL fileURLWithPath:[self.song objectForKey:@"url"]];
-        [self.btnDownload setEnabled:NO];
-        [self.btnDownload setTitle:@"" forState:UIControlStateDisabled];
-    }
-    AVPlayerItem *item = [AVPlayerItem playerItemWithURL:filePath];
-    
-    if (!self.player)
-    {
-        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        self.player = app.player;
-        
-    }
-    
-    [self.player pause];
-    
-    [self.player replaceCurrentItemWithPlayerItem:item];
-    self.player.actionAtItemEnd = AVPlayerActionAtItemEndAdvance;
-    
-    [self.player addObserver:self
-                  forKeyPath:@"currentItem"
-                     options:NSKeyValueObservingOptionNew
-                     context:nil];
     
     void (^observerBlock)(CMTime time) = ^(CMTime time) {
         double progress = (double)time.value / (double)time.timescale;
@@ -101,10 +163,24 @@
         }
     };
     
-    self.timeObserver = [self.player addPeriodicTimeObserverForInterval:CMTimeMake(10, 1000)
-                                                                  queue:dispatch_get_main_queue()
-                                                             usingBlock:observerBlock];
-    [self initScrubberTimer];
+    _timeObserver = [_player addPeriodicTimeObserverForInterval:CMTimeMake(10, 1000)
+                                                          queue:dispatch_get_main_queue()
+                                                     usingBlock:observerBlock];
+}
+
+- (NSURL *)getSongFilePath
+{
+    NSURL *filePath;
+    if ([NSURL URLWithString:[_song objectForKey:@"url"]])
+    {
+        filePath = [NSURL URLWithString:[_song objectForKey:@"url"]];
+    }
+    else
+    {
+        filePath = [NSURL fileURLWithPath:[_song objectForKey:@"url"]];
+    }
+    
+    return filePath;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -128,19 +204,7 @@
         [self.player play];
         [self.btnPlayPause setBackgroundImage:[UIImage imageNamed:@"pause"] forState:UIControlStateSelected];
         
-        CMTime playerDuration = [self playerItemDuration];
-        if (CMTIME_IS_INVALID(playerDuration))
-        {
-            return;
-        }
-        
-        double duration = CMTimeGetSeconds(playerDuration);
-        if (isfinite(duration))
-        {
-            CGFloat width = CGRectGetWidth([self.scrubber bounds]);
-            double tolerance = 0.5f * duration / width;
-            [self createPlayerProgressObserver:tolerance];
-        }
+        [self initScrubberTimer];
     }
     else
     {
@@ -152,7 +216,6 @@
 - (IBAction)didTapDownload:(id)sender
 {
     [self.btnDownload setEnabled:NO];
-    NSLog(@"Download %@", [self.song objectForKey:@"url"]);
     NSURL *url = [NSURL URLWithString:[self.song objectForKey:@"url"]];
     NSString *filename = [NSString stringWithFormat:@"%@ - %@.mp3", [self.song objectForKey:@"artist"], [self.song objectForKey:@"title"]];
     
@@ -164,8 +227,6 @@
     operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"Successfully downloaded file to %@", path);
-        
         DBManager *db = [DBManager getSharedInstance];
         if ([db saveData:[self.song objectForKey:@"artist"] title:[self.song objectForKey:@"title"] duration:[self.song objectForKey:@"duration"] filename:filename] == YES)
         {
@@ -186,6 +247,19 @@
     
     [operation start];
     
+}
+
+- (IBAction)didTapNext:(id)sender
+{
+    [self itemDidFinishPlaying];
+}
+
+- (IBAction)didTapPrev:(id)sender
+{
+    int temp = self->currentSong - 2;
+    if (temp > -1)
+        self->currentSong = self->currentSong - 2;
+    [self itemDidFinishPlaying];
 }
 
 /* ---------------------------------------------------------
@@ -279,7 +353,7 @@
         };
         self.progressObserver = [self.player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(interval, NSEC_PER_SEC)
                                                                           queue:NULL
-                                                                     usingBlock:progressBlock];
+                                                                    usingBlock:progressBlock];
     }
 }
 

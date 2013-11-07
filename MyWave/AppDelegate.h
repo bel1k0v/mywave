@@ -10,8 +10,6 @@
 #import <AVFoundation/AVFoundation.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
-@property (nonatomic, strong) AVQueuePlayer *player;
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) UINavigationController *navigationController;
-
 @end

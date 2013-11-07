@@ -8,7 +8,9 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PlayerViewController">
             <connections>
                 <outlet property="btnDownload" destination="y83-zq-kJj" id="1fP-pm-fiI"/>
+                <outlet property="btnNext" destination="kWy-Am-gEv" id="wZ1-M2-8Pc"/>
                 <outlet property="btnPlayPause" destination="PMW-ZT-byD" id="7Eh-cQ-hoL"/>
+                <outlet property="btnPrev" destination="oSS-E8-gnJ" id="8kf-SI-Xw2"/>
                 <outlet property="lblMusicArtist" destination="sQM-ec-f94" id="BRc-vZ-ENo"/>
                 <outlet property="lblMusicName" destination="dvT-wi-Skc" id="c7v-2K-jXW"/>
                 <outlet property="lblMusicTime" destination="lrj-Eq-siJ" id="iUN-8o-QPo"/>
@@ -82,6 +84,26 @@
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oSS-E8-gnJ">
+                    <rect key="frame" x="51" y="321" width="53" height="53"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" backgroundImage="arrow_left.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="didTapPrev:" destination="-1" eventType="touchUpInside" id="cwF-7q-6Ym"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kWy-Am-gEv">
+                    <rect key="frame" x="214" y="321" width="53" height="53"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" backgroundImage="arrow_right.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="didTapNext:" destination="-1" eventType="touchUpInside" id="fLB-b1-J9b"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
@@ -89,6 +111,8 @@
         </view>
     </objects>
     <resources>
+        <image name="arrow_left.png" width="53" height="53"/>
+        <image name="arrow_right.png" width="53" height="53"/>
         <image name="play.png" width="188" height="188"/>
     </resources>
 </document>
