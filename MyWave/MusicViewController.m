@@ -8,6 +8,8 @@
 
 #import "MusicViewController.h"
 #import "PlayerViewController.h"
+#import "SongCell.h"
+#include "NSString+Gender.h"
 #import <AVFoundation/AVPlayerItem.h>
 
 @interface MusicViewController ()
@@ -40,6 +42,11 @@
 
 #pragma mark - Table view data source
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 54.0f;
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -52,28 +59,27 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    static NSString *CellIdentifier = @"SongCell";
+    SongCell *cell = (SongCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
-    if ([tableView isEqual:self.tableView])
-    {
-        static NSString *TableViewCellIdentifier = @"Cell";
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier];
-        
-        if (cell == nil)
-        {
-            cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault
-                                           reuseIdentifier:TableViewCellIdentifier];
+    if (cell == nil) {
+        NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"SongCell" owner:nil options:nil];
+        for (id currentObject in topLevelObjects){
+            if ([currentObject isKindOfClass:[UITableViewCell class]]){
+                cell = (SongCell *) currentObject;
+                break;
+            }
         }
-        NSDictionary *song = [_data objectAtIndex:indexPath.row];
-
-        CGFloat fontSize = 14.0f;
-        cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:fontSize];
-        cell.textLabel.text = [NSString stringWithFormat:@"%@ - %@",
-                               [song objectForKey:@"artist"],
-                               [song objectForKey:@"title"]];
     }
+    
+    NSDictionary *song = [_data objectAtIndex:indexPath.row];
+    cell.titleLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"title"]];
+    cell.artistLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"artist"]];
+    double duration = [[song objectForKey:@"duration"]doubleValue];
+    int minutes = (int) floor(duration / 60);
+    int seconds = duration - (minutes * 60);
+    NSString *durationLabel = [NSString stringWithFormat:@"%d:%02d", minutes, seconds];
+    cell.durationLabel.text = durationLabel;
     
     return cell;
 }

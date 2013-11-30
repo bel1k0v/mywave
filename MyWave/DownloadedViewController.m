@@ -6,9 +6,11 @@
 //  Copyright (c) 2013 SameWave. All rights reserved.
 //
 
+#import "NSString+Gender.h"
 #import "DownloadedViewController.h"
 #import "PlayerViewController.h"
 #import "DBManager.h"
+#import "SongCell.h"
 #import <AVFoundation/AVFoundation.h>
 
 @interface DownloadedViewController ()
@@ -31,8 +33,27 @@
 {
     DBManager *db = [DBManager getSharedInstance];
     NSArray *data = [db findAll];
-    self.data = nil;
-    self.data = data;
+    _data = nil;
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSMutableArray *songs = [[NSMutableArray alloc]init];
+    
+    for(int i = 0; i < [data count]; ++i)
+    {
+        NSString *artist = [[data objectAtIndex:i]objectAtIndex:0];
+        NSString *title = [[data objectAtIndex:i]objectAtIndex:1];
+        NSString *duration = [[data objectAtIndex:i]objectAtIndex:2];
+        NSString *songPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, [[data objectAtIndex:i]objectAtIndex:3]];
+        
+        NSArray *keys = [NSArray arrayWithObjects:@"url", @"artist", @"title", @"duration", nil];
+        NSArray *values = [NSArray arrayWithObjects:songPath, artist, title, duration, nil];
+        NSDictionary *song = [[NSDictionary alloc] initWithObjects:values forKeys:keys];
+        
+        [songs addObject:song];
+    }
+    
+    _data = songs;
 }
 
 - (void)viewDidLoad
@@ -62,16 +83,29 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    static NSString *CellIdentifier = @"SongCell";
+    SongCell *cell = (SongCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"SongCell" owner:nil options:nil];
+        for (id currentObject in topLevelObjects){
+            if ([currentObject isKindOfClass:[UITableViewCell class]]){
+                cell = (SongCell *) currentObject;
+                break;
+            }
+        }
     }
-    NSString *cellTitle = [NSString stringWithFormat:@"%@ - %@", [[self.data objectAtIndex:indexPath.row]objectAtIndex:0], [[self.data objectAtIndex:indexPath.row]objectAtIndex:1]];
-    cell.textLabel.text = cellTitle;
-    CGFloat fontSize = 14.0f;
-    cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:fontSize];
-
+    
+    NSDictionary *song = [_data objectAtIndex:indexPath.row];
+    cell.titleLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"title"]];
+    cell.artistLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"artist"]];
+    
+    double duration = [[song objectForKey:@"duration"]doubleValue];
+    int minutes = (int) floor(duration / 60);
+    int seconds = duration - (minutes * 60);
+    NSString *durationLabel = [NSString stringWithFormat:@"%d:%02d", minutes, seconds];
+    cell.durationLabel.text = durationLabel;
+    
     return cell;
 }
 
@@ -121,33 +155,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PlayerViewController *playerViewController = [[PlayerViewController alloc]initWithNibName:@"PlayerViewController" bundle:nil];
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSMutableArray *songs = [[NSMutableArray alloc]init];
-    NSMutableArray *playlist = [[NSMutableArray alloc]init];
     
-    for(int i = 0; i < [_data count]; ++i)
-    {
-        NSString *artist = [[_data objectAtIndex:i]objectAtIndex:0];
-        NSString *title = [[_data objectAtIndex:i]objectAtIndex:1];
-        NSString *duration = [[_data objectAtIndex:i]objectAtIndex:2];
-        NSString *songPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, [[_data objectAtIndex:i]objectAtIndex:3]];
-        
-        NSArray *keys = [NSArray arrayWithObjects:@"url", @"artist", @"title", @"duration", nil];
-        NSArray *values = [NSArray arrayWithObjects:songPath, artist, title, duration, nil];
-        NSDictionary *song = [[NSDictionary alloc] initWithObjects:values forKeys:keys];
-        
-        [songs addObject:song];
-        
-        AVPlayerItem *item = [AVPlayerItem playerItemWithURL:[song objectForKey:@"url"]];
-        [playlist addObject:item];
-    }
-    
-    NSDictionary *song = [songs objectAtIndex:indexPath.row];
+    NSDictionary *song = [_data objectAtIndex:indexPath.row];
     
     playerViewController.song = song;
-    playerViewController.songs = songs;
-    playerViewController.playlist = playlist;
+    playerViewController.songs = _data;
     playerViewController->currentSong = indexPath.row;
     
     [self.navigationController pushViewController:playerViewController animated:YES];

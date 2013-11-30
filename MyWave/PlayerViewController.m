@@ -5,7 +5,7 @@
 //  Created by Дмитрий on 03.11.13.
 //  Copyright (c) 2013 SameWave. All rights reserved.
 //
-//#import "AppDelegate.h"
+#import "NSString+Gender.h"
 #import "PlayerViewController.h"
 #import "AFHTTPRequestOperation.h"
 #import "DBManager.h"
@@ -32,12 +32,15 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     return self;
 }
 
+
 -(void)updateUserInterface
 {
-    _lblMusicArtist.text = [NSString stringWithFormat:@"%@",
-                            [_song objectForKey:@"artist"]];
-    _lblMusicName.text = [NSString stringWithFormat:@"%@",
-                          [_song objectForKey:@"title"]];
+    NSString *artist = [NSString htmlEntityDecode:[NSString stringWithFormat:@"%@",
+                                               [_song objectForKey:@"artist"]]];
+    NSString *title = [NSString htmlEntityDecode:[NSString stringWithFormat:@"%@",
+                                              [_song objectForKey:@"title"]]];
+    _lblMusicArtist.text = artist;
+    _lblMusicName.text = title;
     
     //[self.btnDownload setEnabled:NO];
     //[self.btnDownload setTitle:@"" forState:UIControlStateDisabled];
@@ -216,17 +219,11 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 
 - (NSURL *)getSongFilePath
 {
-    NSURL *filePath;
     if ([NSURL URLWithString:[_song objectForKey:@"url"]])
-    {
-        filePath = [NSURL URLWithString:[_song objectForKey:@"url"]];
-    }
+        return [NSURL URLWithString:[_song objectForKey:@"url"]];
     else
-    {
-        filePath = [NSURL fileURLWithPath:[_song objectForKey:@"url"]];
-    }
-    
-    return filePath;
+        return [NSURL fileURLWithPath:[_song objectForKey:@"url"]];
+
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -296,6 +293,7 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
         NSString *successMessage = [NSString stringWithFormat:@"Successfully downloaded file to %@", path];
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Downloaded" message:successMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
         [alert show];
+        [self.btnDownload setEnabled:YES];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSString *errorMessage = [NSString stringWithFormat:@"Something wrong happened"];
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Fail!" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
