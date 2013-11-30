@@ -12,12 +12,16 @@
 
 @interface PlayerViewController ()
 
+@property (nonatomic, strong) AVPlayerItem *currentItem;
 @property (nonatomic, strong) AVQueuePlayer *player;
 @property (nonatomic, strong) id timeObserver;
 @property (nonatomic, strong) id progressObserver;
 @end
 
 @implementation PlayerViewController
+
+static void *PlayerItemStatusContext = &PlayerItemStatusContext;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -28,10 +32,29 @@
     return self;
 }
 
+-(void)updateUserInterface
+{
+    _lblMusicArtist.text = [NSString stringWithFormat:@"%@",
+                            [_song objectForKey:@"artist"]];
+    _lblMusicName.text = [NSString stringWithFormat:@"%@",
+                          [_song objectForKey:@"title"]];
+    
+    //[self.btnDownload setEnabled:NO];
+    //[self.btnDownload setTitle:@"" forState:UIControlStateDisabled];
+    [_scrubber setValue:0];
+    [_scrubber setThumbImage:[UIImage imageNamed:@"position"] forState:UIControlStateNormal];
+    
+    [_lblMusicTime setText:@"0:00 - 0:00"];
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [self dismissViewControllerAnimated:animated completion:nil];
     [_player removeAllItems];
+    _currentItem = nil;
+    _songs = nil;
+    _playlist = nil;
+    _song = nil;
     _player = nil;
 }
 
@@ -53,88 +76,111 @@
 
 - (void)itemDidFinishPlaying
 {
+    [_player removeTimeObserver:_timeObserver];
     if ([self increaseSongNumber] == YES)
     {
         [self removePlayerProgressObserver];
         [_player pause];
+        _currentItem = nil;
+        _player = nil;
         _song = [_songs objectAtIndex:self->currentSong];
         
-        AVPlayerItem *item = [AVPlayerItem playerItemWithURL:[self getSongFilePath]];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemDidFinishPlaying) name:AVPlayerItemDidPlayToEndTimeNotification object:item];
-        
         [self updateUserInterface];
-        
-        _player = nil;
-        _player = [[AVQueuePlayer alloc]initWithPlayerItem:item];
-        _player.actionAtItemEnd = AVPlayerActionAtItemEndAdvance;
-        
-        [_player addObserver:self
-                  forKeyPath:@"currentItem"
-                     options:NSKeyValueObservingOptionNew
-                     context:nil];
-        
-        [self setTimer];
-        [_player play];
+        [self prepareAssetAndInitPlayer];
     }
 }
 
+- (void) prepareAssetAndInitPlayer
+{
+    AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[self getSongFilePath] options:nil];
+    NSArray *requestedKeys = [NSArray arrayWithObjects:@"tracks", @"playable", nil];
+    NSLog(@"%@", asset);
+    
+    [asset loadValuesAsynchronouslyForKeys:requestedKeys completionHandler:
+     ^{
+         dispatch_async(dispatch_get_main_queue(),
+            ^{
+                NSError *error = nil;
+                AVKeyValueStatus status = [asset statusOfValueForKey:@"tracks" error:&error];
+                
+                if (status == AVKeyValueStatusLoaded)
+                {
+                    NSLog(@"Asset loaded");
+                    _currentItem = [AVPlayerItem playerItemWithAsset:asset];
+                    [[NSNotificationCenter defaultCenter] addObserver:self
+                                                             selector:@selector(itemDidFinishPlaying)
+                                                                 name:AVPlayerItemDidPlayToEndTimeNotification object:_currentItem];
+                    _player = [AVQueuePlayer playerWithPlayerItem:_currentItem];
+                    
+                    [_currentItem addObserver:self
+                                   forKeyPath:@"status"
+                                      options:0
+                                      context:PlayerItemStatusContext];
+                }
+                else
+                {
+                    NSLog(@"Error: %d", status);
+                }
+            });
+     }];
+}
+
+- (void)remoteControlReceivedWithEvent:(UIEvent *)theEvent
+{
+    if (theEvent.type == UIEventTypeRemoteControl)
+    {
+        switch(theEvent.subtype) {
+            case UIEventSubtypeRemoteControlTogglePlayPause:
+                NSLog(@"TogglePlayPause");
+                [self playPause];
+                return;
+                
+            case UIEventSubtypeRemoteControlPlay:
+                NSLog(@"TogglePlay");
+                return;
+            case UIEventSubtypeRemoteControlPause:
+                NSLog(@"TogglePause");
+                return;
+            case UIEventSubtypeRemoteControlStop:
+                NSLog(@"ToggleStop");
+                return;
+                //Insert code.
+            case UIEventSubtypeRemoteControlNextTrack:
+                NSLog(@"ToggleNext");
+                [self next];
+                return;
+            case UIEventSubtypeRemoteControlPreviousTrack:
+                NSLog(@"TogglePrevious");
+                [self previous];
+                return;
+            default:
+                NSLog(@"Other");
+                return;
+        }
+    }
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
     // Set AVAudioSession
-    NSError *sessionError = nil;
-    [[AVAudioSession sharedInstance] setDelegate:self];
-    // Change the default output audio route
-    UInt32 doChangeDefaultRoute = 1;
-    AudioSessionSetProperty(kAudioSessionProperty_OverrideCategoryDefaultToSpeaker, sizeof(doChangeDefaultRoute), &doChangeDefaultRoute);
-    
-    UInt32 otherAudioIsPlaying;
-    UInt32 propertySize = sizeof (otherAudioIsPlaying);
-    AudioSessionGetProperty(kAudioSessionProperty_OtherAudioIsPlaying, &propertySize, &otherAudioIsPlaying);
-    
-    if (otherAudioIsPlaying) {
-        NSLog(@"Audio");
-        [[AVAudioSession sharedInstance]
-         setCategory: AVAudioSessionCategoryAmbient
-         error: nil];
-    } else {
-        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&sessionError];
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    [[AVAudioSession sharedInstance] setActive: YES error: nil];
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    if ([self canBecomeFirstResponder]) {
+        [self becomeFirstResponder];
     }
     
     [self updateUserInterface];
-    [self.scrubber setThumbImage:[UIImage imageNamed:@"position"] forState:UIControlStateNormal];
-    
-    AVPlayerItem *item = [AVPlayerItem playerItemWithURL:[self getSongFilePath]];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemDidFinishPlaying) name:AVPlayerItemDidPlayToEndTimeNotification object:item];
+    [self prepareAssetAndInitPlayer];
 
-    _player = [[AVQueuePlayer alloc]initWithPlayerItem:item];
-    _player.actionAtItemEnd = AVPlayerActionAtItemEndAdvance;
-    [_player addObserver:self
-              forKeyPath:@"currentItem"
-                 options:NSKeyValueObservingOptionNew
-                 context:nil];
-    
-    [self setTimer];
-}
-
--(void)updateUserInterface
-{
-    self.lblMusicArtist.text = [NSString stringWithFormat:@"%@",
-                                [self.song objectForKey:@"artist"]];
-    self.lblMusicName.text = [NSString stringWithFormat:@"%@",
-                              [self.song objectForKey:@"title"]];
-    
-    //[self.btnDownload setEnabled:NO];
-    //[self.btnDownload setTitle:@"" forState:UIControlStateDisabled];
-    [self.scrubber setValue:0];
-    [self.lblMusicTime setText:@"0:00 - 0:00"];
+    self.btnPlayPause.selected = YES;
 }
 
 -(void)setTimer
 {
-    if(self.timeObserver)
+    if(_timeObserver)
     {
         _timeObserver = nil;
     }
@@ -144,10 +190,10 @@
 		double duration = [[self.song objectForKey:@"duration"] doubleValue];
         double secondsLeft = duration - progress;
         
-        int leftMinutes = (int) floor(secondsLeft/60);
+        int leftMinutes = (int) floor(secondsLeft / 60);
         int leftMinuteSeconds = (int) secondsLeft - leftMinutes * 60;
         
-        int progressMinutes = (int) floor(progress/60);
+        int progressMinutes = (int) floor(progress / 60);
         int progressMinuteSeconds = (int) progress - progressMinutes * 60;
         
         NSString *timeString = [NSString stringWithFormat:@"%d:%02d - %d:%02d",
@@ -159,7 +205,7 @@
         if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
             self.lblMusicTime.text = timeString;
         } else {
-            NSLog(@"App is backgrounded. Time is: %@", timeString);
+            //NSLog(@"App is backgrounded. Time is: %@", timeString);
         }
     };
     
@@ -185,8 +231,17 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ([keyPath isEqualToString:@"currentItem"]) // Item Changed
-    {
+    if (context == PlayerItemStatusContext) {
+        dispatch_async(dispatch_get_main_queue(),
+           ^{
+               NSLog(@"Start Playing!");
+               [self setTimer];
+               [self initScrubberTimer];
+               [_player play];
+           });
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change
+                              context:context];
     }
 }
 
@@ -196,6 +251,11 @@
 }
 
 - (IBAction)didTapPlayPause:(id)sender
+{
+    [self playPause];
+}
+
+- (void) playPause
 {
     self.btnPlayPause.selected = !self.btnPlayPause.selected;
     
@@ -236,8 +296,6 @@
         NSString *successMessage = [NSString stringWithFormat:@"Successfully downloaded file to %@", path];
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Downloaded" message:successMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
         [alert show];
-        
-        [self.btnDownload setEnabled:YES];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSString *errorMessage = [NSString stringWithFormat:@"Something wrong happened"];
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Fail!" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
@@ -251,10 +309,20 @@
 
 - (IBAction)didTapNext:(id)sender
 {
+    [self next];
+}
+
+- (void) next
+{
     [self itemDidFinishPlaying];
 }
 
 - (IBAction)didTapPrev:(id)sender
+{
+    [self previous];
+}
+
+- (void) previous
 {
     int temp = self->currentSong - 2;
     if (temp > -1)
@@ -278,7 +346,7 @@
 }
 
 #pragma mark -
-#pragma mark Movie scrubber control
+#pragma mark Scrubber control
 
 /* ---------------------------------------------------------
  **  Methods to handle manipulation of the movie scrubber control

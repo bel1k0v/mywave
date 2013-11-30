@@ -56,6 +56,8 @@
 		68ED981A1729AD8D0009C2F6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */; };
 		68ED981C1729ADC90009C2F6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED981B1729ADC90009C2F6 /* CFNetwork.framework */; };
 		68ED9827172B13ED0009C2F6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED9826172B13ED0009C2F6 /* QuartzCore.framework */; };
+		68EFAE3C182ADC44004EA239 /* arrow_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68EFAE3B182ADC44004EA239 /* arrow_left@2x.png */; };
+		68EFAE3E182ADC84004EA239 /* arrow_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68EFAE3D182ADC84004EA239 /* arrow_right@2x.png */; };
 		68F7B7B517343D99003B27C7 /* arrow_left.png in Resources */ = {isa = PBXBuildFile; fileRef = 68F7B7AF17343D99003B27C7 /* arrow_left.png */; };
 		68F7B7B617343D99003B27C7 /* arrow_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 68F7B7B017343D99003B27C7 /* arrow_right.png */; };
 		68F7B7B717343D99003B27C7 /* pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 68F7B7B117343D99003B27C7 /* pause.png */; };
@@ -137,6 +139,8 @@
 		68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		68ED981B1729ADC90009C2F6 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		68ED9826172B13ED0009C2F6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		68EFAE3B182ADC44004EA239 /* arrow_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_left@2x.png"; sourceTree = "<group>"; };
+		68EFAE3D182ADC84004EA239 /* arrow_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_right@2x.png"; sourceTree = "<group>"; };
 		68F7B7AF17343D99003B27C7 /* arrow_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_left.png; sourceTree = "<group>"; };
 		68F7B7B017343D99003B27C7 /* arrow_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_right.png; sourceTree = "<group>"; };
 		68F7B7B117343D99003B27C7 /* pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pause.png; sourceTree = "<group>"; };
@@ -224,6 +228,10 @@
 		68787EB518281FED00FC3FFF /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				68EFAE3D182ADC84004EA239 /* arrow_right@2x.png */,
+				68F7B7B017343D99003B27C7 /* arrow_right.png */,
+				68F7B7AF17343D99003B27C7 /* arrow_left.png */,
+				68EFAE3B182ADC44004EA239 /* arrow_left@2x.png */,
 				68787EC01828237600FC3FFF /* logo@2x.png */,
 				68787EBE1828237000FC3FFF /* logo.png */,
 				68F7B7B317343D99003B27C7 /* position.png */,
@@ -292,8 +300,6 @@
 			isa = PBXGroup;
 			children = (
 				68787EB518281FED00FC3FFF /* Images */,
-				68F7B7AF17343D99003B27C7 /* arrow_left.png */,
-				68F7B7B017343D99003B27C7 /* arrow_right.png */,
 				688453CD172182260092260B /* MyWave-Info.plist */,
 				688453CE172182260092260B /* InfoPlist.strings */,
 				688453D1172182260092260B /* main.m */,
@@ -379,6 +385,11 @@
 			attributes = {
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "";
+				TargetAttributes = {
+					688453C1172182260092260B = {
+						DevelopmentTeam = 3DPG5NE8TM;
+					};
+				};
 			};
 			buildConfigurationList = 688453BD172182250092260B /* Build configuration list for PBXProject "MyWave" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -413,8 +424,10 @@
 				68787EBB182820C000FC3FFF /* pause@2x.png in Resources */,
 				68787EBD182820C000FC3FFF /* position@2x.png in Resources */,
 				68F7B7B517343D99003B27C7 /* arrow_left.png in Resources */,
+				68EFAE3E182ADC84004EA239 /* arrow_right@2x.png in Resources */,
 				68F7B7B617343D99003B27C7 /* arrow_right.png in Resources */,
 				68787EEA1828374400FC3FFF /* MusicViewController.xib in Resources */,
+				68EFAE3C182ADC44004EA239 /* arrow_left@2x.png in Resources */,
 				68787EBF1828237000FC3FFF /* logo.png in Resources */,
 				68F7B7B717343D99003B27C7 /* pause.png in Resources */,
 				68F7B7B817343D99003B27C7 /* play.png in Resources */,
@@ -536,10 +549,13 @@
 		688453E6172182260092260B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyWave/MyWave-Prefix.pch";
 				INFOPLIST_FILE = "MyWave/MyWave-Info.plist";
 				PRODUCT_NAME = MyWave;
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -547,10 +563,13 @@
 		688453E7172182260092260B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyWave/MyWave-Prefix.pch";
 				INFOPLIST_FILE = "MyWave/MyWave-Info.plist";
 				PRODUCT_NAME = MyWave;
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
