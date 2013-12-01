@@ -46,19 +46,23 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     //[self.btnDownload setTitle:@"" forState:UIControlStateDisabled];
     [_scrubber setValue:0];
     [_scrubber setThumbImage:[UIImage imageNamed:@"position"] forState:UIControlStateNormal];
-    
-    [_lblMusicTime setText:@"0:00 - 0:00"];
+    double duration = [[_song objectForKey:@"duration"]doubleValue];
+    int minutes = (int) floor(duration / 60);
+    int seconds = duration - (minutes * 60);
+    NSString *durationLabel = [NSString stringWithFormat:@"0:00 - %d:%02d", minutes, seconds];
+    [_lblMusicTime setText:durationLabel];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [self dismissViewControllerAnimated:animated completion:nil];
+    dispatch_suspend(dispatch_get_main_queue());
     [_player removeAllItems];
     _currentItem = nil;
     _songs = nil;
     _playlist = nil;
     _song = nil;
     _player = nil;
+    [self dismissViewControllerAnimated:animated completion:nil];
 }
 
 - (BOOL)increaseSongNumber
@@ -80,12 +84,13 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 - (void)itemDidFinishPlaying
 {
     [_player removeTimeObserver:_timeObserver];
+    [self removePlayerProgressObserver];
+    [_player pause];
+    _currentItem = nil;
+    _player = nil;
+    
     if ([self increaseSongNumber] == YES)
     {
-        [self removePlayerProgressObserver];
-        [_player pause];
-        _currentItem = nil;
-        _player = nil;
         _song = [_songs objectAtIndex:self->currentSong];
         
         [self updateUserInterface];
@@ -95,6 +100,10 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 
 - (void) prepareAssetAndInitPlayer
 {
+    [_btnNext setEnabled:NO];
+    [_btnPrev setEnabled:NO];
+    [_btnPlayPause setEnabled:NO];
+    
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[self getSongFilePath] options:nil];
     NSArray *requestedKeys = [NSArray arrayWithObjects:@"tracks", @"playable", nil];
     NSLog(@"%@", asset);
@@ -126,6 +135,36 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
                 }
             });
      }];
+}
+
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == PlayerItemStatusContext) {
+        dispatch_async(dispatch_get_main_queue(),
+                       ^{
+                           NSLog(@"Start Playing!");
+                           [_btnNext setEnabled:YES];
+                           [_btnPrev setEnabled:YES];
+                           [_btnPlayPause setEnabled:YES];
+                           [self setTimer];
+                           [self initScrubberTimer];
+                           [_player play];
+                           if (_btnPlayPause.selected)
+                           {
+                               [_player play];
+                               [_btnPlayPause setBackgroundImage:[UIImage imageNamed:@"pause"] forState:UIControlStateSelected];
+                           }
+                           else
+                           {
+                               [_player pause];
+                               [_btnPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+                           }
+                       });
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change
+                              context:context];
+    }
 }
 
 - (void)remoteControlReceivedWithEvent:(UIEvent *)theEvent
@@ -226,21 +265,6 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if (context == PlayerItemStatusContext) {
-        dispatch_async(dispatch_get_main_queue(),
-           ^{
-               NSLog(@"Start Playing!");
-               [self setTimer];
-               [self initScrubberTimer];
-               [_player play];
-           });
-    } else {
-        [super observeValueForKeyPath:keyPath ofObject:object change:change
-                              context:context];
-    }
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -254,55 +278,70 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 
 - (void) playPause
 {
-    self.btnPlayPause.selected = !self.btnPlayPause.selected;
+    _btnPlayPause.selected = !_btnPlayPause.selected;
     
-    if (self.btnPlayPause.selected)
+    if (_btnPlayPause.selected)
     {
-        [self.player play];
-        [self.btnPlayPause setBackgroundImage:[UIImage imageNamed:@"pause"] forState:UIControlStateSelected];
-        
-        [self initScrubberTimer];
+        [_player play];
+        [_btnPlayPause setBackgroundImage:[UIImage imageNamed:@"pause"] forState:UIControlStateSelected];
     }
     else
     {
-        [self.player pause];
-        [self.btnPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+        [_player pause];
+        [_btnPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
     }
 }
 
 - (IBAction)didTapDownload:(id)sender
 {
     [self.btnDownload setEnabled:NO];
-    NSURL *url = [NSURL URLWithString:[self.song objectForKey:@"url"]];
-    NSString *filename = [NSString stringWithFormat:@"%@ - %@.mp3", [self.song objectForKey:@"artist"], [self.song objectForKey:@"title"]];
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *path = [[paths objectAtIndex:0] stringByAppendingPathComponent:filename];
-    operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
-    
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        DBManager *db = [DBManager getSharedInstance];
-        if ([db saveData:[self.song objectForKey:@"artist"] title:[self.song objectForKey:@"title"] duration:[self.song objectForKey:@"duration"] filename:filename] == YES)
-        {
-            NSLog(@"Successfully saved to database");
-        }
-        
-        NSString *successMessage = [NSString stringWithFormat:@"Successfully downloaded file to %@", path];
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Downloaded" message:successMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-        [alert show];
-        [self.btnDownload setEnabled:YES];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    DBManager *db = [DBManager getSharedInstance];
+    if ([db findByTitle:[self.song objectForKey:@"title"] andArtist:[self.song objectForKey:@"artist"]] != nil)
+    {
         NSString *errorMessage = [NSString stringWithFormat:@"Something wrong happened"];
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Fail!" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
         [alert show];
         [self.btnDownload setEnabled:YES];
-    }];
-    
-    [operation start];
-    
+    }
+    else
+    {
+        NSURL *url = [NSURL URLWithString:[self.song objectForKey:@"url"]];
+        NSString *filename = [NSString stringWithFormat:@"%@ - %@.mp3", [self.song objectForKey:@"artist"], [self.song objectForKey:@"title"]];
+        
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+        
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *path = [[paths objectAtIndex:0] stringByAppendingPathComponent:filename];
+        operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
+        
+        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+            if ([db saveData:[self.song objectForKey:@"artist"] title:[self.song objectForKey:@"title"] duration:[self.song objectForKey:@"duration"] filename:filename] == YES)
+            {
+                NSLog(@"Successfully saved to database");
+                NSString *successMessage = [NSString stringWithFormat:@"Success download file to %@", path];
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Downloaded" message:successMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                [alert show];
+            }
+            else
+            {
+                NSLog(@"Remove file");
+                [[NSFileManager defaultManager]removeItemAtPath:path error:NULL];
+                NSString *successMessage = [NSString stringWithFormat:@"Fail download file to %@", path];
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Downloaded" message:successMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                [alert show];
+            }
+
+            [_btnDownload setEnabled:YES];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSString *errorMessage = [NSString stringWithFormat:@"Something wrong happened"];
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Fail!" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [alert show];
+            [_btnDownload setEnabled:YES];
+        }];
+        
+        [operation start];
+    }
 }
 
 - (IBAction)didTapNext:(id)sender

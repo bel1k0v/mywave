@@ -11,6 +11,8 @@
 		6833F80F184A958A00C156AB /* SongCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6833F80D184A958A00C156AB /* SongCell.xib */; };
 		6833F812184A95BF00C156AB /* vk-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6833F810184A95BF00C156AB /* vk-icon.png */; };
 		6833F813184A95BF00C156AB /* vk-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6833F811184A95BF00C156AB /* vk-icon@2x.png */; };
+		6833F816184AAD4E00C156AB /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = 6833F814184AAD4E00C156AB /* plus.png */; };
+		6833F817184AAD4E00C156AB /* plus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6833F815184AAD4E00C156AB /* plus@2x.png */; };
 		68787D901826533700FC3FFF /* PlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787D8E1826533700FC3FFF /* PlayerViewController.m */; };
 		68787D9218265B3D00FC3FFF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED981417270D190009C2F6 /* AVFoundation.framework */; };
 		68787D9418265B7C00FC3FFF /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68787D9318265B7C00FC3FFF /* CoreMedia.framework */; };
@@ -76,6 +78,8 @@
 		6833F80D184A958A00C156AB /* SongCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SongCell.xib; sourceTree = "<group>"; };
 		6833F810184A95BF00C156AB /* vk-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vk-icon.png"; sourceTree = "<group>"; };
 		6833F811184A95BF00C156AB /* vk-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vk-icon@2x.png"; sourceTree = "<group>"; };
+		6833F814184AAD4E00C156AB /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
+		6833F815184AAD4E00C156AB /* plus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plus@2x.png"; sourceTree = "<group>"; };
 		68787D8D1826533700FC3FFF /* PlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerViewController.h; sourceTree = "<group>"; };
 		68787D8E1826533700FC3FFF /* PlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerViewController.m; sourceTree = "<group>"; };
 		68787D9318265B7C00FC3FFF /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -239,6 +243,8 @@
 		68787EB518281FED00FC3FFF /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				6833F814184AAD4E00C156AB /* plus.png */,
+				6833F815184AAD4E00C156AB /* plus@2x.png */,
 				6833F810184A95BF00C156AB /* vk-icon.png */,
 				6833F811184A95BF00C156AB /* vk-icon@2x.png */,
 				68EFAE3D182ADC84004EA239 /* arrow_right@2x.png */,
@@ -441,11 +447,13 @@
 				68F7B7B517343D99003B27C7 /* arrow_left.png in Resources */,
 				68EFAE3E182ADC84004EA239 /* arrow_right@2x.png in Resources */,
 				68F7B7B617343D99003B27C7 /* arrow_right.png in Resources */,
+				6833F817184AAD4E00C156AB /* plus@2x.png in Resources */,
 				68787EEA1828374400FC3FFF /* MusicViewController.xib in Resources */,
 				68EFAE3C182ADC44004EA239 /* arrow_left@2x.png in Resources */,
 				68787EBF1828237000FC3FFF /* logo.png in Resources */,
 				68F7B7B717343D99003B27C7 /* pause.png in Resources */,
 				6833F813184A95BF00C156AB /* vk-icon@2x.png in Resources */,
+				6833F816184AAD4E00C156AB /* plus.png in Resources */,
 				68F7B7B817343D99003B27C7 /* play.png in Resources */,
 				68787D991826CA5500FC3FFF /* DownloadedViewController.xib in Resources */,
 				68F7B7B917343D99003B27C7 /* position.png in Resources */,

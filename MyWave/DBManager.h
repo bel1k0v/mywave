@@ -20,5 +20,6 @@
        duration:(NSString*)duration filename:(NSString*)filename;
 -(NSArray*) findById:(NSString*)registerNumber;
 -(NSArray*) findAll;
+-(NSArray*) findByTitle:(NSString*)title andArtist:(NSString *)artist;
 
 @end
