@@ -74,12 +74,40 @@ static sqlite3_stmt *statement = nil;
         }
         else
         {
+            NSLog(@"Error while preparing statement");
             return NO;
         }
         
         sqlite3_reset(statement);
     }
+    
     return NO;
+}
+
+- (BOOL) deleteById:(NSString *)registeredNumber
+{
+    BOOL result = NO;
+    const char *dbpath = [databasePath UTF8String];
+    if (sqlite3_open(dbpath, &database) == SQLITE_OK)
+    {
+        NSString *deleteSQL = [NSString stringWithFormat:@"delete from mp3 where id = %d", [registeredNumber integerValue]];
+        const char *insert_stmt = [deleteSQL UTF8String];
+        sqlite3_prepare_v2(database, insert_stmt,-1, &statement, NULL);
+        if (sqlite3_step(statement) == SQLITE_DONE)
+        {
+            NSLog(@"Success");
+            result = YES;
+        }
+        else
+        {
+            NSLog(@"Error delete, %s", sqlite3_errmsg(database));
+        }
+        
+        sqlite3_finalize(statement);
+        sqlite3_close(database);
+    }
+    
+    return result;
 }
 
 - (NSArray *) findAll
@@ -87,25 +115,28 @@ static sqlite3_stmt *statement = nil;
     const char *dbpath = [databasePath UTF8String];
     if (sqlite3_open(dbpath, &database) == SQLITE_OK)
     {
-        NSString *querySQL = @"select artist, title, duration, filename from mp3 order by id desc";
+        NSString *querySQL = @"select id, artist, title, duration, filename from mp3 order by id desc";
         const char *query_stmt = [querySQL UTF8String];
         NSMutableArray *resultArray = [[NSMutableArray alloc]init];
         if (sqlite3_prepare_v2(database, query_stmt, -1, &statement, NULL) == SQLITE_OK)
         {
             while (sqlite3_step(statement) == SQLITE_ROW) {
                 NSMutableArray *row = [[NSMutableArray alloc]initWithObjects:nil];
+                NSString *regNum = [[NSString alloc] initWithUTF8String:
+                                (const char *) sqlite3_column_text(statement, 0)];
+                [row addObject:regNum];
                 NSString *artist = [[NSString alloc] initWithUTF8String:
-                                    (const char *) sqlite3_column_text(statement, 0)];
+                                    (const char *) sqlite3_column_text(statement, 1)];
                 [row addObject:artist];
                 
                 NSString *title = [[NSString alloc] initWithUTF8String:
-                                   (const char *) sqlite3_column_text(statement, 1)];
+                                   (const char *) sqlite3_column_text(statement, 2)];
                 [row addObject:title];
                 NSString *duration = [[NSString alloc]initWithUTF8String:
-                                      (const char *) sqlite3_column_text(statement, 2)];
+                                      (const char *) sqlite3_column_text(statement, 3)];
                 [row addObject:duration];
                 NSString *filename = [[NSString alloc]initWithUTF8String:
-                                      (const char *) sqlite3_column_text(statement, 3)];
+                                      (const char *) sqlite3_column_text(statement, 4)];
                 [row addObject:filename];
                 
                 [resultArray addObject:row];
@@ -114,6 +145,7 @@ static sqlite3_stmt *statement = nil;
             
             return resultArray;
         }
+        sqlite3_close(database);
     }
     return nil;
 }
@@ -149,6 +181,7 @@ static sqlite3_stmt *statement = nil;
             
             sqlite3_reset(statement);
         }
+        sqlite3_close(database);
     }
     return nil;
 }
@@ -185,6 +218,7 @@ static sqlite3_stmt *statement = nil;
             
             sqlite3_reset(statement);
         }
+        sqlite3_close(database);
     }
     return nil;
 }

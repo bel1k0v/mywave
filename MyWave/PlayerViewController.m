@@ -103,6 +103,7 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     [_btnNext setEnabled:NO];
     [_btnPrev setEnabled:NO];
     [_btnPlayPause setEnabled:NO];
+    [_btnDownload setEnabled:NO];
     
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[self getSongFilePath] options:nil];
     NSArray *requestedKeys = [NSArray arrayWithObjects:@"tracks", @"playable", nil];
@@ -147,6 +148,7 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
                            [_btnNext setEnabled:YES];
                            [_btnPrev setEnabled:YES];
                            [_btnPlayPause setEnabled:YES];
+                           [_btnDownload setEnabled:YES];
                            [self setTimer];
                            [self initScrubberTimer];
                            [_player play];
@@ -298,13 +300,14 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     DBManager *db = [DBManager getSharedInstance];
     if ([db findByTitle:[self.song objectForKey:@"title"] andArtist:[self.song objectForKey:@"artist"]] != nil)
     {
-        NSString *errorMessage = [NSString stringWithFormat:@"Something wrong happened"];
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Fail!" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        NSString *errorMessage = [NSString stringWithFormat:@"У вас уже загружена эта песня."];
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Предупреждение" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
         [alert show];
         [self.btnDownload setEnabled:YES];
     }
     else
     {
+        NSLog(@"Start download");
         NSURL *url = [NSURL URLWithString:[self.song objectForKey:@"url"]];
         NSString *filename = [NSString stringWithFormat:@"%@ - %@.mp3", [self.song objectForKey:@"artist"], [self.song objectForKey:@"title"]];
         
@@ -318,24 +321,26 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
         [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
             if ([db saveData:[self.song objectForKey:@"artist"] title:[self.song objectForKey:@"title"] duration:[self.song objectForKey:@"duration"] filename:filename] == YES)
             {
-                NSLog(@"Successfully saved to database");
-                NSString *successMessage = [NSString stringWithFormat:@"Success download file to %@", path];
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Downloaded" message:successMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                NSLog(@"Successfully saved to database and saved to: %@", path);
+                NSString *successMessage = [NSString stringWithFormat:@"Файл успешно скачан в папку приложения"];
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Поздравляю!" message:successMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
                 [alert show];
+                [_btnDownload setEnabled:NO];
             }
             else
             {
-                NSLog(@"Remove file");
-                [[NSFileManager defaultManager]removeItemAtPath:path error:NULL];
-                NSString *successMessage = [NSString stringWithFormat:@"Fail download file to %@", path];
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Downloaded" message:successMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                NSError *error = nil;
+                [[NSFileManager defaultManager]removeItemAtPath:path error:&error];
+                NSLog(@"Remove file, %@", error);
+                NSString *successMessage = [NSString stringWithFormat:@"Something wrong happened"];
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ошибка" message:successMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
                 [alert show];
+                [_btnDownload setEnabled:YES];
             }
-
-            [_btnDownload setEnabled:YES];
+            
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSString *errorMessage = [NSString stringWithFormat:@"Something wrong happened"];
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Fail!" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ошибка" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
             [alert show];
             [_btnDownload setEnabled:YES];
         }];

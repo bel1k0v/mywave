@@ -41,13 +41,14 @@
     
     for(int i = 0; i < [data count]; ++i)
     {
-        NSString *artist = [[data objectAtIndex:i]objectAtIndex:0];
-        NSString *title = [[data objectAtIndex:i]objectAtIndex:1];
-        NSString *duration = [[data objectAtIndex:i]objectAtIndex:2];
-        NSString *songPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, [[data objectAtIndex:i]objectAtIndex:3]];
+        NSString *regNum = [[data objectAtIndex:i]objectAtIndex:0];
+        NSString *artist = [[data objectAtIndex:i]objectAtIndex:1];
+        NSString *title = [[data objectAtIndex:i]objectAtIndex:2];
+        NSString *duration = [[data objectAtIndex:i]objectAtIndex:3];
+        NSString *songPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, [[data objectAtIndex:i]objectAtIndex:4]];
         
-        NSArray *keys = [NSArray arrayWithObjects:@"url", @"artist", @"title", @"duration", nil];
-        NSArray *values = [NSArray arrayWithObjects:songPath, artist, title, duration, nil];
+        NSArray *keys = [NSArray arrayWithObjects:@"url", @"artist", @"title", @"duration", @"regNum", nil];
+        NSArray *values = [NSArray arrayWithObjects:songPath, artist, title, duration, regNum, nil];
         NSDictionary *song = [[NSDictionary alloc] initWithObjects:values forKeys:keys];
         
         [songs addObject:song];
@@ -109,45 +110,24 @@
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+        NSLog(@"Delete");
+        NSDictionary *song = [_data objectAtIndex:indexPath.row];
+        NSError *error = nil;
+        //[[NSFileManager defaultManager]removeItemAtPath:[song objectForKey:@"url"] error:&error];
+        NSLog(@"Remove file, %@", error);
+        NSLog(@"ID: %@", [song objectForKey:@"regNum"]);
+        DBManager *db = [DBManager getSharedInstance];
+        [db deleteById:[song objectForKey:@"regNum"]];
+        //[tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [self setupData];
+        [tableView reloadData];
+    }    
 }
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 
 #pragma mark - Table view delegate
 
@@ -155,9 +135,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PlayerViewController *playerViewController = [[PlayerViewController alloc]initWithNibName:@"PlayerViewController" bundle:nil];
-    
     NSDictionary *song = [_data objectAtIndex:indexPath.row];
-    
     playerViewController.song = song;
     playerViewController.songs = _data;
     playerViewController->currentSong = indexPath.row;
