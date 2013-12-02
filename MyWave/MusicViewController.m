@@ -10,11 +10,6 @@
 #import "PlayerViewController.h"
 #import "SongCell.h"
 #include "NSString+Gender.h"
-#import <AVFoundation/AVPlayerItem.h>
-
-@interface MusicViewController ()
-
-@end
 
 @implementation MusicViewController
 
@@ -32,7 +27,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationItem.title = @"VK";
+    self.navigationItem.title = @"Вконтакте";
 }
 
 - (void)didReceiveMemoryWarning
@@ -84,11 +79,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PlayerViewController *playerViewController = [[PlayerViewController alloc]initWithNibName:@"PlayerViewController" bundle:nil];
+
     playerViewController.song =[_data objectAtIndex:indexPath.row];
     playerViewController.songs = _data;
     playerViewController->currentSong = indexPath.row;
     [self.navigationController pushViewController:playerViewController animated:YES];
-     
 }
 
 @end

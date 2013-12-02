@@ -14,7 +14,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
+    if (_player == nil) _player = [[AVQueuePlayer alloc]init];
+        
     AuthViewController *authViewController = [[AuthViewController alloc] initWithNibName:@"AuthViewController" bundle:nil];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:authViewController];
     [self.navigationController.navigationBar setTintColor:[UIColor blackColor]];

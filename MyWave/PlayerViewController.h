@@ -27,10 +27,16 @@
 @property (strong, nonatomic) IBOutlet UISlider *scrubber;
 
 
+@property (nonatomic, strong) AVPlayerItem *currentItem;
+@property (nonatomic, retain) AVQueuePlayer *player;
+@property (nonatomic, strong) id timeObserver;
+@property (nonatomic, strong) id progressObserver;
 
 @property (strong, nonatomic) NSDictionary *song;
 @property (strong, nonatomic) NSArray *songs;
 @property (strong, nonatomic) NSArray *playlist;
+@property (strong, atomic) NSString *classNameRef;
+
 - (IBAction)didTapPlayPause:(id)sender;
 - (IBAction)didTapDownload:(id)sender;
 - (IBAction)didTapNext:(id)sender;

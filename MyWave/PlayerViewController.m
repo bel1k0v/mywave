@@ -9,16 +9,10 @@
 #import "PlayerViewController.h"
 #import "AFHTTPRequestOperation.h"
 #import "DBManager.h"
-
-@interface PlayerViewController ()
-
-@property (nonatomic, strong) AVPlayerItem *currentItem;
-@property (nonatomic, strong) AVQueuePlayer *player;
-@property (nonatomic, strong) id timeObserver;
-@property (nonatomic, strong) id progressObserver;
-@end
+#import "AppDelegate.h"
 
 @implementation PlayerViewController
+@synthesize classNameRef = _classNameRef;
 
 static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 
@@ -42,8 +36,9 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     _lblMusicArtist.text = artist;
     _lblMusicName.text = title;
     
-    //[self.btnDownload setEnabled:NO];
-    //[self.btnDownload setTitle:@"" forState:UIControlStateDisabled];
+    if ([_classNameRef isEqualToString:@"Downloaded"])
+        [self.btnDownload setEnabled:NO];
+
     [_scrubber setValue:0];
     [_scrubber setThumbImage:[UIImage imageNamed:@"position"] forState:UIControlStateNormal];
     double duration = [[_song objectForKey:@"duration"]doubleValue];
@@ -53,22 +48,11 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     [_lblMusicTime setText:durationLabel];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    dispatch_suspend(dispatch_get_main_queue());
-    [_player removeAllItems];
-    _currentItem = nil;
-    _songs = nil;
-    _playlist = nil;
-    _song = nil;
-    _player = nil;
-    [self dismissViewControllerAnimated:animated completion:nil];
-}
-
 - (BOOL)increaseSongNumber
 {
     int temp;
     temp = self->currentSong +1;
+    NSLog(@"%d", temp);
     if (temp >= 0 && (temp <= ([_songs count] -1)))
     {
         self->currentSong++;
@@ -87,7 +71,6 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     [self removePlayerProgressObserver];
     [_player pause];
     _currentItem = nil;
-    _player = nil;
     
     if ([self increaseSongNumber] == YES)
     {
@@ -123,7 +106,10 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
                     [[NSNotificationCenter defaultCenter] addObserver:self
                                                              selector:@selector(itemDidFinishPlaying)
                                                                  name:AVPlayerItemDidPlayToEndTimeNotification object:_currentItem];
-                    _player = [AVQueuePlayer playerWithPlayerItem:_currentItem];
+                    if (_player == nil) _player = [[AVQueuePlayer alloc]init];
+                    else NSLog(@"Player loaded!");
+                    
+                    [_player replaceCurrentItemWithPlayerItem:_currentItem];
                     
                     [_currentItem addObserver:self
                                    forKeyPath:@"status"
@@ -148,7 +134,8 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
                            [_btnNext setEnabled:YES];
                            [_btnPrev setEnabled:YES];
                            [_btnPlayPause setEnabled:YES];
-                           [_btnDownload setEnabled:YES];
+                           if (![_classNameRef isEqualToString:@"Downloaded"])
+                               [_btnDownload setEnabled:YES];
                            [self setTimer];
                            [self initScrubberTimer];
                            [_player play];
@@ -181,9 +168,11 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
                 
             case UIEventSubtypeRemoteControlPlay:
                 NSLog(@"TogglePlay");
+                [_player play];
                 return;
             case UIEventSubtypeRemoteControlPause:
                 NSLog(@"TogglePause");
+                //[_player pause];
                 return;
             case UIEventSubtypeRemoteControlStop:
                 NSLog(@"ToggleStop");
@@ -207,10 +196,26 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    _player = delegate.player;
+    
     // Set AVAudioSession
+    UInt32 otherAudioIsPlaying;                                   // 1
+    UInt32 propertySize = sizeof (otherAudioIsPlaying);
+    
+    AudioSessionGetProperty (                                     // 2
+                             kAudioSessionProperty_OtherAudioIsPlaying,
+                             &propertySize,
+                             &otherAudioIsPlaying
+                             );
+    
+    if (!otherAudioIsPlaying) {                                    // 3
+        [_player pause];
+    }
+    
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[AVAudioSession sharedInstance] setActive: YES error: nil];
+    
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     if ([self canBecomeFirstResponder]) {
         [self becomeFirstResponder];
@@ -356,6 +361,7 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 
 - (void) next
 {
+    NSLog(@"%d", self->currentSong);
     [self itemDidFinishPlaying];
 }
 
@@ -367,9 +373,11 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 - (void) previous
 {
     int temp = self->currentSong - 2;
-    if (temp > -1)
+    if (temp >= -1 && self->currentSong != 0)
+    {
         self->currentSong = self->currentSong - 2;
-    [self itemDidFinishPlaying];
+        [self itemDidFinishPlaying];
+    }
 }
 
 /* ---------------------------------------------------------
@@ -378,7 +386,7 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 
 - (CMTime)playerItemDuration
 {
-	AVPlayerItem *playerItem = [self.player currentItem];
+	AVPlayerItem *playerItem = [_player currentItem];
 	if (playerItem.status == AVPlayerItemStatusReadyToPlay)
 	{
 		return([playerItem duration]);
@@ -387,7 +395,6 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 	return(kCMTimeInvalid);
 }
 
-#pragma mark -
 #pragma mark Scrubber control
 
 /* ---------------------------------------------------------

@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DownloadedViewController : UITableViewController
+@interface DownloadedViewController : UITableViewController <UISearchBarDelegate, UISearchDisplayDelegate>
+{
+    NSMutableArray *searchData;
+    UISearchBar *searchBar;
+    UISearchDisplayController *searchDisplayController;
+}
+
 @property (nonatomic, strong) NSArray *data;
 @end

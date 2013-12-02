@@ -11,11 +11,7 @@
 #import "PlayerViewController.h"
 #import "DBManager.h"
 #import "SongCell.h"
-#import <AVFoundation/AVFoundation.h>
-
-@interface DownloadedViewController ()
-
-@end
+#import "AppDelegate.h"
 
 @implementation DownloadedViewController
 
@@ -23,17 +19,16 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        // Custom initialization
+        searchData = [NSMutableArray arrayWithArray:[self getTableViewData]];
     }
     return self;
 }
 
-
-- (void)setupData
+- (NSArray *)getTableViewData
 {
     DBManager *db = [DBManager getSharedInstance];
     NSArray *data = [db findAll];
-    _data = nil;
+    
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -50,18 +45,33 @@
         NSArray *keys = [NSArray arrayWithObjects:@"url", @"artist", @"title", @"duration", @"regNum", nil];
         NSArray *values = [NSArray arrayWithObjects:songPath, artist, title, duration, regNum, nil];
         NSDictionary *song = [[NSDictionary alloc] initWithObjects:values forKeys:keys];
-        
         [songs addObject:song];
     }
     
-    _data = songs;
+    return songs;
 }
+
+- (void)setupData
+{
+    _data = nil;
+    _data = [self getTableViewData];
+}
+
 
 - (void)viewDidLoad
 {
     [self setupData];
+    searchData = [NSMutableArray arrayWithCapacity:[_data count]];
     [super viewDidLoad];
     self.navigationItem.title = @"Своя волна";
+    searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    
+    searchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
+    searchDisplayController.delegate = self;
+    searchDisplayController.searchResultsDelegate = self;
+    searchDisplayController.searchResultsDataSource = self;
+    
+    self.tableView.tableHeaderView = searchBar;
 }
 
 
@@ -79,12 +89,17 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.data count];
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        return [searchData count];
+    } else {
+        return [_data count];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"SongCell";
+
     SongCell *cell = (SongCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
@@ -98,6 +113,10 @@
     }
     
     NSDictionary *song = [_data objectAtIndex:indexPath.row];
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        song = [searchData objectAtIndex:indexPath.row];
+    }
+
     cell.titleLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"title"]];
     cell.artistLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"artist"]];
     
@@ -110,41 +129,62 @@
     return cell;
 }
 
-// Override to support editing the table view.
+#pragma mark - Table view delegate
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        NSLog(@"Delete");
         NSDictionary *song = [_data objectAtIndex:indexPath.row];
+        if (tableView == self.searchDisplayController.searchResultsTableView) {
+            song = [searchData objectAtIndex:indexPath.row];
+        }
         NSError *error = nil;
-        //[[NSFileManager defaultManager]removeItemAtPath:[song objectForKey:@"url"] error:&error];
-        NSLog(@"Remove file, %@", error);
-        NSLog(@"ID: %@", [song objectForKey:@"regNum"]);
+        [[NSFileManager defaultManager]removeItemAtPath:[song objectForKey:@"url"] error:&error];
         DBManager *db = [DBManager getSharedInstance];
         [db deleteById:[song objectForKey:@"regNum"]];
-        //[tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         [self setupData];
-        [tableView reloadData];
+        [self.tableView reloadData];
     }    
 }
 
-#pragma mark - Table view delegate
 
-// In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PlayerViewController *playerViewController = [[PlayerViewController alloc]initWithNibName:@"PlayerViewController" bundle:nil];
     NSDictionary *song = [_data objectAtIndex:indexPath.row];
+    NSArray *songs = _data;
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        song = [searchData objectAtIndex:indexPath.row];
+        songs = searchData;
+    }
+    
     playerViewController.song = song;
-    playerViewController.songs = _data;
+    playerViewController.songs = songs;
+    playerViewController.classNameRef = @"Downloaded";
     playerViewController->currentSong = indexPath.row;
     
     [self.navigationController pushViewController:playerViewController animated:YES];
-    
+}
+
+#pragma mark Content Filtering
+- (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope {
+    [searchData removeAllObjects];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"artist CONTAINS[c] %@", searchText];
+    searchData = [NSMutableArray arrayWithArray:[_data filteredArrayUsingPredicate:predicate]];
 }
 
 
+#pragma mark - Search display delegate
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    [self filterContentForSearchText:searchString scope:
+     [[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:[self.searchDisplayController.searchBar selectedScopeButtonIndex]]];
+    return YES;
+}
 
+-(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption {
+    [self filterContentForSearchText:self.searchDisplayController.searchBar.text scope:
+     [[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:searchOption]];
+    return YES;
+}
 
 @end

@@ -10,7 +10,7 @@
 
 @implementation SongCell
 @synthesize titleLabel = _titleLabel, artistLabel = _artistLabel,
-durationLabel = _durationLabel;
+            durationLabel = _durationLabel;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
