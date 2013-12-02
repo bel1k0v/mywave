@@ -212,6 +212,7 @@
 				68787ED41828343900FC3FFF /* AFURLSessionManager.m */,
 			);
 			name = AFNetworking;
+			path = AFHTTPRequest;
 			sourceTree = "<group>";
 		};
 		68787EB31827AA5500FC3FFF /* Models */ = {
@@ -222,7 +223,7 @@
 				68787EB01827A8BC00FC3FFF /* DBManager.h */,
 				68787EB11827A8BC00FC3FFF /* DBManager.m */,
 			);
-			name = Models;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		68787EB41827AA6C00FC3FFF /* Controllers */ = {
@@ -237,12 +238,15 @@
 				68787D8D1826533700FC3FFF /* PlayerViewController.h */,
 				68787D8E1826533700FC3FFF /* PlayerViewController.m */,
 			);
-			name = Controllers;
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		68787EB518281FED00FC3FFF /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				688453D7172182260092260B /* Default.png */,
+				688453D9172182260092260B /* Default@2x.png */,
+				688453DB172182260092260B /* Default-568h@2x.png */,
 				6833F814184AAD4E00C156AB /* plus.png */,
 				6833F815184AAD4E00C156AB /* plus@2x.png */,
 				6833F810184A95BF00C156AB /* vk-icon.png */,
@@ -262,7 +266,7 @@
 				68F7B7B417343D99003B27C7 /* stop.png */,
 				68787EB61828207500FC3FFF /* stop@2x.png */,
 			);
-			name = Images;
+			path = Images;
 			sourceTree = "<group>";
 		};
 		688453B9172182250092260B = {
@@ -323,9 +327,6 @@
 				688453CE172182260092260B /* InfoPlist.strings */,
 				688453D1172182260092260B /* main.m */,
 				688453D3172182260092260B /* MyWave-Prefix.pch */,
-				688453D7172182260092260B /* Default.png */,
-				688453D9172182260092260B /* Default@2x.png */,
-				688453DB172182260092260B /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -340,7 +341,7 @@
 				688453F3172185E70092260B /* VkontakteViewController.h */,
 				688453F4172185E70092260B /* VkontakteViewController.m */,
 			);
-			name = Vkontakte;
+			path = Vkontakte;
 			sourceTree = "<group>";
 		};
 		688453EF172184530092260B /* MBProgressHUD */ = {
@@ -349,7 +350,7 @@
 				688453F01721848B0092260B /* MBProgressHUD.h */,
 				688453F11721848B0092260B /* MBProgressHUD.m */,
 			);
-			name = MBProgressHUD;
+			path = MBProgressHUD;
 			sourceTree = "<group>";
 		};
 		68ED98161729ACF40009C2F6 /* Classes */ = {
@@ -362,7 +363,7 @@
 				688453E81721824E0092260B /* Vkontakte */,
 				688453EF172184530092260B /* MBProgressHUD */,
 			);
-			name = Classes;
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		68ED9825172B109B0009C2F6 /* Resources */ = {

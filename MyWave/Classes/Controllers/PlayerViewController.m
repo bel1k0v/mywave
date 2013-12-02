@@ -69,7 +69,7 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 {
     [_player removeTimeObserver:_timeObserver];
     [self removePlayerProgressObserver];
-    [_player pause];
+    [_player removeAllItems];
     _currentItem = nil;
     
     if ([self increaseSongNumber] == YES)
@@ -107,14 +107,16 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
                                                              selector:@selector(itemDidFinishPlaying)
                                                                  name:AVPlayerItemDidPlayToEndTimeNotification object:_currentItem];
                     if (_player == nil) _player = [[AVQueuePlayer alloc]init];
-                    else NSLog(@"Player loaded!");
+                    else [_player pause];
                     
                     [_player replaceCurrentItemWithPlayerItem:_currentItem];
+                    NSLog(@"%@", _player.currentItem);
                     
                     [_currentItem addObserver:self
                                    forKeyPath:@"status"
                                       options:0
                                       context:PlayerItemStatusContext];
+                    NSLog(@"Start Playing!");
                 }
                 else
                 {
@@ -151,6 +153,7 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
                            }
                        });
     } else {
+        NSLog(@"%@", context);
         [super observeValueForKeyPath:keyPath ofObject:object change:change
                               context:context];
     }
@@ -198,20 +201,6 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     [super viewDidLoad];
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     _player = delegate.player;
-    
-    // Set AVAudioSession
-    UInt32 otherAudioIsPlaying;                                   // 1
-    UInt32 propertySize = sizeof (otherAudioIsPlaying);
-    
-    AudioSessionGetProperty (                                     // 2
-                             kAudioSessionProperty_OtherAudioIsPlaying,
-                             &propertySize,
-                             &otherAudioIsPlaying
-                             );
-    
-    if (!otherAudioIsPlaying) {                                    // 3
-        [_player pause];
-    }
     
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[AVAudioSession sharedInstance] setActive: YES error: nil];
