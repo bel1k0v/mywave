@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Vkontakte.h"
 
-@interface MusicViewController : UITableViewController
+@interface VkMusicViewController : UITableViewController <VkontakteDelegate>
+{
+    Vkontakte *_vkInstance;
+    UIBarButtonItem *_loginBarButtonItem;
+}
+
 @property (nonatomic, strong) NSArray *data;
 @end

@@ -7,24 +7,24 @@
 //
 
 #import "NSString+Gender.h"
-#import "DownloadedViewController.h"
+#import "MyMusicViewController.h"
 #import "PlayerViewController.h"
 #import "DBManager.h"
 #import "SongCell.h"
 #import "AppDelegate.h"
 
-@implementation DownloadedViewController
+@implementation MyMusicViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self) {
-        searchData = [NSMutableArray arrayWithArray:[self getTableViewData]];
+        searchData = [NSMutableArray arrayWithArray:[self getSongs]];
     }
     return self;
 }
 
-- (NSArray *)getTableViewData
+- (NSArray *)getSongs
 {
     DBManager *db = [DBManager getSharedInstance];
     NSArray *data = [db findAll];
@@ -54,7 +54,7 @@
 - (void)setupData
 {
     _data = nil;
-    _data = [self getTableViewData];
+    _data = [self getSongs];
 }
 
 
@@ -63,7 +63,9 @@
     [self setupData];
     searchData = [NSMutableArray arrayWithCapacity:[_data count]];
     [super viewDidLoad];
-    self.navigationItem.title = @"Своя волна";
+    self.navigationItem.title = @"Моя музыка";
+    UIBarButtonItem *cameraItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(back)];
+    self.navigationItem.leftBarButtonItem = cameraItem;
     searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
     
     searchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
@@ -72,6 +74,12 @@
     searchDisplayController.searchResultsDataSource = self;
     
     self.tableView.tableHeaderView = searchBar;
+}
+
+- (void) back
+{
+    NSLog(@"Back");
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

@@ -88,6 +88,9 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     [_btnPlayPause setEnabled:NO];
     [_btnDownload setEnabled:NO];
     
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    _player = delegate.player;
+    
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[self getSongFilePath] options:nil];
     NSArray *requestedKeys = [NSArray arrayWithObjects:@"tracks", @"playable", nil];
     NSLog(@"%@", asset);
@@ -101,6 +104,7 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
                 
                 if (status == AVKeyValueStatusLoaded)
                 {
+                    delegate.currentSong = _song;
                     NSLog(@"Asset loaded");
                     _currentItem = [AVPlayerItem playerItemWithAsset:asset];
                     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -110,13 +114,12 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
                     else [_player pause];
                     
                     [_player replaceCurrentItemWithPlayerItem:_currentItem];
-                    NSLog(@"%@", _player.currentItem);
+                    //NSLog(@"%@", _player.currentItem);
                     
                     [_currentItem addObserver:self
                                    forKeyPath:@"status"
                                       options:0
                                       context:PlayerItemStatusContext];
-                    NSLog(@"Start Playing!");
                 }
                 else
                 {
@@ -199,8 +202,8 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    _player = delegate.player;
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(back)];
+    self.navigationItem.leftBarButtonItem = backItem;
     
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[AVAudioSession sharedInstance] setActive: YES error: nil];
@@ -214,6 +217,11 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     [self prepareAssetAndInitPlayer];
 
     self.btnPlayPause.selected = YES;
+}
+
+- (void) back
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)setTimer
@@ -302,8 +310,9 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     else
     {
         NSLog(@"Start download");
-        NSURL *url = [NSURL URLWithString:[self.song objectForKey:@"url"]];
-        NSString *filename = [NSString stringWithFormat:@"%@ - %@.mp3", [self.song objectForKey:@"artist"], [self.song objectForKey:@"title"]];
+        NSDictionary *song = _song;
+        NSURL *url = [NSURL URLWithString:[song objectForKey:@"url"]];
+        NSString *filename = [NSString stringWithFormat:@"%@ - %@.mp3", [song objectForKey:@"artist"], [song objectForKey:@"title"]];
         
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
         AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
@@ -313,7 +322,7 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
         operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
         
         [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            if ([db saveData:[self.song objectForKey:@"artist"] title:[self.song objectForKey:@"title"] duration:[self.song objectForKey:@"duration"] filename:filename] == YES)
+            if ([db saveData:[song objectForKey:@"artist"] title:[song objectForKey:@"title"] duration:[song objectForKey:@"duration"] filename:filename] == YES)
             {
                 NSLog(@"Successfully saved to database and saved to: %@", path);
                 NSString *successMessage = [NSString stringWithFormat:@"Файл успешно скачан в папку приложения"];

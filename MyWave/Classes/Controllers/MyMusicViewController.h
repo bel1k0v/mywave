@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DownloadedViewController : UITableViewController <UISearchBarDelegate, UISearchDisplayDelegate>
+@interface MyMusicViewController : UITableViewController <UISearchBarDelegate, UISearchDisplayDelegate>
 {
     NSMutableArray *searchData;
     UISearchBar *searchBar;
