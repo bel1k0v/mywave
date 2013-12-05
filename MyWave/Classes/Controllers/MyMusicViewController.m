@@ -27,28 +27,7 @@
 - (NSArray *)getSongs
 {
     DBManager *db = [DBManager getSharedInstance];
-    NSArray *data = [db findAll];
-    
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSMutableArray *songs = [[NSMutableArray alloc]init];
-    
-    for(int i = 0; i < [data count]; ++i)
-    {
-        NSString *regNum = [[data objectAtIndex:i]objectAtIndex:0];
-        NSString *artist = [[data objectAtIndex:i]objectAtIndex:1];
-        NSString *title = [[data objectAtIndex:i]objectAtIndex:2];
-        NSString *duration = [[data objectAtIndex:i]objectAtIndex:3];
-        NSString *songPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, [[data objectAtIndex:i]objectAtIndex:4]];
-        
-        NSArray *keys = [NSArray arrayWithObjects:@"url", @"artist", @"title", @"duration", @"regNum", nil];
-        NSArray *values = [NSArray arrayWithObjects:songPath, artist, title, duration, regNum, nil];
-        NSDictionary *song = [[NSDictionary alloc] initWithObjects:values forKeys:keys];
-        [songs addObject:song];
-    }
-    
-    return songs;
+    return [db getSongs];
 }
 
 - (void)setupData
@@ -57,15 +36,9 @@
     _data = [self getSongs];
 }
 
-
-- (void)viewDidLoad
+- (void)initSearch
 {
-    [self setupData];
     searchData = [NSMutableArray arrayWithCapacity:[_data count]];
-    [super viewDidLoad];
-    self.navigationItem.title = @"Моя музыка";
-    UIBarButtonItem *cameraItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(back)];
-    self.navigationItem.leftBarButtonItem = cameraItem;
     searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
     
     searchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
@@ -76,9 +49,19 @@
     self.tableView.tableHeaderView = searchBar;
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self setupData];
+    [self initSearch];
+    self.navigationItem.title = @"Моя музыка";
+    UIBarButtonItem *cameraItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(back)];
+    self.navigationItem.leftBarButtonItem = cameraItem;
+    
+}
+
 - (void) back
 {
-    NSLog(@"Back");
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -147,8 +130,7 @@
         }
         NSError *error = nil;
         [[NSFileManager defaultManager]removeItemAtPath:[song objectForKey:@"url"] error:&error];
-        DBManager *db = [DBManager getSharedInstance];
-        [db deleteById:[song objectForKey:@"regNum"]];
+        [[DBManager getSharedInstance] deleteById:[song objectForKey:@"regNum"]];
         [self setupData];
         [self.tableView reloadData];
     }    
@@ -167,7 +149,7 @@
     
     playerViewController.song = song;
     playerViewController.songs = songs;
-    playerViewController.classNameRef = @"Downloaded";
+    playerViewController.classNameRef = @"MyMusic";
     playerViewController->currentSong = indexPath.row;
     
     [self.navigationController pushViewController:playerViewController animated:YES];
@@ -176,7 +158,7 @@
 #pragma mark Content Filtering
 - (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope {
     [searchData removeAllObjects];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"artist CONTAINS[c] %@", searchText];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"title CONTAINS[c] %@", searchText];
     searchData = [NSMutableArray arrayWithArray:[_data filteredArrayUsingPredicate:predicate]];
 }
 

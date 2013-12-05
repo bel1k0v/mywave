@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
@@ -14,4 +15,5 @@
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) AVQueuePlayer *player;
 @property (strong, nonatomic) NSDictionary *currentSong;
+@property (strong, nonatomic) NSCache *cache;
 @end

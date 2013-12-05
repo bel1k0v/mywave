@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		35FCAAB96D754E878723214C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FD2D23D6CB8649B98A0835DC /* libPods.a */; };
 		682CD8E5184E7D0C006000E6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 682CD8E4184E7D0C006000E6 /* Images.xcassets */; };
 		6833F80E184A958A00C156AB /* SongCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6833F80C184A958A00C156AB /* SongCell.m */; };
 		6833F80F184A958A00C156AB /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6833F80D184A958A00C156AB /* MainViewController.xib */; };
@@ -22,15 +23,6 @@
 		68787E7018278A1800FC3FFF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68787E6F18278A1800FC3FFF /* MobileCoreServices.framework */; };
 		68787EAC1827A7BF00FC3FFF /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 68787EAB1827A7BF00FC3FFF /* libsqlite3.0.dylib */; };
 		68787EB21827A8BC00FC3FFF /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EB11827A8BC00FC3FFF /* DBManager.m */; };
-		68787ED51828343900FC3FFF /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EC31828343900FC3FFF /* AFHTTPRequestOperation.m */; };
-		68787ED61828343900FC3FFF /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EC51828343900FC3FFF /* AFHTTPRequestOperationManager.m */; };
-		68787ED71828343900FC3FFF /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EC71828343900FC3FFF /* AFHTTPSessionManager.m */; };
-		68787ED81828343900FC3FFF /* AFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787ECA1828343900FC3FFF /* AFNetworkReachabilityManager.m */; };
-		68787ED91828343900FC3FFF /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787ECC1828343900FC3FFF /* AFSecurityPolicy.m */; };
-		68787EDA1828343900FC3FFF /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787ECE1828343900FC3FFF /* AFURLConnectionOperation.m */; };
-		68787EDB1828343900FC3FFF /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787ED01828343900FC3FFF /* AFURLRequestSerialization.m */; };
-		68787EDC1828343900FC3FFF /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787ED21828343900FC3FFF /* AFURLResponseSerialization.m */; };
-		68787EDD1828343900FC3FFF /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787ED41828343900FC3FFF /* AFURLSessionManager.m */; };
 		68787EDF1828365400FC3FFF /* PlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68787EDE1828365400FC3FFF /* PlayerViewController.xib */; };
 		68787EE21828368600FC3FFF /* MyMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EE11828368600FC3FFF /* MyMusicViewController.m */; };
 		68787EE5182836AE00FC3FFF /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EE4182836AE00FC3FFF /* MainViewController.m */; };
@@ -70,25 +62,6 @@
 		68787EAB1827A7BF00FC3FFF /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		68787EB01827A8BC00FC3FFF /* DBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBManager.h; sourceTree = "<group>"; };
 		68787EB11827A8BC00FC3FFF /* DBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBManager.m; sourceTree = "<group>"; };
-		68787EC21828343900FC3FFF /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
-		68787EC31828343900FC3FFF /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
-		68787EC41828343900FC3FFF /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
-		68787EC51828343900FC3FFF /* AFHTTPRequestOperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperationManager.m; sourceTree = "<group>"; };
-		68787EC61828343900FC3FFF /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
-		68787EC71828343900FC3FFF /* AFHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPSessionManager.m; sourceTree = "<group>"; };
-		68787EC81828343900FC3FFF /* AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworking.h; sourceTree = "<group>"; };
-		68787EC91828343900FC3FFF /* AFNetworkReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkReachabilityManager.h; sourceTree = "<group>"; };
-		68787ECA1828343900FC3FFF /* AFNetworkReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkReachabilityManager.m; sourceTree = "<group>"; };
-		68787ECB1828343900FC3FFF /* AFSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSecurityPolicy.h; sourceTree = "<group>"; };
-		68787ECC1828343900FC3FFF /* AFSecurityPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFSecurityPolicy.m; sourceTree = "<group>"; };
-		68787ECD1828343900FC3FFF /* AFURLConnectionOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLConnectionOperation.h; sourceTree = "<group>"; };
-		68787ECE1828343900FC3FFF /* AFURLConnectionOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLConnectionOperation.m; sourceTree = "<group>"; };
-		68787ECF1828343900FC3FFF /* AFURLRequestSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLRequestSerialization.h; sourceTree = "<group>"; };
-		68787ED01828343900FC3FFF /* AFURLRequestSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLRequestSerialization.m; sourceTree = "<group>"; };
-		68787ED11828343900FC3FFF /* AFURLResponseSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLResponseSerialization.h; sourceTree = "<group>"; };
-		68787ED21828343900FC3FFF /* AFURLResponseSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLResponseSerialization.m; sourceTree = "<group>"; };
-		68787ED31828343900FC3FFF /* AFURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLSessionManager.h; sourceTree = "<group>"; };
-		68787ED41828343900FC3FFF /* AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLSessionManager.m; sourceTree = "<group>"; };
 		68787EDE1828365400FC3FFF /* PlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlayerViewController.xib; sourceTree = "<group>"; };
 		68787EE01828368600FC3FFF /* MyMusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMusicViewController.h; sourceTree = "<group>"; };
 		68787EE11828368600FC3FFF /* MyMusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMusicViewController.m; sourceTree = "<group>"; };
@@ -120,6 +93,8 @@
 		68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		68ED981B1729ADC90009C2F6 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		68ED9826172B13ED0009C2F6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		BD8C0EDBA8EE446AB9CD421B /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		FD2D23D6CB8649B98A0835DC /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,39 +117,13 @@
 				68ED98181729AD630009C2F6 /* AudioToolbox.framework in Frameworks */,
 				688453C6172182260092260B /* UIKit.framework in Frameworks */,
 				688453C8172182260092260B /* Foundation.framework in Frameworks */,
+				35FCAAB96D754E878723214C /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		68787E8E1827999E00FC3FFF /* AFNetworking */ = {
-			isa = PBXGroup;
-			children = (
-				68787EC21828343900FC3FFF /* AFHTTPRequestOperation.h */,
-				68787EC31828343900FC3FFF /* AFHTTPRequestOperation.m */,
-				68787EC41828343900FC3FFF /* AFHTTPRequestOperationManager.h */,
-				68787EC51828343900FC3FFF /* AFHTTPRequestOperationManager.m */,
-				68787EC61828343900FC3FFF /* AFHTTPSessionManager.h */,
-				68787EC71828343900FC3FFF /* AFHTTPSessionManager.m */,
-				68787EC81828343900FC3FFF /* AFNetworking.h */,
-				68787EC91828343900FC3FFF /* AFNetworkReachabilityManager.h */,
-				68787ECA1828343900FC3FFF /* AFNetworkReachabilityManager.m */,
-				68787ECB1828343900FC3FFF /* AFSecurityPolicy.h */,
-				68787ECC1828343900FC3FFF /* AFSecurityPolicy.m */,
-				68787ECD1828343900FC3FFF /* AFURLConnectionOperation.h */,
-				68787ECE1828343900FC3FFF /* AFURLConnectionOperation.m */,
-				68787ECF1828343900FC3FFF /* AFURLRequestSerialization.h */,
-				68787ED01828343900FC3FFF /* AFURLRequestSerialization.m */,
-				68787ED11828343900FC3FFF /* AFURLResponseSerialization.h */,
-				68787ED21828343900FC3FFF /* AFURLResponseSerialization.m */,
-				68787ED31828343900FC3FFF /* AFURLSessionManager.h */,
-				68787ED41828343900FC3FFF /* AFURLSessionManager.m */,
-			);
-			name = AFNetworking;
-			path = AFHTTPRequest;
-			sourceTree = "<group>";
-		};
 		68787EB31827AA5500FC3FFF /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -206,6 +155,7 @@
 				688453CB172182260092260B /* MyWave */,
 				688453C4172182260092260B /* Frameworks */,
 				688453C3172182260092260B /* Products */,
+				BD8C0EDBA8EE446AB9CD421B /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -235,6 +185,7 @@
 				688453C5172182260092260B /* UIKit.framework */,
 				688453C7172182260092260B /* Foundation.framework */,
 				688453C9172182260092260B /* CoreGraphics.framework */,
+				FD2D23D6CB8649B98A0835DC /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -243,7 +194,6 @@
 			isa = PBXGroup;
 			children = (
 				68ED98161729ACF40009C2F6 /* Classes */,
-				68787E8E1827999E00FC3FFF /* AFNetworking */,
 				682CD8E4184E7D0C006000E6 /* Images.xcassets */,
 				688453CC172182260092260B /* Supporting Files */,
 			);
@@ -325,9 +275,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 688453E5172182260092260B /* Build configuration list for PBXNativeTarget "MyWave" */;
 			buildPhases = (
+				C4DF46ADB47E46F4BD223201 /* Check Pods Manifest.lock */,
 				688453BE172182260092260B /* Sources */,
 				688453BF172182260092260B /* Frameworks */,
 				688453C0172182260092260B /* Resources */,
+				C463BA2761FA41F283B9E662 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -386,27 +338,51 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		C463BA2761FA41F283B9E662 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C4DF46ADB47E46F4BD223201 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		688453BE172182260092260B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				68787ED51828343900FC3FFF /* AFHTTPRequestOperation.m in Sources */,
 				68787EB21827A8BC00FC3FFF /* DBManager.m in Sources */,
 				688453D2172182260092260B /* main.m in Sources */,
 				688453D6172182260092260B /* AppDelegate.m in Sources */,
-				68787EDD1828343900FC3FFF /* AFURLSessionManager.m in Sources */,
-				68787ED71828343900FC3FFF /* AFHTTPSessionManager.m in Sources */,
 				688453EB172182FF0092260B /* NSString+Gender.m in Sources */,
-				68787ED81828343900FC3FFF /* AFNetworkReachabilityManager.m in Sources */,
 				688453EE172183970092260B /* Vkontakte.m in Sources */,
-				68787EDC1828343900FC3FFF /* AFURLResponseSerialization.m in Sources */,
-				68787EDB1828343900FC3FFF /* AFURLRequestSerialization.m in Sources */,
-				68787EDA1828343900FC3FFF /* AFURLConnectionOperation.m in Sources */,
-				68787ED61828343900FC3FFF /* AFHTTPRequestOperationManager.m in Sources */,
 				688453F21721848B0092260B /* MBProgressHUD.m in Sources */,
 				688453F5172185E70092260B /* VkontakteViewController.m in Sources */,
-				68787ED91828343900FC3FFF /* AFSecurityPolicy.m in Sources */,
 				68787EE81828373700FC3FFF /* VkMusicViewController.m in Sources */,
 				68787EE5182836AE00FC3FFF /* MainViewController.m in Sources */,
 				68787EE21828368600FC3FFF /* MyMusicViewController.m in Sources */,
@@ -489,6 +465,7 @@
 		};
 		688453E6172182260092260B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BD8C0EDBA8EE446AB9CD421B /* Pods.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -497,6 +474,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyWave/MyWave-Prefix.pch";
 				INFOPLIST_FILE = "MyWave/MyWave-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = MyWave;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
@@ -505,6 +483,7 @@
 		};
 		688453E7172182260092260B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BD8C0EDBA8EE446AB9CD421B /* Pods.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -513,6 +492,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyWave/MyWave-Prefix.pch";
 				INFOPLIST_FILE = "MyWave/MyWave-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = MyWave;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;

@@ -20,6 +20,7 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     if (_player == nil) _player = [[AVQueuePlayer alloc]init];
     if (_currentSong == nil) _currentSong = [[NSDictionary alloc]init];
+    if (_cache == nil) _cache = [[NSCache alloc]init];//Что это вообще за кэш такой, без таймаута? :-)
   
     MainViewController *mainViewController = [[MainViewController alloc] initWithNibName:@"MainViewController" bundle:nil];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:mainViewController];

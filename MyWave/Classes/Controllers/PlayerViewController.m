@@ -5,6 +5,7 @@
 //  Created by Дмитрий on 03.11.13.
 //  Copyright (c) 2013 SameWave. All rights reserved.
 //
+
 #import "NSString+Gender.h"
 #import "PlayerViewController.h"
 #import "AFHTTPRequestOperation.h"
@@ -36,8 +37,8 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     _lblMusicArtist.text = artist;
     _lblMusicName.text = title;
     
-    if ([_classNameRef isEqualToString:@"Downloaded"])
-        [self.btnDownload setEnabled:NO];
+    if ([_classNameRef isEqualToString:@"MyMusic"])
+        [_btnDownload setEnabled:NO];
 
     [_scrubber setValue:0];
     [_scrubber setThumbImage:[UIImage imageNamed:@"position"] forState:UIControlStateNormal];
@@ -52,7 +53,6 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 {
     int temp;
     temp = self->currentSong +1;
-    NSLog(@"%d", temp);
     if (temp >= 0 && (temp <= ([_songs count] -1)))
     {
         self->currentSong++;
@@ -67,13 +67,13 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 
 - (void)itemDidFinishPlaying
 {
-    [_player removeTimeObserver:_timeObserver];
-    [self removePlayerProgressObserver];
-    [_player removeAllItems];
-    _currentItem = nil;
-    
     if ([self increaseSongNumber] == YES)
     {
+        [_player removeTimeObserver:_timeObserver];
+        [self removePlayerProgressObserver];
+        [_player removeAllItems];
+        _currentItem = nil;
+        
         _song = [_songs objectAtIndex:self->currentSong];
         
         [self updateUserInterface];
@@ -114,7 +114,6 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
                     else [_player pause];
                     
                     [_player replaceCurrentItemWithPlayerItem:_currentItem];
-                    //NSLog(@"%@", _player.currentItem);
                     
                     [_currentItem addObserver:self
                                    forKeyPath:@"status"
@@ -139,7 +138,7 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
                            [_btnNext setEnabled:YES];
                            [_btnPrev setEnabled:YES];
                            [_btnPlayPause setEnabled:YES];
-                           if (![_classNameRef isEqualToString:@"Downloaded"])
+                           if (![_classNameRef isEqualToString:@"MyMusic"])
                                [_btnDownload setEnabled:YES];
                            [self setTimer];
                            [self initScrubberTimer];
@@ -359,7 +358,6 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 
 - (void) next
 {
-    NSLog(@"%d", self->currentSong);
     [self itemDidFinishPlaying];
 }
 

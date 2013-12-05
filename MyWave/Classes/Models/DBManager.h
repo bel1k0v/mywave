@@ -22,6 +22,7 @@
 
 -(NSArray*) findById:(NSString*)registerNumber;
 -(NSArray*) findAll;
+-(NSArray*) getSongs;
 -(NSArray*) findByTitle:(NSString*)title andArtist:(NSString *)artist;
 
 @end

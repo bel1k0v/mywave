@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 SameWave. All rights reserved.
 //
 
+#import "AppDelegate.h"
 #import "VkMusicViewController.h"
 #import "PlayerViewController.h"
 #import "SongCell.h"
@@ -32,7 +33,16 @@
     
     if ((BOOL)[_vkInstance isAuthorized] != FALSE)
     {
-        _data = [_vkInstance getUserAudio];
+        AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        NSArray *cached = [delegate.cache objectForKey:@"vk_music_data"];
+        if (cached == nil)
+        {
+            _data = [_vkInstance getUserAudio];
+            [delegate.cache setObject:_data forKey:@"vk_music_data"];
+        }
+        else
+            _data = cached;
+        
         [self.tableView reloadData];
     }
     
@@ -53,13 +63,9 @@
 - (IBAction)loginBarButtonItemPressed:(id)sender
 {
     if ((BOOL)[_vkInstance isAuthorized] == FALSE)
-    {
         [_vkInstance authenticate];
-    }
     else
-    {
         [_vkInstance logout];
-    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -110,14 +116,9 @@
 - (void)refreshButtonState
 {
     if (![_vkInstance isAuthorized])
-    {
         _loginBarButtonItem.title = @"Войти";
-    }
     else
-    {
-        //[_vkInstance getUserInfo];
         _loginBarButtonItem.title = @"Выйти";
-    }
 }
 
 #pragma mark - Table view delegate
