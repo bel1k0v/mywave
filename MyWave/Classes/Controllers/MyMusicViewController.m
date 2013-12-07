@@ -12,6 +12,7 @@
 #import "DBManager.h"
 #import "SongCell.h"
 #import "AppDelegate.h"
+#import "NSString+FontAwesome.h"
 
 @implementation MyMusicViewController
 
@@ -47,6 +48,11 @@
     searchDisplayController.searchResultsDataSource = self;
     
     self.tableView.tableHeaderView = searchBar;
+}
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    [self.tableView reloadData];
 }
 
 - (void)viewDidLoad
@@ -107,8 +113,20 @@
     if (tableView == self.searchDisplayController.searchResultsTableView) {
         song = [searchData objectAtIndex:indexPath.row];
     }
-
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    NSDictionary *nowPlaying = [appDelegate playingSong];
+    
     cell.titleLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"title"]];
+    if ([[nowPlaying objectForKey:@"url"]isEqualToString:[song objectForKey:@"url"]] == YES)
+    {
+        NSLog(@"Playing song");
+        cell.playLabel.font = [UIFont fontWithName:@"FontAwesome" size:15.0f];
+        cell.playLabel.text = [NSString stringWithFormat:@"%@", [NSString fontAwesomeIconStringForEnum:FAIconEject]];
+    } else {
+        cell.playLabel.text = @"";
+    }
+    
     cell.artistLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"artist"]];
     
     double duration = [[song objectForKey:@"duration"]doubleValue];
@@ -131,9 +149,12 @@
         NSError *error = nil;
         [[NSFileManager defaultManager]removeItemAtPath:[song objectForKey:@"url"] error:&error];
         [[DBManager getSharedInstance] deleteById:[song objectForKey:@"regNum"]];
+        [searchData removeObject:song];
         [self setupData];
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         [self.tableView reloadData];
-    }    
+    } else
+        return ;
 }
 
 

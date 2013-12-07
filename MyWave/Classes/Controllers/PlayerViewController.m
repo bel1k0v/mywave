@@ -27,6 +27,10 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     return self;
 }
 
+- (AppDelegate *)getAppDelegate
+{
+    return (AppDelegate *)[[UIApplication sharedApplication]delegate];
+}
 
 -(void)updateUserInterface
 {
@@ -38,7 +42,7 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     _lblMusicName.text = title;
     
     if ([_classNameRef isEqualToString:@"MyMusic"])
-        [_btnDownload setEnabled:NO];
+        [_btnDownload removeFromSuperview];
 
     [_scrubber setValue:0];
     [_scrubber setThumbImage:[UIImage imageNamed:@"position"] forState:UIControlStateNormal];
@@ -49,7 +53,7 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     [_lblMusicTime setText:durationLabel];
 }
 
-- (BOOL)increaseSongNumber
+- (BOOL)canIncreaseSongNumber
 {
     int temp;
     temp = self->currentSong +1;
@@ -59,17 +63,15 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
         return YES;
     }
     else
-    {
-        NSLog(@"Wrong song number");
-    }
-    return NO;
+        return NO;
 }
 
 - (void)itemDidFinishPlaying
 {
-    if ([self increaseSongNumber] == YES)
+    if ([self canIncreaseSongNumber] == YES)
     {
-        [_player removeTimeObserver:_timeObserver];
+        AppDelegate *appDelegate = [self getAppDelegate];
+        [appDelegate removeTimer];
         [self removePlayerProgressObserver];
         [_player removeAllItems];
         _currentItem = nil;
@@ -77,24 +79,35 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
         _song = [_songs objectAtIndex:self->currentSong];
         
         [self updateUserInterface];
+        
+        [_btnNext setEnabled:NO];
+        [_btnPrev setEnabled:NO];
+        [_btnPlayPause setEnabled:NO];
+        [_btnDownload setEnabled:NO];
+        
         [self prepareAssetAndInitPlayer];
     }
 }
 
 - (void) prepareAssetAndInitPlayer
 {
-    [_btnNext setEnabled:NO];
-    [_btnPrev setEnabled:NO];
-    [_btnPlayPause setEnabled:NO];
-    [_btnDownload setEnabled:NO];
+    AppDelegate *appDelegate = [self getAppDelegate];
+    _player = appDelegate.player;
     
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    _player = delegate.player;
+    NSDictionary *nowPlaying = [appDelegate playingSong];
+    
+    // Continue Playing
+    if ([[nowPlaying objectForKey:@"url"]isEqualToString:[_song objectForKey:@"url"]] == YES)
+    {
+        [appDelegate setTimer];
+        appDelegate.delegate = self;
+        [self initScrubberTimer];
+        return ;
+    }
     
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[self getSongFilePath] options:nil];
     NSArray *requestedKeys = [NSArray arrayWithObjects:@"tracks", @"playable", nil];
-    NSLog(@"%@", asset);
-    
+
     [asset loadValuesAsynchronouslyForKeys:requestedKeys completionHandler:
      ^{
          dispatch_async(dispatch_get_main_queue(),
@@ -104,26 +117,22 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
                 
                 if (status == AVKeyValueStatusLoaded)
                 {
-                    delegate.currentSong = _song;
-                    NSLog(@"Asset loaded");
+                    appDelegate.currentSong = _song;
+                    if (_player != nil) [_player pause];
+                    
+                    // Init AVPlayerItem and add Listener to play next one
                     _currentItem = [AVPlayerItem playerItemWithAsset:asset];
                     [[NSNotificationCenter defaultCenter] addObserver:self
                                                              selector:@selector(itemDidFinishPlaying)
                                                                  name:AVPlayerItemDidPlayToEndTimeNotification object:_currentItem];
-                    if (_player == nil) _player = [[AVQueuePlayer alloc]init];
-                    else [_player pause];
-                    
                     [_player replaceCurrentItemWithPlayerItem:_currentItem];
-                    
                     [_currentItem addObserver:self
                                    forKeyPath:@"status"
                                       options:0
                                       context:PlayerItemStatusContext];
                 }
                 else
-                {
                     NSLog(@"Error: %d", status);
-                }
             });
      }];
 }
@@ -133,27 +142,31 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 {
     if (context == PlayerItemStatusContext) {
         dispatch_async(dispatch_get_main_queue(),
-                       ^{
-                           NSLog(@"Start Playing!");
-                           [_btnNext setEnabled:YES];
-                           [_btnPrev setEnabled:YES];
-                           [_btnPlayPause setEnabled:YES];
-                           if (![_classNameRef isEqualToString:@"MyMusic"])
-                               [_btnDownload setEnabled:YES];
-                           [self setTimer];
-                           [self initScrubberTimer];
-                           [_player play];
-                           if (_btnPlayPause.selected)
-                           {
-                               [_player play];
-                               [_btnPlayPause setBackgroundImage:[UIImage imageNamed:@"pause"] forState:UIControlStateSelected];
-                           }
-                           else
-                           {
-                               [_player pause];
-                               [_btnPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
-                           }
-                       });
+           ^{
+               // Start Playing
+               [_btnNext setEnabled:YES];
+               [_btnPrev setEnabled:YES];
+               [_btnPlayPause setEnabled:YES];
+               if (![_classNameRef isEqualToString:@"MyMusic"])
+                   [_btnDownload setEnabled:YES];
+               
+               AppDelegate *appDelegate = [self getAppDelegate];
+               [appDelegate setTimer];
+               appDelegate.delegate = self;
+               [self initScrubberTimer];
+               
+               [_player play];
+               if (_btnPlayPause.selected)
+               {
+                   [_player play];
+                   [_btnPlayPause setBackgroundImage:[UIImage imageNamed:@"pause"] forState:UIControlStateSelected];
+               }
+               else
+               {
+                   [_player pause];
+                   [_btnPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+               }
+           });
     } else {
         NSLog(@"%@", context);
         [super observeValueForKeyPath:keyPath ofObject:object change:change
@@ -173,16 +186,15 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
                 
             case UIEventSubtypeRemoteControlPlay:
                 NSLog(@"TogglePlay");
-                [_player play];
+                [self playPause];
                 return;
             case UIEventSubtypeRemoteControlPause:
                 NSLog(@"TogglePause");
-                //[_player pause];
+                [self playPause];
                 return;
             case UIEventSubtypeRemoteControlStop:
                 NSLog(@"ToggleStop");
                 return;
-                //Insert code.
             case UIEventSubtypeRemoteControlNextTrack:
                 NSLog(@"ToggleNext");
                 [self next];
@@ -203,6 +215,7 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     [super viewDidLoad];
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(back)];
     self.navigationItem.leftBarButtonItem = backItem;
+    [self updateUserInterface];
     
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[AVAudioSession sharedInstance] setActive: YES error: nil];
@@ -212,7 +225,6 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
         [self becomeFirstResponder];
     }
     
-    [self updateUserInterface];
     [self prepareAssetAndInitPlayer];
 
     self.btnPlayPause.selected = YES;
@@ -223,49 +235,12 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     [self.navigationController popViewControllerAnimated:YES];
 }
 
--(void)setTimer
-{
-    if(_timeObserver)
-    {
-        _timeObserver = nil;
-    }
-    
-    void (^observerBlock)(CMTime time) = ^(CMTime time) {
-        double progress = (double)time.value / (double)time.timescale;
-		double duration = [[self.song objectForKey:@"duration"] doubleValue];
-        double secondsLeft = duration - progress;
-        
-        int leftMinutes = (int) floor(secondsLeft / 60);
-        int leftMinuteSeconds = (int) secondsLeft - leftMinutes * 60;
-        
-        int progressMinutes = (int) floor(progress / 60);
-        int progressMinuteSeconds = (int) progress - progressMinutes * 60;
-        
-        NSString *timeString = [NSString stringWithFormat:@"%d:%02d - %d:%02d",
-                                progressMinutes,
-                                progressMinuteSeconds,
-                                leftMinutes,
-                                leftMinuteSeconds];
-        
-        if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
-            self.lblMusicTime.text = timeString;
-        } else {
-            //NSLog(@"App is backgrounded. Time is: %@", timeString);
-        }
-    };
-    
-    _timeObserver = [_player addPeriodicTimeObserverForInterval:CMTimeMake(10, 1000)
-                                                          queue:dispatch_get_main_queue()
-                                                     usingBlock:observerBlock];
-}
-
 - (NSURL *)getSongFilePath
 {
     if ([NSURL URLWithString:[_song objectForKey:@"url"]])
         return [NSURL URLWithString:[_song objectForKey:@"url"]];
     else
         return [NSURL fileURLWithPath:[_song objectForKey:@"url"]];
-
 }
 
 
@@ -410,7 +385,7 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 	double duration = CMTimeGetSeconds(playerDuration);
 	if (isfinite(duration))
 	{
-		CGFloat width = CGRectGetWidth([self.scrubber bounds]);
+		CGFloat width = CGRectGetWidth([_scrubber bounds]);
 		interval = 0.5f * duration / width;
 	}
     
@@ -424,26 +399,26 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 	CMTime playerDuration = [self playerItemDuration];
 	if (CMTIME_IS_INVALID(playerDuration))
 	{
-		self.scrubber.minimumValue = 0.0;
+		_scrubber.minimumValue = 0.0;
 		return;
 	}
     
 	double duration = CMTimeGetSeconds(playerDuration);
 	if (isfinite(duration))
 	{
-		float minValue = [self.scrubber minimumValue];
-		float maxValue = [self.scrubber maximumValue];
+		float minValue = [_scrubber minimumValue];
+		float maxValue = [_scrubber maximumValue];
 		double time = CMTimeGetSeconds([self.player currentTime]);
 		
-		[self.scrubber setValue:(maxValue - minValue) * time / duration + minValue];
+		[_scrubber setValue:(maxValue - minValue) * time / duration + minValue];
 	}
 }
 
 /* The user is dragging the movie controller thumb to scrub through the movie. */
 - (IBAction)beginScrubbing:(id)sender
 {
-	restoreAfterScrubbingRate = [self.player rate];
-	[self.player setRate:0.f];
+	restoreAfterScrubbingRate = [_player rate];
+	[_player setRate:0.f];
 	
 	/* Remove previous timer. */
 	[self removePlayerProgressObserver];
@@ -453,18 +428,18 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 {
 	if (self.progressObserver)
 	{
-		[self.player removeTimeObserver:self.progressObserver];
-		self.progressObserver = nil;
+		[_player removeTimeObserver:_progressObserver];
+		_progressObserver = nil;
 	}
 }
 -(void)createPlayerProgressObserver:(double)interval
 {
-    if (!self.progressObserver)
+    if (!_progressObserver)
     {
         void (^progressBlock)(CMTime time) = ^(CMTime time) {
             [self syncScrubber];
         };
-        self.progressObserver = [self.player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(interval, NSEC_PER_SEC)
+        _progressObserver = [_player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(interval, NSEC_PER_SEC)
                                                                           queue:NULL
                                                                     usingBlock:progressBlock];
     }
@@ -491,7 +466,7 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 			
 			double time = duration * (value - minValue) / (maxValue - minValue);
 			
-			[self.player seekToTime:CMTimeMakeWithSeconds(time, NSEC_PER_SEC)];
+			[_player seekToTime:CMTimeMakeWithSeconds(time, NSEC_PER_SEC)];
 		}
 	}
 }
@@ -515,7 +490,7 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     
 	if (restoreAfterScrubbingRate)
 	{
-		[self.player setRate:restoreAfterScrubbingRate];
+		[_player setRate:restoreAfterScrubbingRate];
 		restoreAfterScrubbingRate = 0.f;
 	}
 }

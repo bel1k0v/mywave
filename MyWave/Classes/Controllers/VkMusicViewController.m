@@ -10,7 +10,8 @@
 #import "VkMusicViewController.h"
 #import "PlayerViewController.h"
 #import "SongCell.h"
-#include "NSString+Gender.h"
+#import "NSString+Gender.h"
+#import "NSString+FontAwesome.h"
 
 @implementation VkMusicViewController
 
@@ -53,6 +54,11 @@
     _loginBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Войти" style:UIBarButtonItemStylePlain target:self action:@selector(loginBarButtonItemPressed:)];
     self.navigationItem.rightBarButtonItem = _loginBarButtonItem;
     [self refreshButtonState];
+}
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    [self.tableView reloadData];
 }
 
 - (void) back
@@ -101,7 +107,20 @@
     }
     
     NSDictionary *song = [_data objectAtIndex:indexPath.row];
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    NSDictionary *nowPlaying = [appDelegate playingSong];
+    
     cell.titleLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"title"]];
+
+    if ([[nowPlaying objectForKey:@"url"]isEqualToString:[song objectForKey:@"url"]] == YES)
+    {
+        NSLog(@"Playing song");
+        cell.playLabel.font = [UIFont fontWithName:@"FontAwesome" size:15.0f];
+        cell.playLabel.text = [NSString stringWithFormat:@"%@", [NSString fontAwesomeIconStringForEnum:FAIconEject]];
+    } else {
+        cell.playLabel.text = @"";
+    }
+
     cell.artistLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"artist"]];
     
     double duration = [[song objectForKey:@"duration"]doubleValue];

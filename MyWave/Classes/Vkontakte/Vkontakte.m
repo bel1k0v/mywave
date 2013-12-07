@@ -198,7 +198,7 @@
 
 @implementation Vkontakte
 
-#warning Provide your vkontakte app id
+//#warning Provide your vkontakte app id
 NSString * const vkAppId = @"3585088";
 NSString * const vkPermissions = @"wall,photos,offline,audio";
 NSString * const vkRedirectUrl = @"http://oauth.vk.com/blank.html";
@@ -424,6 +424,8 @@ NSString * const vkRedirectUrl = @"http://oauth.vk.com/blank.html";
             return NULL;
         }
     }
+    
+    return NULL;
 }
 
 #pragma mark - VkontakteViewControllerDelegate

@@ -12,4 +12,5 @@
 @property (nonatomic, strong) IBOutlet UILabel *titleLabel;
 @property (nonatomic, strong) IBOutlet UILabel *artistLabel;
 @property (nonatomic, strong) IBOutlet UILabel *durationLabel;
+@property (nonatomic, strong) IBOutlet UILabel *playLabel;
 @end

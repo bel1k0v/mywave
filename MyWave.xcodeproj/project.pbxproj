@@ -42,6 +42,9 @@
 		68ED981A1729AD8D0009C2F6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */; };
 		68ED981C1729ADC90009C2F6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED981B1729ADC90009C2F6 /* CFNetwork.framework */; };
 		68ED9827172B13ED0009C2F6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED9826172B13ED0009C2F6 /* QuartzCore.framework */; };
+		68F7D4D31850FEE000094192 /* NSString+FontAwesome.m in Sources */ = {isa = PBXBuildFile; fileRef = 68F7D4D21850FEE000094192 /* NSString+FontAwesome.m */; };
+		68F7D4D7185102C600094192 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 68F7D4D51851009300094192 /* FontAwesome.ttf */; };
+		68F7D4D81851045000094192 /* MyWave-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 688453CD172182260092260B /* MyWave-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -93,6 +96,9 @@
 		68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		68ED981B1729ADC90009C2F6 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		68ED9826172B13ED0009C2F6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		68F7D4D11850FEE000094192 /* NSString+FontAwesome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+FontAwesome.h"; path = "../Classes/Vkontakte/NSString+FontAwesome.h"; sourceTree = "<group>"; };
+		68F7D4D21850FEE000094192 /* NSString+FontAwesome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+FontAwesome.m"; path = "../Classes/Vkontakte/NSString+FontAwesome.m"; sourceTree = "<group>"; };
+		68F7D4D51851009300094192 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.ttf; sourceTree = "<group>"; };
 		BD8C0EDBA8EE446AB9CD421B /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		FD2D23D6CB8649B98A0835DC /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -193,8 +199,10 @@
 		688453CB172182260092260B /* MyWave */ = {
 			isa = PBXGroup;
 			children = (
+				68F7D4D41851005900094192 /* Resources */,
 				68ED98161729ACF40009C2F6 /* Classes */,
 				682CD8E4184E7D0C006000E6 /* Images.xcassets */,
+				68ED9825172B109B0009C2F6 /* InterfaceBuilder */,
 				688453CC172182260092260B /* Supporting Files */,
 			);
 			path = MyWave;
@@ -236,7 +244,6 @@
 		68ED98161729ACF40009C2F6 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				68ED9825172B109B0009C2F6 /* InterfaceBuilder */,
 				68787EB41827AA6C00FC3FFF /* Controllers */,
 				68787EB31827AA5500FC3FFF /* Models */,
 				688453EF172184530092260B /* MBProgressHUD */,
@@ -266,6 +273,16 @@
 				6833F80C184A958A00C156AB /* SongCell.m */,
 			);
 			path = UI;
+			sourceTree = "<group>";
+		};
+		68F7D4D41851005900094192 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				68F7D4D11850FEE000094192 /* NSString+FontAwesome.h */,
+				68F7D4D21850FEE000094192 /* NSString+FontAwesome.m */,
+				68F7D4D51851009300094192 /* FontAwesome.ttf */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -329,9 +346,11 @@
 				688453D0172182260092260B /* InfoPlist.strings in Resources */,
 				68787EDF1828365400FC3FFF /* PlayerViewController.xib in Resources */,
 				6833F80F184A958A00C156AB /* MainViewController.xib in Resources */,
+				68F7D4D7185102C600094192 /* FontAwesome.ttf in Resources */,
 				682CD8E5184E7D0C006000E6 /* Images.xcassets in Resources */,
 				68787EEA1828374400FC3FFF /* VkMusicViewController.xib in Resources */,
 				6833F94F184C93CD00C156AB /* SongCell.xib in Resources */,
+				68F7D4D81851045000094192 /* MyWave-Info.plist in Resources */,
 				68787D991826CA5500FC3FFF /* MyMusicViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -382,6 +401,7 @@
 				688453EB172182FF0092260B /* NSString+Gender.m in Sources */,
 				688453EE172183970092260B /* Vkontakte.m in Sources */,
 				688453F21721848B0092260B /* MBProgressHUD.m in Sources */,
+				68F7D4D31850FEE000094192 /* NSString+FontAwesome.m in Sources */,
 				688453F5172185E70092260B /* VkontakteViewController.m in Sources */,
 				68787EE81828373700FC3FFF /* VkMusicViewController.m in Sources */,
 				68787EE5182836AE00FC3FFF /* MainViewController.m in Sources */,

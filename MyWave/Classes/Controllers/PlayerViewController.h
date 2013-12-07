@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <AVFoundation/AVFoundation.h>
+#include <AVFoundation/AVFoundation.h>
 
 @interface PlayerViewController : UIViewController <AVAudioSessionDelegate>
 {
@@ -29,7 +29,6 @@
 
 @property (nonatomic, strong) AVPlayerItem *currentItem;
 @property (nonatomic, retain) AVQueuePlayer *player;
-@property (nonatomic, strong) id timeObserver;
 @property (nonatomic, strong) id progressObserver;
 
 @property (strong, nonatomic) NSDictionary *song;
