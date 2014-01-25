@@ -5,7 +5,7 @@
 //  Created by Дмитрий on 19.04.13.
 //  Copyright (c) 2013 SameWave. All rights reserved.
 //
-#import "AppDelegate.h"
+#import "SoundManager.h"
 #import "MainViewController.h"
 #import "VkMusicViewController.h"
 #import "MyMusicViewController.h"
@@ -20,9 +20,9 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    if (delegate.currentSong != nil)
-        NSLog(@"%@", delegate.currentSong);
+    SoundManager *soundManager = [SoundManager sharedInstance];
+    if (soundManager.currentSong != nil)
+        NSLog(@"%@", soundManager.currentSong);
 }
 
 - (void)didReceiveMemoryWarning

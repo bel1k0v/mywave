@@ -33,7 +33,6 @@
 
 @property (strong, nonatomic) NSDictionary *song;
 @property (strong, nonatomic) NSArray *songs;
-@property (strong, nonatomic) NSArray *playlist;
 @property (strong, atomic) NSString *classNameRef;
 
 - (IBAction)didTapPlayPause:(id)sender;

@@ -12,6 +12,12 @@
 		6833F80E184A958A00C156AB /* SongCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6833F80C184A958A00C156AB /* SongCell.m */; };
 		6833F80F184A958A00C156AB /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6833F80D184A958A00C156AB /* MainViewController.xib */; };
 		6833F94F184C93CD00C156AB /* SongCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6833F94E184C93CD00C156AB /* SongCell.xib */; };
+		6838F67718535118005DB7BF /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6838F67118535118005DB7BF /* libTestFlight.a */; };
+		6838F67818535118005DB7BF /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 6838F67218535118005DB7BF /* README.md */; };
+		6838F67918535118005DB7BF /* release_notes.md in Resources */ = {isa = PBXBuildFile; fileRef = 6838F67318535118005DB7BF /* release_notes.md */; };
+		6838F67B18535213005DB7BF /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6838F67A18535213005DB7BF /* libz.dylib */; };
+		6864DFA71885C9BF005B33C0 /* SoundManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6864DFA61885C9BF005B33C0 /* SoundManager.m */; };
+		6864DFAA18874FC0005B33C0 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 6864DFA918874FC0005B33C0 /* Song.m */; };
 		68787D901826533700FC3FFF /* PlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787D8E1826533700FC3FFF /* PlayerViewController.m */; };
 		68787D9218265B3D00FC3FFF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED981417270D190009C2F6 /* AVFoundation.framework */; };
 		68787D9418265B7C00FC3FFF /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68787D9318265B7C00FC3FFF /* CoreMedia.framework */; };
@@ -53,6 +59,17 @@
 		6833F80C184A958A00C156AB /* SongCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongCell.m; sourceTree = "<group>"; };
 		6833F80D184A958A00C156AB /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
 		6833F94E184C93CD00C156AB /* SongCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SongCell.xib; sourceTree = "<group>"; };
+		6838F67118535118005DB7BF /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
+		6838F67218535118005DB7BF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		6838F67318535118005DB7BF /* release_notes.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = release_notes.md; sourceTree = "<group>"; };
+		6838F67418535118005DB7BF /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+AsyncLogging.h"; sourceTree = "<group>"; };
+		6838F67518535118005DB7BF /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
+		6838F67618535118005DB7BF /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
+		6838F67A18535213005DB7BF /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		6864DFA51885C9BF005B33C0 /* SoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundManager.h; sourceTree = "<group>"; };
+		6864DFA61885C9BF005B33C0 /* SoundManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoundManager.m; sourceTree = "<group>"; };
+		6864DFA818874FC0005B33C0 /* Song.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Song.h; sourceTree = "<group>"; };
+		6864DFA918874FC0005B33C0 /* Song.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Song.m; sourceTree = "<group>"; };
 		68787D8D1826533700FC3FFF /* PlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerViewController.h; sourceTree = "<group>"; };
 		68787D8E1826533700FC3FFF /* PlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerViewController.m; sourceTree = "<group>"; };
 		68787D9318265B7C00FC3FFF /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -108,6 +125,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6838F67B18535213005DB7BF /* libz.dylib in Frameworks */,
 				68787EAC1827A7BF00FC3FFF /* libsqlite3.0.dylib in Frameworks */,
 				68787E7018278A1800FC3FFF /* MobileCoreServices.framework in Frameworks */,
 				68787E6B182789F100FC3FFF /* CoreFoundation.framework in Frameworks */,
@@ -119,6 +137,7 @@
 				68ED9827172B13ED0009C2F6 /* QuartzCore.framework in Frameworks */,
 				68ED981C1729ADC90009C2F6 /* CFNetwork.framework in Frameworks */,
 				688453CA172182260092260B /* CoreGraphics.framework in Frameworks */,
+				6838F67718535118005DB7BF /* libTestFlight.a in Frameworks */,
 				68ED981A1729AD8D0009C2F6 /* MediaPlayer.framework in Frameworks */,
 				68ED98181729AD630009C2F6 /* AudioToolbox.framework in Frameworks */,
 				688453C6172182260092260B /* UIKit.framework in Frameworks */,
@@ -130,12 +149,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6838F67018535118005DB7BF /* TestFlightSDK2.0.2 */ = {
+			isa = PBXGroup;
+			children = (
+				6838F67118535118005DB7BF /* libTestFlight.a */,
+				6838F67218535118005DB7BF /* README.md */,
+				6838F67318535118005DB7BF /* release_notes.md */,
+				6838F67418535118005DB7BF /* TestFlight+AsyncLogging.h */,
+				6838F67518535118005DB7BF /* TestFlight+ManualSessions.h */,
+				6838F67618535118005DB7BF /* TestFlight.h */,
+			);
+			path = TestFlightSDK2.0.2;
+			sourceTree = "<group>";
+		};
 		68787EB31827AA5500FC3FFF /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				68F7D4D0184FD27300094192 /* UI */,
 				68787EB01827A8BC00FC3FFF /* DBManager.h */,
 				68787EB11827A8BC00FC3FFF /* DBManager.m */,
+				6864DFA51885C9BF005B33C0 /* SoundManager.h */,
+				6864DFA61885C9BF005B33C0 /* SoundManager.m */,
+				6864DFA818874FC0005B33C0 /* Song.h */,
+				6864DFA918874FC0005B33C0 /* Song.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -158,6 +194,7 @@
 		688453B9172182250092260B = {
 			isa = PBXGroup;
 			children = (
+				6838F67018535118005DB7BF /* TestFlightSDK2.0.2 */,
 				688453CB172182260092260B /* MyWave */,
 				688453C4172182260092260B /* Frameworks */,
 				688453C3172182260092260B /* Products */,
@@ -176,6 +213,7 @@
 		688453C4172182260092260B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6838F67A18535213005DB7BF /* libz.dylib */,
 				68ED981B1729ADC90009C2F6 /* CFNetwork.framework */,
 				68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */,
 				68ED98171729AD630009C2F6 /* AudioToolbox.framework */,
@@ -345,7 +383,9 @@
 			files = (
 				688453D0172182260092260B /* InfoPlist.strings in Resources */,
 				68787EDF1828365400FC3FFF /* PlayerViewController.xib in Resources */,
+				6838F67818535118005DB7BF /* README.md in Resources */,
 				6833F80F184A958A00C156AB /* MainViewController.xib in Resources */,
+				6838F67918535118005DB7BF /* release_notes.md in Resources */,
 				68F7D4D7185102C600094192 /* FontAwesome.ttf in Resources */,
 				682CD8E5184E7D0C006000E6 /* Images.xcassets in Resources */,
 				68787EEA1828374400FC3FFF /* VkMusicViewController.xib in Resources */,
@@ -395,11 +435,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6864DFAA18874FC0005B33C0 /* Song.m in Sources */,
 				68787EB21827A8BC00FC3FFF /* DBManager.m in Sources */,
 				688453D2172182260092260B /* main.m in Sources */,
 				688453D6172182260092260B /* AppDelegate.m in Sources */,
 				688453EB172182FF0092260B /* NSString+Gender.m in Sources */,
 				688453EE172183970092260B /* Vkontakte.m in Sources */,
+				6864DFA71885C9BF005B33C0 /* SoundManager.m in Sources */,
 				688453F21721848B0092260B /* MBProgressHUD.m in Sources */,
 				68F7D4D31850FEE000094192 /* NSString+FontAwesome.m in Sources */,
 				688453F5172185E70092260B /* VkontakteViewController.m in Sources */,
@@ -495,8 +537,12 @@
 				GCC_PREFIX_HEADER = "MyWave/MyWave-Prefix.pch";
 				INFOPLIST_FILE = "MyWave/MyWave-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/dmitrij/xCode/MyWave/TestFlightSDK2.0.2,
+				);
 				PRODUCT_NAME = MyWave;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "6113CC02-04DC-4786-942F-A542892A432C";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -513,8 +559,12 @@
 				GCC_PREFIX_HEADER = "MyWave/MyWave-Prefix.pch";
 				INFOPLIST_FILE = "MyWave/MyWave-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/dmitrij/xCode/MyWave/TestFlightSDK2.0.2,
+				);
 				PRODUCT_NAME = MyWave;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "64F7FB7E-2933-4907-954C-206BE3E61974";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

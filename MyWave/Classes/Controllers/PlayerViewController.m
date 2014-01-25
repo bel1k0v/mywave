@@ -10,10 +10,10 @@
 #import "PlayerViewController.h"
 #import "AFHTTPRequestOperation.h"
 #import "DBManager.h"
-#import "AppDelegate.h"
+#import "SoundManager.h"
 
 @implementation PlayerViewController
-@synthesize classNameRef = _classNameRef;
+@synthesize classNameRef = _classNameRef, player = _player, songs = _songs, song = _song;
 
 static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 
@@ -27,25 +27,24 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     return self;
 }
 
-- (AppDelegate *)getAppDelegate
+- (SoundManager *)soundManager
 {
-    return (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    return [SoundManager sharedInstance];
 }
 
 -(void)updateUserInterface
 {
-    NSString *artist = [NSString htmlEntityDecode:[NSString stringWithFormat:@"%@",
+    _lblMusicArtist.text = [NSString htmlEntityDecode:[NSString stringWithFormat:@"%@",
                                                [_song objectForKey:@"artist"]]];
-    NSString *title = [NSString htmlEntityDecode:[NSString stringWithFormat:@"%@",
+    _lblMusicName.text  = [NSString htmlEntityDecode:[NSString stringWithFormat:@"%@",
                                               [_song objectForKey:@"title"]]];
-    _lblMusicArtist.text = artist;
-    _lblMusicName.text = title;
     
     if ([_classNameRef isEqualToString:@"MyMusic"])
         [_btnDownload removeFromSuperview];
 
     [_scrubber setValue:0];
     [_scrubber setThumbImage:[UIImage imageNamed:@"position"] forState:UIControlStateNormal];
+    
     double duration = [[_song objectForKey:@"duration"]doubleValue];
     int minutes = (int) floor(duration / 60);
     int seconds = duration - (minutes * 60);
@@ -70,8 +69,9 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 {
     if ([self canIncreaseSongNumber] == YES)
     {
-        AppDelegate *appDelegate = [self getAppDelegate];
-        [appDelegate removeTimer];
+        // Free memory
+        SoundManager *soundManager = [self soundManager];;
+        [soundManager removeTimer];
         [self removePlayerProgressObserver];
         [_player removeAllItems];
         _currentItem = nil;
@@ -79,28 +79,40 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
         _song = [_songs objectAtIndex:self->currentSong];
         
         [self updateUserInterface];
-        
-        [_btnNext setEnabled:NO];
-        [_btnPrev setEnabled:NO];
-        [_btnPlayPause setEnabled:NO];
-        [_btnDownload setEnabled:NO];
-        
+        [self setButtonsDisabled];
         [self prepareAssetAndInitPlayer];
     }
 }
 
+- (void) setButtonsDisabled
+{
+    [_btnNext setEnabled:NO];
+    [_btnPrev setEnabled:NO];
+    [_btnPlayPause setEnabled:NO];
+    [_btnDownload setEnabled:NO];
+}
+
+- (void) setButtonsEnabled
+{
+    [_btnNext setEnabled:YES];
+    [_btnPrev setEnabled:YES];
+    [_btnPlayPause setEnabled:YES];
+    if (![_classNameRef isEqualToString:@"MyMusic"])
+        [_btnDownload setEnabled:YES];
+}
+
 - (void) prepareAssetAndInitPlayer
 {
-    AppDelegate *appDelegate = [self getAppDelegate];
-    _player = appDelegate.player;
+    SoundManager *soundManager = [self soundManager];;
+    _player = soundManager.player;
     
-    NSDictionary *nowPlaying = [appDelegate playingSong];
+    NSDictionary *nowPlaying = [soundManager playingSong];
     
     // Continue Playing
     if ([[nowPlaying objectForKey:@"url"]isEqualToString:[_song objectForKey:@"url"]] == YES)
     {
-        [appDelegate setTimer];
-        appDelegate.delegate = self;
+        [soundManager setTimer];
+        soundManager.delegate = self;
         [self initScrubberTimer];
         return ;
     }
@@ -117,14 +129,15 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
                 
                 if (status == AVKeyValueStatusLoaded)
                 {
-                    appDelegate.currentSong = _song;
-                    if (_player != nil) [_player pause];
+                    soundManager.currentSong = _song;
+                    [_player pause];
                     
                     // Init AVPlayerItem and add Listener to play next one
                     _currentItem = [AVPlayerItem playerItemWithAsset:asset];
                     [[NSNotificationCenter defaultCenter] addObserver:self
                                                              selector:@selector(itemDidFinishPlaying)
                                                                  name:AVPlayerItemDidPlayToEndTimeNotification object:_currentItem];
+                    
                     [_player replaceCurrentItemWithPlayerItem:_currentItem];
                     [_currentItem addObserver:self
                                    forKeyPath:@"status"
@@ -144,15 +157,10 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
         dispatch_async(dispatch_get_main_queue(),
            ^{
                // Start Playing
-               [_btnNext setEnabled:YES];
-               [_btnPrev setEnabled:YES];
-               [_btnPlayPause setEnabled:YES];
-               if (![_classNameRef isEqualToString:@"MyMusic"])
-                   [_btnDownload setEnabled:YES];
-               
-               AppDelegate *appDelegate = [self getAppDelegate];
-               [appDelegate setTimer];
-               appDelegate.delegate = self;
+               [self setButtonsEnabled];
+               SoundManager *soundManager = [self soundManager];;
+               [soundManager setTimer];
+               soundManager.delegate = self;
                [self initScrubberTimer];
                
                [_player play];
@@ -213,8 +221,11 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(back)];
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind
+                                                                              target:self
+                                                                              action:@selector(back)];
     self.navigationItem.leftBarButtonItem = backItem;
+    
     [self updateUserInterface];
     
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
@@ -226,7 +237,6 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     }
     
     [self prepareAssetAndInitPlayer];
-
     self.btnPlayPause.selected = YES;
 }
 
@@ -272,14 +282,14 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 
 - (IBAction)didTapDownload:(id)sender
 {
-    [self.btnDownload setEnabled:NO];
+    [_btnDownload setEnabled:NO];
     DBManager *db = [DBManager getSharedInstance];
-    if ([db findByTitle:[self.song objectForKey:@"title"] andArtist:[self.song objectForKey:@"artist"]] != nil)
+    if ([db findByTitle:[_song objectForKey:@"title"] andArtist:[_song objectForKey:@"artist"]] != nil)
     {
         NSString *errorMessage = [NSString stringWithFormat:@"У вас уже загружена эта песня."];
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Предупреждение" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
         [alert show];
-        [self.btnDownload setEnabled:YES];
+        [_btnDownload setEnabled:YES];
     }
     else
     {
@@ -408,7 +418,7 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 	{
 		float minValue = [_scrubber minimumValue];
 		float maxValue = [_scrubber maximumValue];
-		double time = CMTimeGetSeconds([self.player currentTime]);
+		double time = CMTimeGetSeconds([_player currentTime]);
 		
 		[_scrubber setValue:(maxValue - minValue) * time / duration + minValue];
 	}
@@ -426,7 +436,7 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 
 -(void)removePlayerProgressObserver
 {
-	if (self.progressObserver)
+	if (_progressObserver)
 	{
 		[_player removeTimeObserver:_progressObserver];
 		_progressObserver = nil;
@@ -483,7 +493,7 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     double duration = CMTimeGetSeconds(playerDuration);
     if (isfinite(duration))
     {
-        CGFloat width = CGRectGetWidth([self.scrubber bounds]);
+        CGFloat width = CGRectGetWidth([_scrubber bounds]);
         double tolerance = 0.5f * duration / width;
         [self createPlayerProgressObserver:tolerance];
     }
@@ -502,12 +512,12 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 
 -(void)enableScrubber
 {
-    self.scrubber.enabled = YES;
+    _scrubber.enabled = YES;
 }
 
 -(void)disableScrubber
 {
-    self.scrubber.enabled = NO;
+    _scrubber.enabled = NO;
 }
 
 @end

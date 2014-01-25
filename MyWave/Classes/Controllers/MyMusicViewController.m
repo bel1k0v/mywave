@@ -10,8 +10,8 @@
 #import "MyMusicViewController.h"
 #import "PlayerViewController.h"
 #import "DBManager.h"
+#import "SoundManager.h"
 #import "SongCell.h"
-#import "AppDelegate.h"
 #import "NSString+FontAwesome.h"
 
 @implementation MyMusicViewController
@@ -114,8 +114,8 @@
         song = [searchData objectAtIndex:indexPath.row];
     }
     
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    NSDictionary *nowPlaying = [appDelegate playingSong];
+    SoundManager *soundManager = [SoundManager sharedInstance];
+    NSDictionary *nowPlaying = [soundManager playingSong];
     
     cell.titleLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"title"]];
     if ([[nowPlaying objectForKey:@"url"]isEqualToString:[song objectForKey:@"url"]] == YES)

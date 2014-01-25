@@ -12,6 +12,7 @@
 #import "SongCell.h"
 #import "NSString+Gender.h"
 #import "NSString+FontAwesome.h"
+#import "SoundManager.h"
 
 @implementation VkMusicViewController
 
@@ -107,8 +108,8 @@
     }
     
     NSDictionary *song = [_data objectAtIndex:indexPath.row];
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    NSDictionary *nowPlaying = [appDelegate playingSong];
+    SoundManager *soundManager = [SoundManager sharedInstance];
+    NSDictionary *nowPlaying = [soundManager playingSong];
     
     cell.titleLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"title"]];
 
@@ -145,7 +146,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PlayerViewController *playerViewController = [[PlayerViewController alloc]initWithNibName:@"PlayerViewController" bundle:nil];
-
     playerViewController.song =[_data objectAtIndex:indexPath.row];
     playerViewController.songs = _data;
     playerViewController->currentSong = indexPath.row;
