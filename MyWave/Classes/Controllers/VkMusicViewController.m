@@ -20,6 +20,7 @@
 {
     self = [super initWithStyle:style];
     if (self) {
+        searchCache = [[NSCache alloc] init];
         searchData = [[NSMutableArray alloc]initWithArray:[self getSongs]];
     }
     return self;
@@ -201,7 +202,7 @@
 - (void)vkontakteDidFinishLogin:(Vkontakte *)vkontakte
 {
     [self refreshButtonState];
-    _data = [vkontakte getUserAudio];
+    [self setupData];
     [self.tableView reloadData];
 }
 
@@ -215,8 +216,13 @@
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
     NSLog(@"%@", searchString);
 
-    if (searchString.length > 3 && searchString.length < 18) {
-        searchData = [[NSMutableArray alloc]initWithArray:[_vkInstance searchAudio:searchString]];
+    if (searchString.length > 3 && searchString.length < 25) {
+        NSArray *cachedData = [searchCache objectForKey:searchString];
+        if (cachedData == NULL) {
+            cachedData = [_vkInstance searchAudio:searchString];
+            [searchCache setObject:cachedData forKey:searchString];
+        }
+        searchData = [[NSMutableArray alloc]initWithArray:cachedData];
     }
     [self.tableView reloadData];
     return YES;

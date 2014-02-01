@@ -97,7 +97,7 @@
         NSString *captcha_user = [[NSUserDefaults standardUserDefaults] objectForKey:@"captcha_user"];
         reqURl = [reqURl stringByAppendingFormat:@"&captcha_sid=%@&captcha_key=%@", captcha_sid, [self URLEncodedString: captcha_user]];
     }
-    NSLog(@"Sending request: %@", reqURl);
+    //NSLog(@"Sending request: %@", reqURl);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:reqURl]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                                                        timeoutInterval:60.0];
@@ -136,7 +136,7 @@
 
 - (NSDictionary *)sendPOSTRequest:(NSString *)reqURl withImageData:(NSData *)imageData
 {
-    NSLog(@"Sending request: %@", reqURl);
+    //NSLog(@"Sending request: %@", reqURl);
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:reqURl]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
@@ -177,7 +177,7 @@
         
         NSString *errorMsg = [[dict objectForKey:@"error"] objectForKey:@"error_msg"];
         
-        NSLog(@"Server response: %@ \nError: %@", dict, errorMsg);
+        //NSLog(@"Server response: %@ \nError: %@", dict, errorMsg);
         
         return dict;
     }
@@ -385,7 +385,7 @@ NSString * const vkRedirectUrl = @"http://oauth.vk.com/blank.html";
     if (![self isAuthorized]) return NULL;
     
     NSString *url = [NSString stringWithFormat:@"https://api.vk.com/method/audio.get?oid=%@&access_token=%@", userId, accessToken];
-    NSLog(@"action URL: %@", url);
+    //NSLog(@"action URL: %@", url);
     
     NSDictionary *parsedDictionary = [self sendRequest:url withCaptcha:NO];
 
@@ -438,7 +438,6 @@ NSString * const vkRedirectUrl = @"http://oauth.vk.com/blank.html";
         range.location = 1;
         range.length = [array count] - 1;
         NSArray *music = [array subarrayWithRange:range];
-        NSLog(@"%@", music);
         return music;
     }
     else

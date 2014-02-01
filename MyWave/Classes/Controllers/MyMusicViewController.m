@@ -17,8 +17,7 @@
 @implementation MyMusicViewController
 @synthesize data = _data;
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
+- (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
         searchData = [NSMutableArray arrayWithArray:[self getSongs]];
@@ -26,20 +25,17 @@
     return self;
 }
 
-- (NSArray *)getSongs
-{
+- (NSArray *)getSongs {
     DBManager *db = [DBManager getSharedInstance];
     return [db getSongs];
 }
 
-- (void)setupData
-{
+- (void)setupData {
     _data = nil;
     _data = [self getSongs];
 }
 
-- (void)initSearch
-{
+- (void)initSearch {
     searchData = [NSMutableArray arrayWithCapacity:[_data count]];
     searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
     

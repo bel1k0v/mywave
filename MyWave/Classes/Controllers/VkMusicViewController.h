@@ -14,6 +14,7 @@
     NSMutableArray *searchData;
     UISearchBar *searchBar;
     UISearchDisplayController *searchDisplayController;
+    NSCache *searchCache;
     
     Vkontakte *_vkInstance;
     UIBarButtonItem *_loginBarButtonItem;

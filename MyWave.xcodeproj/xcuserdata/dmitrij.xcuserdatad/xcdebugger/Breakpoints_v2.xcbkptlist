@@ -202,11 +202,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyWave/Classes/Controllers/VkMusicViewController.m"
-            timestampString = "412955031.369337"
+            timestampString = "412974370.547957"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "165"
-            endingLineNumber = "165"
+            startingLineNumber = "166"
+            endingLineNumber = "166"
             landmarkName = "@implementation VkMusicViewController"
             landmarkType = "3">
          </BreakpointContent>
