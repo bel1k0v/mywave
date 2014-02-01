@@ -424,7 +424,7 @@ NSString * const vkRedirectUrl = @"http://oauth.vk.com/blank.html";
 
 - (NSArray *) searchAudio:(NSString *)q {
     if (![self isAuthorized]) return NULL;
-    
+    q = [q stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
     NSString *url = [NSString stringWithFormat:@"https://api.vk.com/method/audio.search?q=%@&access_token=%@", q, accessToken];
     NSLog(@"action URL: %@", url);
     
