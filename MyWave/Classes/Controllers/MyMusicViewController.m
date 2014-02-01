@@ -1,9 +1,9 @@
 //
 //  DownloadedViewController.m
-//  TheSameWave
+//  MyWave
 //
 //  Created by Дмитрий on 03.11.13.
-//  Copyright (c) 2013 SameWave. All rights reserved.
+//  Copyright (c) 2013 MyWave. All rights reserved.
 //
 
 #import "NSString+Gender.h"
@@ -15,6 +15,7 @@
 #import "NSString+FontAwesome.h"
 
 @implementation MyMusicViewController
+@synthesize data = _data;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -50,42 +51,35 @@
     self.tableView.tableHeaderView = searchBar;
 }
 
-- (void) viewDidAppear:(BOOL)animated
-{
+- (void) viewDidAppear:(BOOL)animated {
     [self.tableView reloadData];
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     [self setupData];
     [self initSearch];
     self.navigationItem.title = @"Моя музыка";
     UIBarButtonItem *cameraItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(back)];
     self.navigationItem.leftBarButtonItem = cameraItem;
-    
 }
 
-- (void) back
-{
+- (void) back {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (tableView == self.searchDisplayController.searchResultsTableView) {
         return [searchData count];
     } else {
@@ -93,16 +87,15 @@
     }
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"SongCell";
 
     SongCell *cell = (SongCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
         NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"SongCell" owner:nil options:nil];
-        for (id currentObject in topLevelObjects){
-            if ([currentObject isKindOfClass:[UITableViewCell class]]){
+        for (id currentObject in topLevelObjects) {
+            if ([currentObject isKindOfClass:[UITableViewCell class]]) {
                 cell = (SongCell *) currentObject;
                 break;
             }
@@ -118,9 +111,7 @@
     NSDictionary *nowPlaying = [soundManager playingSong];
     
     cell.titleLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"title"]];
-    if ([[nowPlaying objectForKey:@"url"]isEqualToString:[song objectForKey:@"url"]] == YES)
-    {
-        NSLog(@"Playing song");
+    if ([[nowPlaying objectForKey:@"url"]isEqualToString:[song objectForKey:@"url"]] == YES) {
         cell.playLabel.font = [UIFont fontWithName:@"FontAwesome" size:15.0f];
         cell.playLabel.text = [NSString stringWithFormat:@"%@", [NSString fontAwesomeIconStringForEnum:FAIconEject]];
     } else {
@@ -139,8 +130,7 @@
 }
 
 #pragma mark - Table view delegate
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         NSDictionary *song = [_data objectAtIndex:indexPath.row];
         if (tableView == self.searchDisplayController.searchResultsTableView) {
@@ -158,8 +148,7 @@
 }
 
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     PlayerViewController *playerViewController = [[PlayerViewController alloc]initWithNibName:@"PlayerViewController" bundle:nil];
     NSDictionary *song = [_data objectAtIndex:indexPath.row];
     NSArray *songs = _data;
@@ -167,7 +156,6 @@
         song = [searchData objectAtIndex:indexPath.row];
         songs = searchData;
     }
-    
     playerViewController.song = song;
     playerViewController.songs = songs;
     playerViewController.classNameRef = @"MyMusic";
@@ -185,8 +173,7 @@
 
 
 #pragma mark - Search display delegate
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
-{
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
     [self filterContentForSearchText:searchString scope:
      [[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:[self.searchDisplayController.searchBar selectedScopeButtonIndex]]];
     return YES;

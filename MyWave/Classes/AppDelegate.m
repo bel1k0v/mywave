@@ -7,10 +7,9 @@
 //
 
 #import "AppDelegate.h"
-#import "VkMusicViewController.h"
-#import "MyMusicViewController.h"
 #import "MainViewController.h"
 #import "TestFlight.h"
+#import "SoundManager.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -22,8 +21,6 @@
     [TestFlight takeOff:@"441ce003-181e-4495-847c-028ed9b65ad2"];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    if (_cache == nil) _cache = [[NSCache alloc]init];//Что это вообще за кэш такой, без таймаута? :-)
-  
     MainViewController *mainViewController = [[MainViewController alloc] initWithNibName:@"MainViewController" bundle:nil];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:mainViewController];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];

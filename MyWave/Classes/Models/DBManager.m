@@ -1,10 +1,7 @@
-//
 //  DBManager.m
-//  TheSameWave
+//  MyWave
 //
 //  Created by Дмитрий on 04.11.13.
-//  Copyright (c) 2013 SameWave. All rights reserved.
-//
 
 #import "DBManager.h"
 

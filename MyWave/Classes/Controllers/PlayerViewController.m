@@ -1,9 +1,9 @@
 //
 //  PlayerViewController.m
-//  TheSameWave
+//  MyWave
 //
 //  Created by Дмитрий on 03.11.13.
-//  Copyright (c) 2013 SameWave. All rights reserved.
+//  Copyright (c) 2013 MyWave. All rights reserved.
 //
 
 #import "NSString+Gender.h"
@@ -13,7 +13,22 @@
 #import "SoundManager.h"
 
 @implementation PlayerViewController
-@synthesize classNameRef = _classNameRef, player = _player, songs = _songs, song = _song;
+
+@synthesize
+    classNameRef = _classNameRef,
+    player = _player,
+    songs = _songs,
+    song = _song,
+    currentItem = _currentItem,
+    progressObserver = _progressObserver,
+    lblMusicArtist = _lblMusicArtist,
+    lblMusicName = _lblMusicName,
+    lblMusicTime = _lblMusicTime,
+    btnDownload = _btnDownload,
+    btnNext = _btnNext,
+    btnPrev = _btnPrev,
+    btnPlayPause = _btnPlayPause,
+    scrubber = _scrubber;
 
 static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 
@@ -29,71 +44,43 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 
 - (SoundManager *)soundManager
 {
-    return [SoundManager sharedInstance];
+    SoundManager *sharedInstance = [SoundManager sharedInstance];
+    return sharedInstance;
 }
 
--(void)updateUserInterface
-{
-    _lblMusicArtist.text = [NSString htmlEntityDecode:[NSString stringWithFormat:@"%@",
-                                               [_song objectForKey:@"artist"]]];
-    _lblMusicName.text  = [NSString htmlEntityDecode:[NSString stringWithFormat:@"%@",
-                                              [_song objectForKey:@"title"]]];
-    
+- (void)updateUserInterface {
     if ([_classNameRef isEqualToString:@"MyMusic"])
         [_btnDownload removeFromSuperview];
-
-    [_scrubber setValue:0];
-    [_scrubber setThumbImage:[UIImage imageNamed:@"position"] forState:UIControlStateNormal];
+    
+    [_lblMusicArtist setText:[NSString htmlEntityDecode:[NSString stringWithFormat:@"%@",
+                                               [_song objectForKey:@"artist"]]]];
+    [_lblMusicName setText:[NSString htmlEntityDecode:[NSString stringWithFormat:@"%@",
+                                              [_song objectForKey:@"title"]]]];
     
     double duration = [[_song objectForKey:@"duration"]doubleValue];
     int minutes = (int) floor(duration / 60);
     int seconds = duration - (minutes * 60);
     NSString *durationLabel = [NSString stringWithFormat:@"0:00 - %d:%02d", minutes, seconds];
     [_lblMusicTime setText:durationLabel];
+    
+    [_scrubber setValue:0];
+    [_scrubber setThumbImage:[UIImage imageNamed:@"position"] forState:UIControlStateNormal];
 }
 
-- (BOOL)canIncreaseSongNumber
-{
+- (BOOL)canIncreaseSongNumber {
     int temp;
     temp = self->currentSong +1;
-    if (temp >= 0 && (temp <= ([_songs count] -1)))
-    {
-        self->currentSong++;
-        return YES;
-    }
-    else
-        return NO;
+    return (temp >= 0 && (temp < [_songs count])) ? YES : NO;
 }
 
-- (void)itemDidFinishPlaying
-{
-    if ([self canIncreaseSongNumber] == YES)
-    {
-        // Free memory
-        SoundManager *soundManager = [self soundManager];;
-        [soundManager removeTimer];
-        [self removePlayerProgressObserver];
-        [_player removeAllItems];
-        _currentItem = nil;
-        
-        _song = [_songs objectAtIndex:self->currentSong];
-        
-        [self updateUserInterface];
-        [self setButtonsDisabled];
-        [self prepareAssetAndInitPlayer];
-    }
-}
-
-- (void) setButtonsDisabled
-{
+- (void) setButtonsDisabled {
     [_btnNext setEnabled:NO];
     [_btnPrev setEnabled:NO];
     [_btnPlayPause setEnabled:NO];
     [_btnDownload setEnabled:NO];
 }
 
-- (void) setButtonsEnabled
-{
+- (void) setButtonsEnabled {
     [_btnNext setEnabled:YES];
     [_btnPrev setEnabled:YES];
     [_btnPlayPause setEnabled:YES];
@@ -101,16 +88,14 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
         [_btnDownload setEnabled:YES];
 }
 
-- (void) prepareAssetAndInitPlayer
-{
-    SoundManager *soundManager = [self soundManager];;
+- (void) prepareAssetAndInitPlayer {
+    SoundManager *soundManager = [self soundManager];
     _player = soundManager.player;
     
     NSDictionary *nowPlaying = [soundManager playingSong];
     
     // Continue Playing
-    if ([[nowPlaying objectForKey:@"url"]isEqualToString:[_song objectForKey:@"url"]] == YES)
-    {
+    if ([[nowPlaying objectForKey:@"url"]isEqualToString:[_song objectForKey:@"url"]] == YES) {
         [soundManager setTimer];
         soundManager.delegate = self;
         [self initScrubberTimer];
@@ -120,95 +105,121 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[self getSongFilePath] options:nil];
     NSArray *requestedKeys = [NSArray arrayWithObjects:@"tracks", @"playable", nil];
 
-    [asset loadValuesAsynchronouslyForKeys:requestedKeys completionHandler:
-     ^{
-         dispatch_async(dispatch_get_main_queue(),
-            ^{
-                NSError *error = nil;
-                AVKeyValueStatus status = [asset statusOfValueForKey:@"tracks" error:&error];
-                
-                if (status == AVKeyValueStatusLoaded)
-                {
-                    soundManager.currentSong = _song;
-                    [_player pause];
-                    
-                    // Init AVPlayerItem and add Listener to play next one
-                    _currentItem = [AVPlayerItem playerItemWithAsset:asset];
-                    [[NSNotificationCenter defaultCenter] addObserver:self
-                                                             selector:@selector(itemDidFinishPlaying)
-                                                                 name:AVPlayerItemDidPlayToEndTimeNotification object:_currentItem];
-                    
-                    [_player replaceCurrentItemWithPlayerItem:_currentItem];
-                    [_currentItem addObserver:self
-                                   forKeyPath:@"status"
-                                      options:0
-                                      context:PlayerItemStatusContext];
-                }
-                else
-                    NSLog(@"Error: %d", status);
-            });
+    [asset loadValuesAsynchronouslyForKeys:requestedKeys completionHandler:^{
+         dispatch_async(dispatch_get_main_queue(), ^{
+            NSError *error = nil;
+            AVKeyValueStatus status = [asset statusOfValueForKey:@"tracks"
+                                                           error:&error];
+            if (status == AVKeyValueStatusLoaded) {
+                [_player pause];
+                _currentItem = [AVPlayerItem playerItemWithAsset:asset];
+                [_currentItem addObserver:self
+                               forKeyPath:@"status"
+                                  options:0
+                                  context:PlayerItemStatusContext];
+                [_player replaceCurrentItemWithPlayerItem:_currentItem];
+            
+                NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+                [nc addObserver:self
+                       selector:@selector(itemDidFinishPlaying)
+                           name:AVPlayerItemDidPlayToEndTimeNotification
+                         object:_currentItem];
+            } else NSLog(@"Error: %d", status);
+        });
      }];
 }
 
+- (void)itemDidFinishPlaying {
+    if ([self canIncreaseSongNumber] == YES) {
+        self->currentSong++;
+        SoundManager *soundManager = [self soundManager];
+        [soundManager removeTimer];
+        [self removePlayerProgressObserver];
+        [_player removeAllItems];
+        
+        _currentItem = nil;
+        _song = [_songs objectAtIndex:self->currentSong];
+        
+        [self updateUserInterface];
+        [self setButtonsDisabled];
+        [self prepareAssetAndInitPlayer];
+    }
+}
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
 {
     if (context == PlayerItemStatusContext) {
-        dispatch_async(dispatch_get_main_queue(),
-           ^{
-               // Start Playing
-               [self setButtonsEnabled];
-               SoundManager *soundManager = [self soundManager];;
-               [soundManager setTimer];
-               soundManager.delegate = self;
-               [self initScrubberTimer];
-               
-               [_player play];
-               if (_btnPlayPause.selected)
-               {
-                   [_player play];
-                   [_btnPlayPause setBackgroundImage:[UIImage imageNamed:@"pause"] forState:UIControlStateSelected];
-               }
-               else
-               {
-                   [_player pause];
-                   [_btnPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
-               }
-           });
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // Start Playing
+            [self setButtonsEnabled];
+            
+            SoundManager *soundManager = [self soundManager];
+            [soundManager setTimer];
+            soundManager.currentSong = _song;
+            soundManager.delegate = self;
+            [self initScrubberTimer];
+            [_player play];
+            if (_btnPlayPause.selected) {
+                [_player play];
+                [_btnPlayPause setBackgroundImage:[UIImage imageNamed:@"pause"]
+                                         forState:UIControlStateSelected];
+            } else {
+                [_player pause];
+                [_btnPlayPause setBackgroundImage:[UIImage imageNamed:@"play"]
+                                         forState:UIControlStateNormal];
+            }
+        });
     } else {
-        NSLog(@"%@", context);
-        [super observeValueForKeyPath:keyPath ofObject:object change:change
+        [super observeValueForKeyPath:keyPath
+                             ofObject:object
+                               change:change
                               context:context];
     }
 }
 
-- (void)remoteControlReceivedWithEvent:(UIEvent *)theEvent
-{
-    if (theEvent.type == UIEventTypeRemoteControl)
-    {
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind
+                                                                              target:self
+                                                                              action:@selector(back)];
+    self.navigationItem.leftBarButtonItem = backItem;
+    [self updateUserInterface];
+    
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    // Headphones controls @see (void)remoteControlReceivedWithEvent:(UIEvent *)theEvent
+    if ([self canBecomeFirstResponder]) {
+        [self becomeFirstResponder];
+    }
+    
+    [self prepareAssetAndInitPlayer];
+    self.btnPlayPause.selected = YES;
+}
+
+- (void)remoteControlReceivedWithEvent:(UIEvent *)theEvent {
+    if (theEvent.type == UIEventTypeRemoteControl) {
         switch(theEvent.subtype) {
             case UIEventSubtypeRemoteControlTogglePlayPause:
-                NSLog(@"TogglePlayPause");
                 [self playPause];
                 return;
-                
             case UIEventSubtypeRemoteControlPlay:
-                NSLog(@"TogglePlay");
                 [self playPause];
                 return;
             case UIEventSubtypeRemoteControlPause:
-                NSLog(@"TogglePause");
                 [self playPause];
                 return;
             case UIEventSubtypeRemoteControlStop:
                 NSLog(@"ToggleStop");
                 return;
             case UIEventSubtypeRemoteControlNextTrack:
-                NSLog(@"ToggleNext");
                 [self next];
                 return;
             case UIEventSubtypeRemoteControlPreviousTrack:
-                NSLog(@"TogglePrevious");
                 [self previous];
                 return;
             default:
@@ -218,35 +229,11 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     }
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind
-                                                                              target:self
-                                                                              action:@selector(back)];
-    self.navigationItem.leftBarButtonItem = backItem;
-    
-    [self updateUserInterface];
-    
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
-    [[AVAudioSession sharedInstance] setActive: YES error: nil];
-    
-    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-    if ([self canBecomeFirstResponder]) {
-        [self becomeFirstResponder];
-    }
-    
-    [self prepareAssetAndInitPlayer];
-    self.btnPlayPause.selected = YES;
-}
-
-- (void) back
-{
+- (void) back {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (NSURL *)getSongFilePath
-{
+- (NSURL *)getSongFilePath {
     if ([NSURL URLWithString:[_song objectForKey:@"url"]])
         return [NSURL URLWithString:[_song objectForKey:@"url"]];
     else
@@ -254,46 +241,40 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 }
 
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
-- (IBAction)didTapPlayPause:(id)sender
-{
+- (IBAction)didTapPlayPause:(id)sender {
     [self playPause];
 }
 
-- (void) playPause
-{
+- (void) playPause {
     _btnPlayPause.selected = !_btnPlayPause.selected;
-    
-    if (_btnPlayPause.selected)
-    {
+    if (_btnPlayPause.selected) {
         [_player play];
-        [_btnPlayPause setBackgroundImage:[UIImage imageNamed:@"pause"] forState:UIControlStateSelected];
-    }
-    else
-    {
+        [_btnPlayPause setBackgroundImage:[UIImage imageNamed:@"pause"]
+                                 forState:UIControlStateSelected];
+    } else {
         [_player pause];
-        [_btnPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+        [_btnPlayPause setBackgroundImage:[UIImage imageNamed:@"play"]
+                                 forState:UIControlStateNormal];
     }
 }
 
-- (IBAction)didTapDownload:(id)sender
-{
+- (IBAction)didTapDownload:(id)sender {
     [_btnDownload setEnabled:NO];
+    
     DBManager *db = [DBManager getSharedInstance];
-    if ([db findByTitle:[_song objectForKey:@"title"] andArtist:[_song objectForKey:@"artist"]] != nil)
-    {
-        NSString *errorMessage = [NSString stringWithFormat:@"У вас уже загружена эта песня."];
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Предупреждение" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    if ([db findByTitle:[_song objectForKey:@"title"] andArtist:[_song objectForKey:@"artist"]] != nil) {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Предупреждение"
+                                                        message:@"У вас уже загружена эта песня."
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
         [alert show];
         [_btnDownload setEnabled:YES];
-    }
-    else
-    {
-        NSLog(@"Start download");
+    } else {
         NSDictionary *song = _song;
         NSURL *url = [NSURL URLWithString:[song objectForKey:@"url"]];
         NSString *filename = [NSString stringWithFormat:@"%@ - %@.mp3", [song objectForKey:@"artist"], [song objectForKey:@"title"]];
@@ -306,73 +287,76 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
         operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
         
         [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            if ([db saveData:[song objectForKey:@"artist"] title:[song objectForKey:@"title"] duration:[song objectForKey:@"duration"] filename:filename] == YES)
+            if ([db saveData:[song objectForKey:@"artist"]
+                       title:[song objectForKey:@"title"]
+                    duration:[song objectForKey:@"duration"]
+                    filename:filename] == YES)
             {
                 NSLog(@"Successfully saved to database and saved to: %@", path);
-                NSString *successMessage = [NSString stringWithFormat:@"Файл успешно скачан в папку приложения"];
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Поздравляю!" message:successMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Поздравляю!"
+                                                                message:@"Файл успешно скачан в папку приложения"
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
                 [alert show];
                 [_btnDownload setEnabled:NO];
-            }
-            else
-            {
+            } else {
                 NSError *error = nil;
                 [[NSFileManager defaultManager]removeItemAtPath:path error:&error];
                 NSLog(@"Remove file, %@", error);
-                NSString *successMessage = [NSString stringWithFormat:@"Something wrong happened"];
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ошибка" message:successMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ошибка"
+                                                                message:@"Something wrong happened. Database error."
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
                 [alert show];
                 [_btnDownload setEnabled:YES];
             }
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSString *errorMessage = [NSString stringWithFormat:@"Something wrong happened"];
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ошибка" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ошибка"
+                                                            message:@"Something wrong happened"
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
             [alert show];
             [_btnDownload setEnabled:YES];
         }];
-        
         [operation start];
     }
 }
 
-- (IBAction)didTapNext:(id)sender
-{
+- (IBAction)didTapNext:(id)sender {
     [self next];
 }
 
-- (void) next
-{
+- (void) next {
     [self itemDidFinishPlaying];
 }
 
-- (IBAction)didTapPrev:(id)sender
-{
+- (IBAction)didTapPrev:(id)sender {
     [self previous];
 }
 
-- (void) previous
-{
-    int temp = self->currentSong - 2;
-    if (temp >= -1 && self->currentSong != 0)
-    {
-        self->currentSong = self->currentSong - 2;
-        [self itemDidFinishPlaying];
-    }
+- (void) previous {
+    if (self->currentSong) {
+        int temp = self->currentSong - 2;
+        if (temp >= -1) {
+            self->currentSong = self->currentSong - 2;
+            [self itemDidFinishPlaying];
+        } else return ;
+    } else return ;
 }
 
 /* ---------------------------------------------------------
  **  Get the duration for a AVPlayerItem.
  ** ------------------------------------------------------- */
 
-- (CMTime)playerItemDuration
-{
+- (CMTime)playerItemDuration {
 	AVPlayerItem *playerItem = [_player currentItem];
-	if (playerItem.status == AVPlayerItemStatusReadyToPlay)
-	{
+	if (playerItem.status == AVPlayerItemStatusReadyToPlay) {
 		return([playerItem duration]);
 	}
-	
 	return(kCMTimeInvalid);
 }
 
@@ -383,18 +367,15 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
  ** ------------------------------------------------------- */
 
 /* Requests invocation of a given block during media playback to update the movie scrubber control. */
--(void)initScrubberTimer
-{
+-(void)initScrubberTimer {
 	double interval = .1f;
 	
 	CMTime playerDuration = [self playerItemDuration];
-	if (CMTIME_IS_INVALID(playerDuration))
-	{
+	if (CMTIME_IS_INVALID(playerDuration)) {
 		return;
 	}
 	double duration = CMTimeGetSeconds(playerDuration);
-	if (isfinite(duration))
-	{
+	if (isfinite(duration)) {
 		CGFloat width = CGRectGetWidth([_scrubber bounds]);
 		interval = 0.5f * duration / width;
 	}
@@ -404,18 +385,15 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 }
 
 /* Set the scrubber based on the player current time. */
-- (void)syncScrubber
-{
+- (void)syncScrubber {
 	CMTime playerDuration = [self playerItemDuration];
-	if (CMTIME_IS_INVALID(playerDuration))
-	{
+	if (CMTIME_IS_INVALID(playerDuration)) {
 		_scrubber.minimumValue = 0.0;
 		return;
 	}
     
 	double duration = CMTimeGetSeconds(playerDuration);
-	if (isfinite(duration))
-	{
+	if (isfinite(duration)) {
 		float minValue = [_scrubber minimumValue];
 		float maxValue = [_scrubber maximumValue];
 		double time = CMTimeGetSeconds([_player currentTime]);
@@ -425,8 +403,7 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 }
 
 /* The user is dragging the movie controller thumb to scrub through the movie. */
-- (IBAction)beginScrubbing:(id)sender
-{
+- (IBAction)beginScrubbing:(id)sender {
 	restoreAfterScrubbingRate = [_player rate];
 	[_player setRate:0.f];
 	
@@ -434,18 +411,14 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 	[self removePlayerProgressObserver];
 }
 
--(void)removePlayerProgressObserver
-{
-	if (_progressObserver)
-	{
+-(void)removePlayerProgressObserver {
+	if (_progressObserver) {
 		[_player removeTimeObserver:_progressObserver];
 		_progressObserver = nil;
 	}
 }
--(void)createPlayerProgressObserver:(double)interval
-{
-    if (!_progressObserver)
-    {
+-(void)createPlayerProgressObserver:(double)interval {
+    if (!_progressObserver) {
         void (^progressBlock)(CMTime time) = ^(CMTime time) {
             [self syncScrubber];
         };
@@ -456,20 +429,16 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 }
 
 /* Set the player current time to match the scrubber position. */
-- (IBAction)scrub:(id)sender
-{
-	if ([sender isKindOfClass:[UISlider class]])
-	{
+- (IBAction)scrub:(id)sender {
+	if ([sender isKindOfClass:[UISlider class]]) {
 		UISlider* slider = sender;
 		
 		CMTime playerDuration = [self playerItemDuration];
 		if (CMTIME_IS_INVALID(playerDuration)) {
 			return;
 		}
-		
 		double duration = CMTimeGetSeconds(playerDuration);
-		if (isfinite(duration))
-		{
+		if (isfinite(duration)) {
 			float minValue = [slider minimumValue];
 			float maxValue = [slider maximumValue];
 			float value = [slider value];
@@ -485,38 +454,31 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 - (IBAction)endScrubbing:(id)sender
 {
     CMTime playerDuration = [self playerItemDuration];
-    if (CMTIME_IS_INVALID(playerDuration))
-    {
+    if (CMTIME_IS_INVALID(playerDuration)) {
         return;
     }
-    
     double duration = CMTimeGetSeconds(playerDuration);
-    if (isfinite(duration))
-    {
+    if (isfinite(duration)) {
         CGFloat width = CGRectGetWidth([_scrubber bounds]);
         double tolerance = 0.5f * duration / width;
         [self createPlayerProgressObserver:tolerance];
     }
     
-	if (restoreAfterScrubbingRate)
-	{
+	if (restoreAfterScrubbingRate) {
 		[_player setRate:restoreAfterScrubbingRate];
 		restoreAfterScrubbingRate = 0.f;
 	}
 }
 
-- (BOOL)isScrubbing
-{
+- (BOOL)isScrubbing {
 	return restoreAfterScrubbingRate != 0.f;
 }
 
--(void)enableScrubber
-{
+-(void)enableScrubber {
     _scrubber.enabled = YES;
 }
 
--(void)disableScrubber
-{
+-(void)disableScrubber {
     _scrubber.enabled = NO;
 }
 

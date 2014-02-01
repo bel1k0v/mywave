@@ -11,7 +11,6 @@
 
 @implementation SoundManager
 @synthesize
-    songs = _songs,
     currentSong = _currentSong,
     player = _player,
     delegate = _delegate,

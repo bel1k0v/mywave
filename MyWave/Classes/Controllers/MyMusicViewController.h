@@ -1,9 +1,9 @@
 //
 //  DownloadedViewController.h
-//  TheSameWave
+//  MyWave
 //
 //  Created by Дмитрий on 03.11.13.
-//  Copyright (c) 2013 SameWave. All rights reserved.
+//  Copyright (c) 2013 MyWave. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

@@ -11,12 +11,12 @@
 
 @class PlayerViewController;
 
-@interface SoundManager : NSObject
+@interface SoundManager : NSObject {
+    @public int currentSong;
+}
 
 @property (strong, nonatomic) AVQueuePlayer *player;
-@property (strong, nonatomic) NSNumber *currentSongNumber;
 @property (strong, nonatomic) NSDictionary *currentSong;
-@property (strong, nonatomic) NSMutableArray *songs;
 
 @property (nonatomic, strong) id timeObserver;
 @property (nonatomic, strong) PlayerViewController *delegate;

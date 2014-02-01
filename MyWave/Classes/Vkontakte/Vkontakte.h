@@ -25,7 +25,7 @@ extern NSString * const vkRedirectUrl;
 - (void)logout;
 - (void)getUserInfo;
 - (NSArray* )getUserAudio;
-
+- (NSArray* )searchAudio:(NSString *)q;
 @end
 
 // Протокол делегата контроллера: вызываем метод Vkontakte который возвращает массивы или словари

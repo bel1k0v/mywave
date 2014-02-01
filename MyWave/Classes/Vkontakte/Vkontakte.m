@@ -399,12 +399,47 @@ NSString * const vkRedirectUrl = @"http://oauth.vk.com/blank.html";
         NSArray *music = [array subarrayWithRange:range];
         
         return music;
-        /*
-        if ([self.delegate respondsToSelector:@selector(vkontakteDidFinishGettinMusic:)])
+    }
+    else
+    {
+        NSDictionary *errorDict = [parsedDictionary objectForKey:@"error"];
+        
+        if ([self.delegate respondsToSelector:@selector(vkontakteDidFailedWithError:)])
         {
-            [self.delegate vkontakteDidFinishGettinMusic:music];
+            NSError *error = [NSError errorWithDomain:@"http://api.vk.com/method"
+                                                 code:[[errorDict objectForKey:@"error_code"] intValue]
+                                             userInfo:errorDict];
+            
+            if (error.code == 5)
+            {
+                [self logout];
+            }
+            
+            return NULL;
         }
-         */
+    }
+    
+    return NULL;
+}
+
+- (NSArray *) searchAudio:(NSString *)q {
+    if (![self isAuthorized]) return NULL;
+    
+    NSString *url = [NSString stringWithFormat:@"https://api.vk.com/method/audio.search?q=%@&access_token=%@", q, accessToken];
+    NSLog(@"action URL: %@", url);
+    
+    NSDictionary *parsedDictionary = [self sendRequest:url withCaptcha:NO];
+    
+    NSArray *array = [parsedDictionary objectForKey:@"response"];
+    
+    if ([parsedDictionary objectForKey:@"response"])
+    {
+        NSRange range;
+        range.location = 1;
+        range.length = [array count] - 1;
+        NSArray *music = [array subarrayWithRange:range];
+        NSLog(@"%@", music);
+        return music;
     }
     else
     {

@@ -3,10 +3,9 @@
 //  MyWave
 //
 //  Created by Дмитрий on 23.04.13.
-//  Copyright (c) 2013 SameWave. All rights reserved.
+//  Copyright (c) 2013 MyWave. All rights reserved.
 //
 
-#import "AppDelegate.h"
 #import "VkMusicViewController.h"
 #import "PlayerViewController.h"
 #import "SongCell.h"
@@ -15,46 +14,62 @@
 #import "SoundManager.h"
 
 @implementation VkMusicViewController
-
 @synthesize data = _data;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self) {
-        // Custom initialization
+        searchData = [[NSMutableArray alloc]initWithArray:[self getSongs]];
     }
     return self;
 }
 
+- (void)initSearch
+{
+    searchData = [NSMutableArray arrayWithCapacity:[_data count]];
+    searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    
+    searchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
+    searchDisplayController.delegate = self;
+    searchDisplayController.searchResultsDelegate = self;
+    searchDisplayController.searchResultsDataSource = self;
+    
+    self.tableView.tableHeaderView = searchBar;
+}
+- (void)setupData
+{
+    _data = nil;
+    _data = [self getSongs];
+}
+-(NSArray *)getSongs
+{
+    return ((BOOL)[_vkInstance isAuthorized] != FALSE) ? [_vkInstance getUserAudio] : [[NSArray alloc]init];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     _vkInstance = [Vkontakte sharedInstance];
     _vkInstance.delegate = self;
     
-    if ((BOOL)[_vkInstance isAuthorized] != FALSE)
-    {
-        AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-        NSArray *cached = [delegate.cache objectForKey:@"vk_music_data"];
-        if (cached == nil)
-        {
-            _data = [_vkInstance getUserAudio];
-            [delegate.cache setObject:_data forKey:@"vk_music_data"];
-        }
-        else
-            _data = cached;
-        
+    if ((BOOL)[_vkInstance isAuthorized] != FALSE) {
+        [self setupData];
         [self.tableView reloadData];
     }
     
     self.navigationItem.title = @"Вконтакте";
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(back)];
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind
+                                                                              target:self
+                                                                              action:@selector(back)];
     self.navigationItem.leftBarButtonItem = backItem;
     
-    _loginBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Войти" style:UIBarButtonItemStylePlain target:self action:@selector(loginBarButtonItemPressed:)];
+    _loginBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Войти"
+                                                           style:UIBarButtonItemStylePlain
+                                                          target:self
+                                                          action:@selector(loginBarButtonItemPressed:)];
     self.navigationItem.rightBarButtonItem = _loginBarButtonItem;
     [self refreshButtonState];
+    [self initSearch];
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -89,7 +104,11 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [_data count];
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        return [searchData count];
+    } else {
+        return [_data count];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -108,6 +127,9 @@
     }
     
     NSDictionary *song = [_data objectAtIndex:indexPath.row];
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        song = [searchData objectAtIndex:indexPath.row];
+    }
     SoundManager *soundManager = [SoundManager sharedInstance];
     NSDictionary *nowPlaying = [soundManager playingSong];
     
@@ -115,7 +137,6 @@
 
     if ([[nowPlaying objectForKey:@"url"]isEqualToString:[song objectForKey:@"url"]] == YES)
     {
-        NSLog(@"Playing song");
         cell.playLabel.font = [UIFont fontWithName:@"FontAwesome" size:15.0f];
         cell.playLabel.text = [NSString stringWithFormat:@"%@", [NSString fontAwesomeIconStringForEnum:FAIconEject]];
     } else {
@@ -146,8 +167,15 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PlayerViewController *playerViewController = [[PlayerViewController alloc]initWithNibName:@"PlayerViewController" bundle:nil];
-    playerViewController.song =[_data objectAtIndex:indexPath.row];
-    playerViewController.songs = _data;
+    NSDictionary *song = [_data objectAtIndex:indexPath.row];
+    NSArray *songs = _data;
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        song = [searchData objectAtIndex:indexPath.row];
+        songs = searchData;
+    }
+    
+    playerViewController.song = song;
+    playerViewController.songs = songs;
     playerViewController->currentSong = indexPath.row;
     [self.navigationController pushViewController:playerViewController animated:YES];
 }
@@ -181,6 +209,17 @@
 - (void)vkontakteDidFinishLogOut:(Vkontakte *)vkontakte
 {
     [self refreshButtonState];
+}
+
+#pragma mark - Search display delegate
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
+    NSLog(@"%@", searchString);
+
+    if (searchString.length > 3 && searchString.length < 18) {
+        searchData = [[NSMutableArray alloc]initWithArray:[_vkInstance searchAudio:searchString]];
+    }
+    [self.tableView reloadData];
+    return YES;
 }
 
 @end
