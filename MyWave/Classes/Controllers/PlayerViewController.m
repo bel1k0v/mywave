@@ -293,8 +293,8 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
                     filename:filename] == YES)
             {
                 NSLog(@"Successfully saved to database and saved to: %@", path);
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Поздравляю!"
-                                                                message:@"Файл успешно скачан в папку приложения"
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"OK"
+                                                                message:@"Песня загружена"
                                                                delegate:nil
                                                       cancelButtonTitle:@"OK"
                                                       otherButtonTitles:nil];

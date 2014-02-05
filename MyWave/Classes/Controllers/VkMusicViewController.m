@@ -220,7 +220,8 @@
         NSArray *cachedData = [searchCache objectForKey:searchString];
         if (cachedData == NULL) {
             cachedData = [_vkInstance searchAudio:searchString];
-            [searchCache setObject:cachedData forKey:searchString];
+            if (cachedData != NULL) [searchCache setObject:cachedData forKey:searchString];
+            else cachedData = [[NSArray alloc]init];
         }
         searchData = [[NSMutableArray alloc]initWithArray:cachedData];
     }

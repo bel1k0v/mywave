@@ -44,6 +44,7 @@
 		688453EE172183970092260B /* Vkontakte.m in Sources */ = {isa = PBXBuildFile; fileRef = 688453ED172183970092260B /* Vkontakte.m */; };
 		688453F21721848B0092260B /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 688453F11721848B0092260B /* MBProgressHUD.m */; };
 		688453F5172185E70092260B /* VkontakteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 688453F4172185E70092260B /* VkontakteViewController.m */; };
+		68A3D7A518A2B2FF00E9C026 /* NSString+URLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A3D7A418A2B2FF00E9C026 /* NSString+URLEncoding.m */; };
 		68ED98181729AD630009C2F6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED98171729AD630009C2F6 /* AudioToolbox.framework */; };
 		68ED981A1729AD8D0009C2F6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */; };
 		68ED981C1729ADC90009C2F6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED981B1729ADC90009C2F6 /* CFNetwork.framework */; };
@@ -109,6 +110,8 @@
 		688453F3172185E70092260B /* VkontakteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VkontakteViewController.h; sourceTree = "<group>"; };
 		688453F4172185E70092260B /* VkontakteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VkontakteViewController.m; sourceTree = "<group>"; };
 		68A3D7A1189D8BC700E9C026 /* libPods-AFNetworking.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "libPods-AFNetworking.a"; path = "Pods/build/Debug-iphoneos/libPods-AFNetworking.a"; sourceTree = "<group>"; };
+		68A3D7A318A2B2FF00E9C026 /* NSString+URLEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+URLEncoding.h"; path = "../../Resources/NSString+URLEncoding.h"; sourceTree = "<group>"; };
+		68A3D7A418A2B2FF00E9C026 /* NSString+URLEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+URLEncoding.m"; path = "../../Resources/NSString+URLEncoding.m"; sourceTree = "<group>"; };
 		68ED981417270D190009C2F6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		68ED98171729AD630009C2F6 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
@@ -262,6 +265,8 @@
 		688453E81721824E0092260B /* Vkontakte */ = {
 			isa = PBXGroup;
 			children = (
+				68A3D7A318A2B2FF00E9C026 /* NSString+URLEncoding.h */,
+				68A3D7A418A2B2FF00E9C026 /* NSString+URLEncoding.m */,
 				688453E9172182FF0092260B /* NSString+Gender.h */,
 				688453EA172182FF0092260B /* NSString+Gender.m */,
 				688453EC172183970092260B /* Vkontakte.h */,
@@ -451,6 +456,7 @@
 				68787EE5182836AE00FC3FFF /* MainViewController.m in Sources */,
 				68787EE21828368600FC3FFF /* MyMusicViewController.m in Sources */,
 				68787D901826533700FC3FFF /* PlayerViewController.m in Sources */,
+				68A3D7A518A2B2FF00E9C026 /* NSString+URLEncoding.m in Sources */,
 				6833F80E184A958A00C156AB /* SongCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -497,7 +503,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "DC0FA2AD-7316-4AC9-8144-A9B2AB975C8D";
+				PROVISIONING_PROFILE = "206C6C38-2DF2-4028-90D0-DEBB2E603F99";
 				SDKROOT = iphoneos7.0;
 			};
 			name = Debug;
@@ -523,7 +529,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "5FFB23BD-3CDA-45C6-B871-05EA881D0F48";
+				PROVISIONING_PROFILE = "9BA3C01D-D400-4827-857F-6EDE1F727482";
 				SDKROOT = iphoneos7.0;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -546,7 +552,7 @@
 					/Users/dmitrij/xCode/MyWave/TestFlightSDK2.0.2,
 				);
 				PRODUCT_NAME = MyWave;
-				PROVISIONING_PROFILE = "DC0FA2AD-7316-4AC9-8144-A9B2AB975C8D";
+				PROVISIONING_PROFILE = "206C6C38-2DF2-4028-90D0-DEBB2E603F99";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -568,7 +574,7 @@
 					/Users/dmitrij/xCode/MyWave/TestFlightSDK2.0.2,
 				);
 				PRODUCT_NAME = MyWave;
-				PROVISIONING_PROFILE = "5FFB23BD-3CDA-45C6-B871-05EA881D0F48";
+				PROVISIONING_PROFILE = "9BA3C01D-D400-4827-857F-6EDE1F727482";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -1,4 +1,5 @@
 #import "Vkontakte.h"
+#import "NSString+URLEncoding.h"
 
 @interface Vkontakte (Private)
 
@@ -176,8 +177,7 @@
                               error:&error];
         
         NSString *errorMsg = [[dict objectForKey:@"error"] objectForKey:@"error_msg"];
-        
-        //NSLog(@"Server response: %@ \nError: %@", dict, errorMsg);
+        NSLog(@"Server response: %@ \nError: %@", dict, errorMsg);
         
         return dict;
     }
@@ -424,7 +424,7 @@ NSString * const vkRedirectUrl = @"http://oauth.vk.com/blank.html";
 
 - (NSArray *) searchAudio:(NSString *)q {
     if (![self isAuthorized]) return NULL;
-    q = [q stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+    q = [q urlEncodeUsingEncoding:NSUTF8StringEncoding];
     NSString *url = [NSString stringWithFormat:@"https://api.vk.com/method/audio.search?q=%@&access_token=%@", q, accessToken];
     NSLog(@"action URL: %@", url);
     
