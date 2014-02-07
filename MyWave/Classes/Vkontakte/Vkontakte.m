@@ -397,19 +397,16 @@ NSString * const vkRedirectUrl = @"http://oauth.vk.com/blank.html";
         range.location = 1;
         range.length = [array count] - 1;
         NSArray *music = [array subarrayWithRange:range];
-        
         return music;
     }
     else
     {
         NSDictionary *errorDict = [parsedDictionary objectForKey:@"error"];
-        
         if ([self.delegate respondsToSelector:@selector(vkontakteDidFailedWithError:)])
         {
             NSError *error = [NSError errorWithDomain:@"http://api.vk.com/method"
                                                  code:[[errorDict objectForKey:@"error_code"] intValue]
                                              userInfo:errorDict];
-            
             if (error.code == 5)
             {
                 [self logout];

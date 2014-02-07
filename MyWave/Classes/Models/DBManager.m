@@ -234,7 +234,6 @@ static sqlite3_stmt *statement = nil;
             }
             else
             {
-                NSLog(@"Not found");
                 return nil;
             }
             

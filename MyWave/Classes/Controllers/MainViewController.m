@@ -15,7 +15,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationItem.title = @"Cвоя волна";
+    self.navigationItem.title = @"Cвоя Волна" ;
 }
 
 - (void)viewWillAppear:(BOOL)animated

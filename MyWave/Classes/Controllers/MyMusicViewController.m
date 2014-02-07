@@ -55,7 +55,7 @@
     [super viewDidLoad];
     [self setupData];
     [self initSearch];
-    self.navigationItem.title = @"Моя музыка";
+    self.navigationItem.title = @"Моя Музыка";
     UIBarButtonItem *cameraItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(back)];
     self.navigationItem.leftBarButtonItem = cameraItem;
 }
@@ -166,7 +166,6 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"title CONTAINS[c] %@", searchText];
     searchData = [NSMutableArray arrayWithArray:[_data filteredArrayUsingPredicate:predicate]];
 }
-
 
 #pragma mark - Search display delegate
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {

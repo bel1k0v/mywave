@@ -12,6 +12,7 @@
 #import "DBManager.h"
 #import "SoundManager.h"
 
+
 @implementation PlayerViewController
 
 @synthesize
@@ -49,8 +50,9 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
 }
 
 - (void)updateUserInterface {
-    if ([_classNameRef isEqualToString:@"MyMusic"])
+    if ([_classNameRef isEqualToString:@"MyMusic"]) {
         [_btnDownload removeFromSuperview];
+    }
     
     [_lblMusicArtist setText:[NSString htmlEntityDecode:[NSString stringWithFormat:@"%@",
                                                [_song objectForKey:@"artist"]]]];
@@ -277,7 +279,10 @@ static void *PlayerItemStatusContext = &PlayerItemStatusContext;
     } else {
         NSDictionary *song = _song;
         NSURL *url = [NSURL URLWithString:[song objectForKey:@"url"]];
-        NSString *filename = [NSString stringWithFormat:@"%@ - %@.mp3", [song objectForKey:@"artist"], [song objectForKey:@"title"]];
+        NSString *filename = [NSString stringWithFormat:@"%@ - %@.mp3",
+                              [song objectForKey:@"artist"],
+                              [song objectForKey:@"title"]
+                              ];
         
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
         AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
