@@ -11,7 +11,7 @@
 #import "SongCell.h"
 #import "NSString+Gender.h"
 #import "NSString+FontAwesome.h"
-#import "SoundManager.h"
+#import "Track+Provider.h"
 
 @implementation VkMusicViewController
 @synthesize data = _data;
@@ -131,11 +131,11 @@
     if (tableView == self.searchDisplayController.searchResultsTableView) {
         song = [searchData objectAtIndex:indexPath.row];
     }
-    SoundManager *soundManager = [SoundManager sharedInstance];
-    NSDictionary *nowPlaying = [soundManager playingSong];
+
+
     
     cell.titleLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"title"]];
-
+    /*
     if ([[nowPlaying objectForKey:@"url"]isEqualToString:[song objectForKey:@"url"]] == YES)
     {
         cell.playLabel.font = [UIFont fontWithName:@"FontAwesome" size:15.0f];
@@ -143,7 +143,7 @@
     } else {
         cell.playLabel.text = @"";
     }
-
+    */
     cell.artistLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"artist"]];
     
     double duration = [[song objectForKey:@"duration"]doubleValue];
@@ -167,17 +167,17 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PlayerViewController *playerViewController = [[PlayerViewController alloc]initWithNibName:@"PlayerViewController" bundle:nil];
-    NSDictionary *song = [_data objectAtIndex:indexPath.row];
-    NSArray *songs = _data;
-    if (tableView == self.searchDisplayController.searchResultsTableView) {
-        song = [searchData objectAtIndex:indexPath.row];
-        songs = searchData;
-    }
+    PlayerViewController *playerViewController = [PlayerViewController new];
+    [playerViewController setTitle:@"Плеер ♫"];
     
-    playerViewController.song = song;
-    playerViewController.songs = songs;
-    playerViewController->currentSong = indexPath.row;
+    NSArray *songs = [NSArray new];
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        songs = searchData;
+    } else {
+        songs = _data;
+    }
+    [playerViewController setCurrentTrackIndex:indexPath.row];
+    [playerViewController setTracks:[Track tracksWithArray:songs url:YES]];
     [self.navigationController pushViewController:playerViewController animated:YES];
 }
 
@@ -224,8 +224,9 @@
             else cachedData = [[NSArray alloc]init];
         }
         searchData = [[NSMutableArray alloc]initWithArray:cachedData];
+        [self.tableView reloadData];
     }
-    [self.tableView reloadData];
+    
     return YES;
 }
 

@@ -6,485 +6,255 @@
 //  Copyright (c) 2013 MyWave. All rights reserved.
 //
 
-#import "NSString+Gender.h"
 #import "PlayerViewController.h"
-#import "AFHTTPRequestOperation.h"
-#import "DBManager.h"
-#import "SoundManager.h"
+#import "DOUAudioStreamer.h"
+#import "DOUAudioStreamer+Options.h"
+#import "Track.h"
 
+static void *kStatusKVOKey = &kStatusKVOKey;
+static void *kDurationKVOKey = &kDurationKVOKey;
+static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
+
+
+@interface PlayerViewController () {
+@private
+    UILabel *_titleLabel;
+    UILabel *_statusLabel;
+    UILabel *_miscLabel;
+    
+    UIButton *_buttonPlayPause;
+    UIButton *_buttonNext;
+    UIButton *_buttonStop;
+    
+    UISlider *_progressSlider;
+    
+    UILabel *_volumeLabel;
+    UISlider *_volumeSlider;
+    
+    NSTimer *_timer;
+    
+    DOUAudioStreamer *_streamer;
+}
+
+@end
 
 @implementation PlayerViewController
 
-@synthesize
-    classNameRef = _classNameRef,
-    player = _player,
-    songs = _songs,
-    song = _song,
-    currentItem = _currentItem,
-    progressObserver = _progressObserver,
-    lblMusicArtist = _lblMusicArtist,
-    lblMusicName = _lblMusicName,
-    lblMusicTime = _lblMusicTime,
-    btnDownload = _btnDownload,
-    btnNext = _btnNext,
-    btnPrev = _btnPrev,
-    btnPlayPause = _btnPlayPause,
-    scrubber = _scrubber;
+- (void)loadView {
+    UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [view setBackgroundColor:[UIColor whiteColor]];
+    
+    _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 64.0, CGRectGetWidth([view bounds]), 30.0)];
+    [_titleLabel setFont:[UIFont systemFontOfSize:20.0]];
+    [_titleLabel setTextColor:[UIColor blackColor]];
+    [_titleLabel setTextAlignment:NSTextAlignmentCenter];
+    [_titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
+    [view addSubview:_titleLabel];
+    
+    _statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, CGRectGetMaxY([_titleLabel frame]) + 10.0, CGRectGetWidth([view bounds]), 30.0)];
+    [_statusLabel setFont:[UIFont systemFontOfSize:16.0]];
+    [_statusLabel setTextColor:[UIColor colorWithWhite:0.4 alpha:1.0]];
+    [_statusLabel setTextAlignment:NSTextAlignmentCenter];
+    [_statusLabel setLineBreakMode:NSLineBreakByTruncatingTail];
+    [view addSubview:_statusLabel];
+    
+    _miscLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, CGRectGetMaxY([_statusLabel frame]) + 10.0, CGRectGetWidth([view bounds]), 20.0)];
+    [_miscLabel setFont:[UIFont systemFontOfSize:10.0]];
+    [_miscLabel setTextColor:[UIColor colorWithWhite:0.5 alpha:1.0]];
+    [_miscLabel setTextAlignment:NSTextAlignmentCenter];
+    [_miscLabel setLineBreakMode:NSLineBreakByTruncatingTail];
+    [view addSubview:_miscLabel];
+    
+    _buttonPlayPause = [UIButton buttonWithType:UIButtonTypeSystem];
+    [_buttonPlayPause setFrame:CGRectMake(80.0, CGRectGetMaxY([_miscLabel frame]) + 20.0, 60.0, 20.0)];
+    [_buttonPlayPause setTitle:@"Play" forState:UIControlStateNormal];
+    [_buttonPlayPause addTarget:self action:@selector(_actionPlayPause:) forControlEvents:UIControlEventTouchDown];
+    [view addSubview:_buttonPlayPause];
+    
+    _buttonNext = [UIButton buttonWithType:UIButtonTypeSystem];
+    [_buttonNext setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 80.0 - 60.0, CGRectGetMinY([_buttonPlayPause frame]), 60.0, 20.0)];
+    [_buttonNext setTitle:@"Next" forState:UIControlStateNormal];
+    [_buttonNext addTarget:self action:@selector(_actionNext:) forControlEvents:UIControlEventTouchDown];
+    [view addSubview:_buttonNext];
+    
+    _buttonStop = [UIButton buttonWithType:UIButtonTypeSystem];
+    [_buttonStop setFrame:CGRectMake(round((CGRectGetWidth([view bounds]) - 60.0) / 2.0), CGRectGetMaxY([_buttonNext frame]) + 20.0, 60.0, 20.0)];
+    [_buttonStop setTitle:@"Stop" forState:UIControlStateNormal];
+    [_buttonStop addTarget:self action:@selector(_actionStop:) forControlEvents:UIControlEventTouchDown];
+    [view addSubview:_buttonStop];
+    
+    _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_buttonStop frame]) + 20.0, CGRectGetWidth([view bounds]) - 20.0 * 2.0, 40.0)];
+    [_progressSlider addTarget:self action:@selector(_actionSliderProgress:) forControlEvents:UIControlEventValueChanged];
+    [view addSubview:_progressSlider];
+    
+    _volumeLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_progressSlider frame]) + 20.0, 80.0, 40.0)];
+    [_volumeLabel setText:@"Volume:"];
+    [view addSubview:_volumeLabel];
+    
+    _volumeSlider = [[UISlider alloc] initWithFrame:CGRectMake(CGRectGetMaxX([_volumeLabel frame]) + 10.0, CGRectGetMinY([_volumeLabel frame]), CGRectGetWidth([view bounds]) - CGRectGetMaxX([_volumeLabel frame]) - 10.0 - 20.0, 40.0)];
+    [_volumeSlider addTarget:self action:@selector(_actionSliderVolume:) forControlEvents:UIControlEventValueChanged];
+    [view addSubview:_volumeSlider];
+    
+    [self setView:view];
+}
 
-static void *PlayerItemStatusContext = &PlayerItemStatusContext;
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        self.title = @"Плеер";
-        
+- (void)_cancelStreamer {
+    if (_streamer != nil) {
+        [_streamer pause];
+        [_streamer removeObserver:self forKeyPath:@"status"];
+        [_streamer removeObserver:self forKeyPath:@"duration"];
+        [_streamer removeObserver:self forKeyPath:@"bufferingRatio"];
+        _streamer = nil;
     }
-    return self;
 }
 
-- (SoundManager *)soundManager
-{
-    SoundManager *sharedInstance = [SoundManager sharedInstance];
-    return sharedInstance;
+- (void)_resetStreamer {
+    [self _cancelStreamer];
+    
+    Track *track = [_tracks objectAtIndex:_currentTrackIndex];
+    NSString *title = [NSString stringWithFormat:@"%@ - %@", track.artist, track.title];
+    [_titleLabel setText:title];
+    
+    _streamer = [DOUAudioStreamer streamerWithAudioFile:track];
+    [_streamer addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:kStatusKVOKey];
+    [_streamer addObserver:self forKeyPath:@"duration" options:NSKeyValueObservingOptionNew context:kDurationKVOKey];
+    [_streamer addObserver:self forKeyPath:@"bufferingRatio" options:NSKeyValueObservingOptionNew context:kBufferingRatioKVOKey];
+    
+    [_streamer play];
+    
+    [self _updateBufferingStatus];
+    [self _setupHintForStreamer];
 }
 
-- (void)updateUserInterface {
-    if ([_classNameRef isEqualToString:@"MyMusic"]) {
-        [_btnDownload removeFromSuperview];
+- (void)_setupHintForStreamer {
+    NSUInteger nextIndex = _currentTrackIndex + 1;
+    if (nextIndex >= [_tracks count]) {
+        nextIndex = 0;
     }
     
-    [_lblMusicArtist setText:[NSString htmlEntityDecode:[NSString stringWithFormat:@"%@",
-                                               [_song objectForKey:@"artist"]]]];
-    [_lblMusicName setText:[NSString htmlEntityDecode:[NSString stringWithFormat:@"%@",
-                                              [_song objectForKey:@"title"]]]];
-    
-    double duration = [[_song objectForKey:@"duration"]doubleValue];
-    int minutes = (int) floor(duration / 60);
-    int seconds = duration - (minutes * 60);
-    NSString *durationLabel = [NSString stringWithFormat:@"0:00 - %d:%02d", minutes, seconds];
-    [_lblMusicTime setText:durationLabel];
-    
-    [_scrubber setValue:0];
-    [_scrubber setThumbImage:[UIImage imageNamed:@"position"] forState:UIControlStateNormal];
+    [DOUAudioStreamer setHintWithAudioFile:[_tracks objectAtIndex:nextIndex]];
 }
 
-- (BOOL)canIncreaseSongNumber {
-    int temp;
-    temp = self->currentSong +1;
-    return (temp >= 0 && (temp < [_songs count])) ? YES : NO;
-}
-
-- (void) setButtonsDisabled {
-    [_btnNext setEnabled:NO];
-    [_btnPrev setEnabled:NO];
-    [_btnPlayPause setEnabled:NO];
-    [_btnDownload setEnabled:NO];
-}
-
-- (void) setButtonsEnabled {
-    [_btnNext setEnabled:YES];
-    [_btnPrev setEnabled:YES];
-    [_btnPlayPause setEnabled:YES];
-    if (![_classNameRef isEqualToString:@"MyMusic"])
-        [_btnDownload setEnabled:YES];
-}
-
-- (void) prepareAssetAndInitPlayer {
-    SoundManager *soundManager = [self soundManager];
-    _player = soundManager.player;
-    
-    NSDictionary *nowPlaying = [soundManager playingSong];
-    
-    // Continue Playing
-    if ([[nowPlaying objectForKey:@"url"]isEqualToString:[_song objectForKey:@"url"]] == YES) {
-        [soundManager setTimer];
-        soundManager.delegate = self;
-        [self initScrubberTimer];
-        return ;
+- (void)_timerAction:(id)timer {
+    if ([_streamer duration] == 0.0) {
+        [_progressSlider setValue:0.0f animated:NO];
     }
-    
-    AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[self getSongFilePath] options:nil];
-    NSArray *requestedKeys = [NSArray arrayWithObjects:@"tracks", @"playable", nil];
+    else {
+        [_progressSlider setValue:[_streamer currentTime] / [_streamer duration] animated:YES];
+    }
+}
 
-    [asset loadValuesAsynchronouslyForKeys:requestedKeys completionHandler:^{
-         dispatch_async(dispatch_get_main_queue(), ^{
-            NSError *error = nil;
-            AVKeyValueStatus status = [asset statusOfValueForKey:@"tracks"
-                                                           error:&error];
-            if (status == AVKeyValueStatusLoaded) {
-                [_player pause];
-                _currentItem = [AVPlayerItem playerItemWithAsset:asset];
-                [_currentItem addObserver:self
-                               forKeyPath:@"status"
-                                  options:0
-                                  context:PlayerItemStatusContext];
-                [_player replaceCurrentItemWithPlayerItem:_currentItem];
+- (void)_updateStatus {
+    switch ([_streamer status]) {
+        case DOUAudioStreamerPlaying:
+            [_statusLabel setText:@"playing"];
+            [_buttonPlayPause setTitle:@"Pause" forState:UIControlStateNormal];
+            break;
             
-                NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-                [nc addObserver:self
-                       selector:@selector(itemDidFinishPlaying)
-                           name:AVPlayerItemDidPlayToEndTimeNotification
-                         object:_currentItem];
-            } else NSLog(@"Error: %d", status);
-        });
-     }];
-}
-
-- (void)itemDidFinishPlaying {
-    if ([self canIncreaseSongNumber] == YES) {
-        self->currentSong++;
-        SoundManager *soundManager = [self soundManager];
-        [soundManager removeTimer];
-        [self removePlayerProgressObserver];
-        [_player removeAllItems];
-        
-        _currentItem = nil;
-        _song = [_songs objectAtIndex:self->currentSong];
-        
-        [self updateUserInterface];
-        [self setButtonsDisabled];
-        [self prepareAssetAndInitPlayer];
-    }
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath
-                      ofObject:(id)object
-                        change:(NSDictionary *)change
-                       context:(void *)context
-{
-    if (context == PlayerItemStatusContext) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            // Start Playing
-            [self setButtonsEnabled];
+        case DOUAudioStreamerPaused:
+            [_statusLabel setText:@"paused"];
+            [_buttonPlayPause setTitle:@"Play" forState:UIControlStateNormal];
+            break;
             
-            SoundManager *soundManager = [self soundManager];
-            [soundManager setTimer];
-            soundManager.currentSong = _song;
-            soundManager.delegate = self;
-            [self initScrubberTimer];
-            [_player play];
-            if (_btnPlayPause.selected) {
-                [_player play];
-                [_btnPlayPause setBackgroundImage:[UIImage imageNamed:@"pause"]
-                                         forState:UIControlStateSelected];
-            } else {
-                [_player pause];
-                [_btnPlayPause setBackgroundImage:[UIImage imageNamed:@"play"]
-                                         forState:UIControlStateNormal];
-            }
-        });
-    } else {
-        [super observeValueForKeyPath:keyPath
-                             ofObject:object
-                               change:change
-                              context:context];
-    }
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind
-                                                                              target:self
-                                                                              action:@selector(back)];
-    self.navigationItem.leftBarButtonItem = backItem;
-    [self updateUserInterface];
-    
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
-    [[AVAudioSession sharedInstance] setActive:YES error:nil];
-    
-    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-    // Headphones controls @see (void)remoteControlReceivedWithEvent:(UIEvent *)theEvent
-    if ([self canBecomeFirstResponder]) {
-        [self becomeFirstResponder];
-    }
-    
-    [self prepareAssetAndInitPlayer];
-    self.btnPlayPause.selected = YES;
-}
-
-- (void)remoteControlReceivedWithEvent:(UIEvent *)theEvent {
-    if (theEvent.type == UIEventTypeRemoteControl) {
-        switch(theEvent.subtype) {
-            case UIEventSubtypeRemoteControlTogglePlayPause:
-                [self playPause];
-                return;
-            case UIEventSubtypeRemoteControlPlay:
-                [self playPause];
-                return;
-            case UIEventSubtypeRemoteControlPause:
-                [self playPause];
-                return;
-            case UIEventSubtypeRemoteControlStop:
-                NSLog(@"ToggleStop");
-                return;
-            case UIEventSubtypeRemoteControlNextTrack:
-                [self next];
-                return;
-            case UIEventSubtypeRemoteControlPreviousTrack:
-                [self previous];
-                return;
-            default:
-                NSLog(@"Other");
-                return;
-        }
-    }
-}
-
-- (void) back {
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (NSURL *)getSongFilePath {
-    if ([NSURL URLWithString:[_song objectForKey:@"url"]])
-        return [NSURL URLWithString:[_song objectForKey:@"url"]];
-    else
-        return [NSURL fileURLWithPath:[_song objectForKey:@"url"]];
-}
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-- (IBAction)didTapPlayPause:(id)sender {
-    [self playPause];
-}
-
-- (void) playPause {
-    _btnPlayPause.selected = !_btnPlayPause.selected;
-    if (_btnPlayPause.selected) {
-        [_player play];
-        [_btnPlayPause setBackgroundImage:[UIImage imageNamed:@"pause"]
-                                 forState:UIControlStateSelected];
-    } else {
-        [_player pause];
-        [_btnPlayPause setBackgroundImage:[UIImage imageNamed:@"play"]
-                                 forState:UIControlStateNormal];
-    }
-}
-
-- (IBAction)didTapDownload:(id)sender {
-    [_btnDownload setEnabled:NO];
-    
-    DBManager *db = [DBManager getSharedInstance];
-    if ([db findByTitle:[_song objectForKey:@"title"] andArtist:[_song objectForKey:@"artist"]] != nil) {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Предупреждение"
-                                                        message:@"У вас уже загружена эта песня."
-                                                       delegate:nil
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
-        [_btnDownload setEnabled:YES];
-    } else {
-        NSDictionary *song = _song;
-        NSURL *url = [NSURL URLWithString:[song objectForKey:@"url"]];
-        NSString *filename = [NSString stringWithFormat:@"%@ - %@.mp3",
-                              [song objectForKey:@"artist"],
-                              [song objectForKey:@"title"]
-                              ];
-        
-        NSURLRequest *request = [NSURLRequest requestWithURL:url];
-        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-        
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *path = [[paths objectAtIndex:0] stringByAppendingPathComponent:filename];
-        operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
-        
-        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            if ([db saveData:[song objectForKey:@"artist"]
-                       title:[song objectForKey:@"title"]
-                    duration:[song objectForKey:@"duration"]
-                    filename:filename] == YES)
-            {
-                NSLog(@"Successfully saved to database and saved to: %@", path);
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"OK"
-                                                                message:@"Песня загружена"
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
-                [alert show];
-                [_btnDownload setEnabled:NO];
-            } else {
-                NSError *error = nil;
-                [[NSFileManager defaultManager]removeItemAtPath:path error:&error];
-                NSLog(@"Remove file, %@", error);
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ошибка"
-                                                                message:@"Something wrong happened. Database error."
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
-                [alert show];
-                [_btnDownload setEnabled:YES];
-            }
+        case DOUAudioStreamerIdle:
+            [_statusLabel setText:@"idle"];
+            [_buttonPlayPause setTitle:@"Play" forState:UIControlStateNormal];
+            break;
             
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ошибка"
-                                                            message:@"Something wrong happened"
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-            [alert show];
-            [_btnDownload setEnabled:YES];
-        }];
-        [operation start];
+        case DOUAudioStreamerFinished:
+            [_statusLabel setText:@"finished"];
+            [self _actionNext:nil];
+            break;
+            
+        case DOUAudioStreamerBuffering:
+            [_statusLabel setText:@"buffering"];
+            break;
+            
+        case DOUAudioStreamerError:
+            [_statusLabel setText:@"error"];
+            break;
     }
 }
 
-- (IBAction)didTapNext:(id)sender {
-    [self next];
-}
-
-- (void) next {
-    [self itemDidFinishPlaying];
-}
-
-- (IBAction)didTapPrev:(id)sender {
-    [self previous];
-}
-
-- (void) previous {
-    if (self->currentSong) {
-        int temp = self->currentSong - 2;
-        if (temp >= -1) {
-            self->currentSong = self->currentSong - 2;
-            [self itemDidFinishPlaying];
-        } else return ;
-    } else return ;
-}
-
-/* ---------------------------------------------------------
- **  Get the duration for a AVPlayerItem.
- ** ------------------------------------------------------- */
-
-- (CMTime)playerItemDuration {
-	AVPlayerItem *playerItem = [_player currentItem];
-	if (playerItem.status == AVPlayerItemStatusReadyToPlay) {
-		return([playerItem duration]);
-	}
-	return(kCMTimeInvalid);
-}
-
-#pragma mark Scrubber control
-
-/* ---------------------------------------------------------
- **  Methods to handle manipulation of the movie scrubber control
- ** ------------------------------------------------------- */
-
-/* Requests invocation of a given block during media playback to update the movie scrubber control. */
--(void)initScrubberTimer {
-	double interval = .1f;
-	
-	CMTime playerDuration = [self playerItemDuration];
-	if (CMTIME_IS_INVALID(playerDuration)) {
-		return;
-	}
-	double duration = CMTimeGetSeconds(playerDuration);
-	if (isfinite(duration)) {
-		CGFloat width = CGRectGetWidth([_scrubber bounds]);
-		interval = 0.5f * duration / width;
-	}
+- (void)_updateBufferingStatus {
+    [_miscLabel setText:[NSString stringWithFormat:@"Received %.2f/%.2f MB (%.2f %%), Speed %.2f MB/s", (double)[_streamer receivedLength] / 1024 / 1024, (double)[_streamer expectedLength] / 1024 / 1024, [_streamer bufferingRatio] * 100.0, (double)[_streamer downloadSpeed] / 1024 / 1024]];
     
-	/* Update the scrubber during normal playback. */
-	[self createPlayerProgressObserver:interval];
+    if ([_streamer bufferingRatio] >= 1.0) {
+        NSLog(@"sha256: %@", [_streamer sha256]);
+    }
 }
 
-/* Set the scrubber based on the player current time. */
-- (void)syncScrubber {
-	CMTime playerDuration = [self playerItemDuration];
-	if (CMTIME_IS_INVALID(playerDuration)) {
-		_scrubber.minimumValue = 0.0;
-		return;
-	}
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (context == kStatusKVOKey) {
+        [self performSelector:@selector(_updateStatus)
+                     onThread:[NSThread mainThread]
+                   withObject:nil
+                waitUntilDone:NO];
+    }
+    else if (context == kDurationKVOKey) {
+        [self performSelector:@selector(_timerAction:)
+                     onThread:[NSThread mainThread]
+                   withObject:nil
+                waitUntilDone:NO];
+    }
+    else if (context == kBufferingRatioKVOKey) {
+        [self performSelector:@selector(_updateBufferingStatus)
+                     onThread:[NSThread mainThread]
+                   withObject:nil
+                waitUntilDone:NO];
+    }
+    else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
-	double duration = CMTimeGetSeconds(playerDuration);
-	if (isfinite(duration)) {
-		float minValue = [_scrubber minimumValue];
-		float maxValue = [_scrubber maximumValue];
-		double time = CMTimeGetSeconds([_player currentTime]);
-		
-		[_scrubber setValue:(maxValue - minValue) * time / duration + minValue];
-	}
+    [self _resetStreamer];
+    
+    _timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_timerAction:) userInfo:nil repeats:YES];
+    [_volumeSlider setValue:[DOUAudioStreamer volume]];
 }
 
-/* The user is dragging the movie controller thumb to scrub through the movie. */
-- (IBAction)beginScrubbing:(id)sender {
-	restoreAfterScrubbingRate = [_player rate];
-	[_player setRate:0.f];
-	
-	/* Remove previous timer. */
-	[self removePlayerProgressObserver];
-}
+/*
+ - (void)viewWillDisappear:(BOOL)animated {
+ [_timer invalidate];
+ [_streamer stop];
+ [self _cancelStreamer];
+ 
+ [super viewWillDisappear:animated];
+ }
+ */
 
--(void)removePlayerProgressObserver {
-	if (_progressObserver) {
-		[_player removeTimeObserver:_progressObserver];
-		_progressObserver = nil;
-	}
-}
--(void)createPlayerProgressObserver:(double)interval {
-    if (!_progressObserver) {
-        void (^progressBlock)(CMTime time) = ^(CMTime time) {
-            [self syncScrubber];
-        };
-        _progressObserver = [_player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(interval, NSEC_PER_SEC)
-                                                                          queue:NULL
-                                                                    usingBlock:progressBlock];
+- (void)_actionPlayPause:(id)sender {
+    if ([_streamer status] == DOUAudioStreamerPaused ||
+        [_streamer status] == DOUAudioStreamerIdle) {
+        [_streamer play];
+    }
+    else {
+        [_streamer pause];
     }
 }
 
-/* Set the player current time to match the scrubber position. */
-- (IBAction)scrub:(id)sender {
-	if ([sender isKindOfClass:[UISlider class]]) {
-		UISlider* slider = sender;
-		
-		CMTime playerDuration = [self playerItemDuration];
-		if (CMTIME_IS_INVALID(playerDuration)) {
-			return;
-		}
-		double duration = CMTimeGetSeconds(playerDuration);
-		if (isfinite(duration)) {
-			float minValue = [slider minimumValue];
-			float maxValue = [slider maximumValue];
-			float value = [slider value];
-			
-			double time = duration * (value - minValue) / (maxValue - minValue);
-			
-			[_player seekToTime:CMTimeMakeWithSeconds(time, NSEC_PER_SEC)];
-		}
-	}
-}
-
-/* The user has released the movie thumb control to stop scrubbing through the movie. */
-- (IBAction)endScrubbing:(id)sender
-{
-    CMTime playerDuration = [self playerItemDuration];
-    if (CMTIME_IS_INVALID(playerDuration)) {
-        return;
-    }
-    double duration = CMTimeGetSeconds(playerDuration);
-    if (isfinite(duration)) {
-        CGFloat width = CGRectGetWidth([_scrubber bounds]);
-        double tolerance = 0.5f * duration / width;
-        [self createPlayerProgressObserver:tolerance];
+- (void)_actionNext:(id)sender {
+    if (++_currentTrackIndex >= [_tracks count]) {
+        _currentTrackIndex = 0;
     }
     
-	if (restoreAfterScrubbingRate) {
-		[_player setRate:restoreAfterScrubbingRate];
-		restoreAfterScrubbingRate = 0.f;
-	}
+    [self _resetStreamer];
 }
 
-- (BOOL)isScrubbing {
-	return restoreAfterScrubbingRate != 0.f;
+- (void)_actionStop:(id)sender {
+    [_streamer stop];
 }
 
--(void)enableScrubber {
-    _scrubber.enabled = YES;
+- (void)_actionSliderProgress:(id)sender {
+    [_streamer setCurrentTime:[_streamer duration] * [_progressSlider value]];
 }
 
--(void)disableScrubber {
-    _scrubber.enabled = NO;
+- (void)_actionSliderVolume:(id)sender {
+    [DOUAudioStreamer setVolume:[_volumeSlider value]];
 }
 
 @end

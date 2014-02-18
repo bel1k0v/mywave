@@ -4,6 +4,7 @@
 //  Created by Дмитрий on 04.11.13.
 
 #import "DBManager.h"
+#import <MediaPlayer/MediaPlayer.h>
 
 static DBManager *sharedInstance = nil;
 static sqlite3 *database = nil;
@@ -150,7 +151,7 @@ static sqlite3_stmt *statement = nil;
 - (NSArray *)getSongs
 {
     NSArray *data = [self findAll];
-
+    ;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSMutableArray *songs = [[NSMutableArray alloc]init];
@@ -162,7 +163,6 @@ static sqlite3_stmt *statement = nil;
         NSString *title = [[data objectAtIndex:i]objectAtIndex:2];
         NSString *duration = [[data objectAtIndex:i]objectAtIndex:3];
         NSString *songPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, [[data objectAtIndex:i]objectAtIndex:4]];
-        
         NSArray *keys = [NSArray arrayWithObjects:@"url", @"artist", @"title", @"duration", @"regNum", nil];
         NSArray *values = [NSArray arrayWithObjects:songPath, artist, title, duration, regNum, nil];
         NSDictionary *song = [[NSDictionary alloc] initWithObjects:values forKeys:keys];
