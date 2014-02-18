@@ -5,7 +5,7 @@
 //  Created by Дмитрий on 19.04.13.
 //  Copyright (c) 2013 MyWave. All rights reserved.
 //
-#import "SoundManager.h"
+
 #import "MainViewController.h"
 #import "VkMusicViewController.h"
 #import "MyMusicViewController.h"
@@ -16,13 +16,6 @@
 {
     [super viewDidLoad];
     self.navigationItem.title = @"Cвоя Волна" ;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    SoundManager *soundManager = [SoundManager sharedInstance];
-    if (soundManager.currentSong != nil)
-        NSLog(@"%@", soundManager.currentSong);
 }
 
 - (void)didReceiveMemoryWarning
@@ -41,4 +34,5 @@
     MyMusicViewController* downloadedViewController = [MyMusicViewController new];
     [self.navigationController pushViewController:downloadedViewController animated:YES];
 }
+
 @end
