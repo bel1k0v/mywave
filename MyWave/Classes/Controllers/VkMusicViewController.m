@@ -10,7 +10,7 @@
 #import "PlayerViewController.h"
 #import "SongCell.h"
 #import "NSString+Gender.h"
-#import "NSString+FontAwesome.h"
+#import "NSString+HTML.h"
 #import "Track+Provider.h"
 
 @implementation VkMusicViewController
@@ -135,15 +135,6 @@
 
     
     cell.titleLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"title"]];
-    /*
-    if ([[nowPlaying objectForKey:@"url"]isEqualToString:[song objectForKey:@"url"]] == YES)
-    {
-        cell.playLabel.font = [UIFont fontWithName:@"FontAwesome" size:15.0f];
-        cell.playLabel.text = [NSString stringWithFormat:@"%@", [NSString fontAwesomeIconStringForEnum:FAIconEject]];
-    } else {
-        cell.playLabel.text = @"";
-    }
-    */
     cell.artistLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"artist"]];
     
     double duration = [[song objectForKey:@"duration"]doubleValue];
@@ -168,8 +159,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PlayerViewController *playerViewController = [PlayerViewController new];
-    [playerViewController setTitle:@"Плеер ♫"];
-    
     NSArray *songs = [NSArray new];
     if (tableView == self.searchDisplayController.searchResultsTableView) {
         songs = searchData;
@@ -185,7 +174,11 @@
 
 - (void)vkontakteDidFailedWithError:(NSError *)error
 {
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Fail!" message:@"VK Error" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Fail!"
+                                                    message:@"VK Error"
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles: nil];
     [alert show];
 }
 
@@ -214,8 +207,6 @@
 
 #pragma mark - Search display delegate
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
-    NSLog(@"%@", searchString);
-
     if (searchString.length > 3 && searchString.length < 25) {
         NSArray *cachedData = [searchCache objectForKey:searchString];
         if (cachedData == NULL) {

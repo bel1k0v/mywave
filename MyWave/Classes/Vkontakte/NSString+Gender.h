@@ -11,7 +11,3 @@
 @interface NSString (Gender)
 + (NSString *)stringWithGenderId:(NSUInteger)gId;
 @end
-
-@interface NSString (HTML)
-+ (NSString *)htmlEntityDecode:(NSString *)string;
-@end

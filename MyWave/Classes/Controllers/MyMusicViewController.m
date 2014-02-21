@@ -1,5 +1,5 @@
 //
-//  DownloadedViewController.m
+//  MyMusicViewController.m
 //  MyWave
 //
 //  Created by Дмитрий on 03.11.13.
@@ -9,8 +9,8 @@
 #import "MyMusicViewController.h"
 #import "PlayerViewController.h"
 #import "SongCell.h"
-#import "NSString+FontAwesome.h"
 #import "NSString+Gender.h"
+#import "NSString+HTML.h"
 #import "Track+Provider.h"
 #import "DBManager.h"
 
@@ -102,8 +102,6 @@
     if (tableView == self.searchDisplayController.searchResultsTableView) {
         song = [searchData objectAtIndex:indexPath.row];
     }
-    
-    
     cell.titleLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"title"]];    
     cell.artistLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"artist"]];
     
@@ -137,8 +135,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     PlayerViewController *playerViewController = [PlayerViewController new];
-    [playerViewController setTitle:@"Плеер ♫"];
-    
     NSArray *songs = [NSArray new];
     if (tableView == self.searchDisplayController.searchResultsTableView) {
         songs = searchData;

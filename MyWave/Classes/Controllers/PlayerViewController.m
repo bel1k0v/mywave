@@ -10,6 +10,7 @@
 #import "DOUAudioStreamer.h"
 #import "DOUAudioStreamer+Options.h"
 #import "Track.h"
+#import "NSString+HTML.h"
 
 static void *kStatusKVOKey = &kStatusKVOKey;
 static void *kDurationKVOKey = &kDurationKVOKey;
@@ -19,17 +20,19 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 @interface PlayerViewController () {
 @private
     UILabel *_titleLabel;
+    UILabel *_artistLabel;
     UILabel *_statusLabel;
     UILabel *_miscLabel;
     
     UIButton *_buttonPlayPause;
     UIButton *_buttonNext;
-    UIButton *_buttonStop;
+    UIButton *_buttonPrevious;
     
     UISlider *_progressSlider;
     
-    UILabel *_volumeLabel;
     UISlider *_volumeSlider;
+    
+    UIProgressView *_miscProgress;
     
     NSTimer *_timer;
     
@@ -41,58 +44,78 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 @implementation PlayerViewController
 
 - (void)loadView {
+    [self setTitle:@"♫"];
+    
     UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [view setBackgroundColor:[UIColor whiteColor]];
+    NSString *labelFontName = @"HelveticaNeue-CondensedBlack";
     
-    _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 64.0, CGRectGetWidth([view bounds]), 30.0)];
-    [_titleLabel setFont:[UIFont systemFontOfSize:20.0]];
+    CGFloat topPoint = 34.0;
+    if ([[UIDevice currentDevice].systemVersion floatValue] > 6.1f) {
+        topPoint = 84.0;
+    }
+
+    _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, topPoint, CGRectGetWidth([view bounds]), 30.0)];
+    [_titleLabel setFont:[UIFont fontWithName:labelFontName size:18.0]];
     [_titleLabel setTextColor:[UIColor blackColor]];
     [_titleLabel setTextAlignment:NSTextAlignmentCenter];
     [_titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
+    //[_titleLabel setBackgroundColor:[UIColor redColor]];
     [view addSubview:_titleLabel];
     
-    _statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, CGRectGetMaxY([_titleLabel frame]) + 10.0, CGRectGetWidth([view bounds]), 30.0)];
-    [_statusLabel setFont:[UIFont systemFontOfSize:16.0]];
-    [_statusLabel setTextColor:[UIColor colorWithWhite:0.4 alpha:1.0]];
+    _artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, CGRectGetMaxY([_titleLabel frame]), CGRectGetWidth([view bounds]), 30.0)];
+    [_artistLabel setFont:[UIFont fontWithName:labelFontName size:16.0]];
+    [_artistLabel setTextColor:[UIColor blackColor]];
+    [_artistLabel setTextAlignment:NSTextAlignmentCenter];
+    [_artistLabel setLineBreakMode:NSLineBreakByTruncatingTail];
+    //[_artistLabel setBackgroundColor:[UIColor greenColor]];
+    [view addSubview:_artistLabel];
+    
+    _statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, CGRectGetMaxY([_artistLabel frame]), CGRectGetWidth([view bounds]), 30.0)];
+    [_statusLabel setFont:[UIFont fontWithName:labelFontName size:14.0]];
+    [_statusLabel setTextColor:[UIColor darkGrayColor]];
     [_statusLabel setTextAlignment:NSTextAlignmentCenter];
     [_statusLabel setLineBreakMode:NSLineBreakByTruncatingTail];
+    //[_statusLabel setBackgroundColor:[UIColor blueColor]];
     [view addSubview:_statusLabel];
-    
+    /*
     _miscLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, CGRectGetMaxY([_statusLabel frame]) + 10.0, CGRectGetWidth([view bounds]), 20.0)];
-    [_miscLabel setFont:[UIFont systemFontOfSize:10.0]];
-    [_miscLabel setTextColor:[UIColor colorWithWhite:0.5 alpha:1.0]];
+    [_miscLabel setFont:[UIFont fontWithName:labelFontName size:10.0]];
+    [_miscLabel setTextColor:[UIColor greenColor]];
     [_miscLabel setTextAlignment:NSTextAlignmentCenter];
     [_miscLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_miscLabel];
+    */
+    _miscProgress = [[UIProgressView alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY([_statusLabel frame]) + 8.0, 280, 3)];
+    _miscProgress.progress = 0.0f;
+    [view addSubview:_miscProgress];
     
     _buttonPlayPause = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonPlayPause setFrame:CGRectMake(80.0, CGRectGetMaxY([_miscLabel frame]) + 20.0, 60.0, 20.0)];
-    [_buttonPlayPause setTitle:@"Play" forState:UIControlStateNormal];
+    [_buttonPlayPause setFrame:CGRectMake((CGRectGetWidth([view bounds]) - 99.0) / 2 , CGRectGetMaxY([_miscProgress frame]) + 20.0, 99.0, 99.0)];
+    [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
     [_buttonPlayPause addTarget:self action:@selector(_actionPlayPause:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonPlayPause];
     
     _buttonNext = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonNext setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 80.0 - 60.0, CGRectGetMinY([_buttonPlayPause frame]), 60.0, 20.0)];
-    [_buttonNext setTitle:@"Next" forState:UIControlStateNormal];
+    [_buttonNext setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 20.0 - 53.0, CGRectGetMinY([_buttonPlayPause frame]), 53.0, 53.0)];
+    [_buttonNext setBackgroundImage:[UIImage imageNamed:@"arrow_right"] forState:UIControlStateNormal];
     [_buttonNext addTarget:self action:@selector(_actionNext:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonNext];
     
-    _buttonStop = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonStop setFrame:CGRectMake(round((CGRectGetWidth([view bounds]) - 60.0) / 2.0), CGRectGetMaxY([_buttonNext frame]) + 20.0, 60.0, 20.0)];
-    [_buttonStop setTitle:@"Stop" forState:UIControlStateNormal];
-    [_buttonStop addTarget:self action:@selector(_actionStop:) forControlEvents:UIControlEventTouchDown];
-    [view addSubview:_buttonStop];
+    _buttonPrevious = [UIButton buttonWithType:UIButtonTypeSystem];
+    [_buttonPrevious setFrame:CGRectMake(20, CGRectGetMinY([_buttonPlayPause frame]), 53.0, 53.0)];
+    [_buttonPrevious setBackgroundImage:[UIImage imageNamed:@"arrow_left"] forState:UIControlStateNormal];
+    [_buttonPrevious addTarget:self action:@selector(_actionPrevious:) forControlEvents:UIControlEventTouchDown];
+    [view addSubview:_buttonPrevious];
     
-    _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_buttonStop frame]) + 20.0, CGRectGetWidth([view bounds]) - 20.0 * 2.0, 40.0)];
+    _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_buttonPlayPause frame]) + 20.0, CGRectGetWidth([view bounds]) - 40.0, 40.0)];
     [_progressSlider addTarget:self action:@selector(_actionSliderProgress:) forControlEvents:UIControlEventValueChanged];
+    [_progressSlider setThumbImage:[UIImage imageNamed:@"position"] forState:UIControlStateNormal];
     [view addSubview:_progressSlider];
     
-    _volumeLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_progressSlider frame]) + 20.0, 80.0, 40.0)];
-    [_volumeLabel setText:@"Volume:"];
-    [view addSubview:_volumeLabel];
-    
-    _volumeSlider = [[UISlider alloc] initWithFrame:CGRectMake(CGRectGetMaxX([_volumeLabel frame]) + 10.0, CGRectGetMinY([_volumeLabel frame]), CGRectGetWidth([view bounds]) - CGRectGetMaxX([_volumeLabel frame]) - 10.0 - 20.0, 40.0)];
+    _volumeSlider = [[UISlider alloc] initWithFrame:CGRectMake(20.0, CGRectGetMinY([_progressSlider frame]) + 30.0, CGRectGetWidth([view bounds]) - 40.0, 40.0)];
     [_volumeSlider addTarget:self action:@selector(_actionSliderVolume:) forControlEvents:UIControlEventValueChanged];
+    [_volumeSlider setThumbImage:[UIImage imageNamed:@"position"] forState:UIControlStateNormal];
     [view addSubview:_volumeSlider];
     
     [self setView:view];
@@ -112,8 +135,8 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [self _cancelStreamer];
     
     Track *track = [_tracks objectAtIndex:_currentTrackIndex];
-    NSString *title = [NSString stringWithFormat:@"%@ - %@", track.artist, track.title];
-    [_titleLabel setText:title];
+    [_titleLabel setText:[NSString htmlEntityDecode:track.title]];
+    [_artistLabel setText:[NSString htmlEntityDecode:track.artist]];
     
     _streamer = [DOUAudioStreamer streamerWithAudioFile:track];
     [_streamer addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:kStatusKVOKey];
@@ -148,17 +171,17 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     switch ([_streamer status]) {
         case DOUAudioStreamerPlaying:
             [_statusLabel setText:@"playing"];
-            [_buttonPlayPause setTitle:@"Pause" forState:UIControlStateNormal];
+            [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
             break;
             
         case DOUAudioStreamerPaused:
             [_statusLabel setText:@"paused"];
-            [_buttonPlayPause setTitle:@"Play" forState:UIControlStateNormal];
+            [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
             break;
             
         case DOUAudioStreamerIdle:
             [_statusLabel setText:@"idle"];
-            [_buttonPlayPause setTitle:@"Play" forState:UIControlStateNormal];
+            [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
             break;
             
         case DOUAudioStreamerFinished:
@@ -177,8 +200,9 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 }
 
 - (void)_updateBufferingStatus {
-    [_miscLabel setText:[NSString stringWithFormat:@"Received %.2f/%.2f MB (%.2f %%), Speed %.2f MB/s", (double)[_streamer receivedLength] / 1024 / 1024, (double)[_streamer expectedLength] / 1024 / 1024, [_streamer bufferingRatio] * 100.0, (double)[_streamer downloadSpeed] / 1024 / 1024]];
+    //[_miscLabel setText:[NSString stringWithFormat:@"Received %.2f/%.2f MB (%.2f %%), Speed %.2f MB/s", (double)[_streamer receivedLength] / 1024 / 1024, (double)[_streamer expectedLength] / 1024 / 1024, [_streamer bufferingRatio] * 100.0, (double)[_streamer downloadSpeed] / 1024 / 1024]];
     
+    _miscProgress.progress = (float) [_streamer receivedLength] / [_streamer expectedLength];
     if ([_streamer bufferingRatio] >= 1.0) {
         NSLog(@"sha256: %@", [_streamer sha256]);
     }
@@ -215,17 +239,49 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     
     _timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_timerAction:) userInfo:nil repeats:YES];
     [_volumeSlider setValue:[DOUAudioStreamer volume]];
+
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    if ([self canBecomeFirstResponder]) {
+        [self becomeFirstResponder];
+    }
 }
 
-/*
+
+- (void)remoteControlReceivedWithEvent:(UIEvent *)theEvent {
+    if (theEvent.type == UIEventTypeRemoteControl) {
+        switch (theEvent.subtype) {
+            case UIEventSubtypeRemoteControlTogglePlayPause:
+                [self _actionPlayPause:self];
+                break;
+            case UIEventSubtypeRemoteControlPlay:
+                [self _actionPlayPause:self];
+                break;
+            case UIEventSubtypeRemoteControlPause:
+                [self _actionPlayPause:self];
+            case UIEventSubtypeRemoteControlStop:
+                [self _actionStop:self];
+                break;
+            case UIEventSubtypeRemoteControlNextTrack:
+                [self _actionNext:self];
+                break;
+            case UIEventSubtypeRemoteControlPreviousTrack:
+                [self _actionPrevious:self];
+                break;
+            default:
+                NSLog(@"Other");
+                break;
+        }
+    }
+}
+
  - (void)viewWillDisappear:(BOOL)animated {
- [_timer invalidate];
- [_streamer stop];
- [self _cancelStreamer];
- 
- [super viewWillDisappear:animated];
+     [_timer invalidate];
+     [_streamer stop];
+     [self _cancelStreamer];
+     
+     [super viewWillDisappear:animated];
  }
- */
+
 
 - (void)_actionPlayPause:(id)sender {
     if ([_streamer status] == DOUAudioStreamerPaused ||
@@ -241,8 +297,14 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     if (++_currentTrackIndex >= [_tracks count]) {
         _currentTrackIndex = 0;
     }
-    
     [self _resetStreamer];
+}
+
+- (void)_actionPrevious:(id)sender {
+    if (_currentTrackIndex > 0) {
+        --_currentTrackIndex;
+        [self _resetStreamer];
+    }
 }
 
 - (void)_actionStop:(id)sender {

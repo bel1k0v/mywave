@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
 
-@interface PlayerViewController : UIViewController
+@interface PlayerViewController : UIViewController <AVAudioSessionDelegate>
 
 @property (nonatomic, copy) NSArray *tracks;
 @property (nonatomic, readwrite) NSUInteger currentTrackIndex;

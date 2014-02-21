@@ -12,12 +12,10 @@
 		6833F80E184A958A00C156AB /* SongCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6833F80C184A958A00C156AB /* SongCell.m */; };
 		6833F80F184A958A00C156AB /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6833F80D184A958A00C156AB /* MainViewController.xib */; };
 		6833F94F184C93CD00C156AB /* SongCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6833F94E184C93CD00C156AB /* SongCell.xib */; };
-		6838F67718535118005DB7BF /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6838F67118535118005DB7BF /* libTestFlight.a */; };
-		6838F67818535118005DB7BF /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 6838F67218535118005DB7BF /* README.md */; };
-		6838F67918535118005DB7BF /* release_notes.md in Resources */ = {isa = PBXBuildFile; fileRef = 6838F67318535118005DB7BF /* release_notes.md */; };
 		6838F67B18535213005DB7BF /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6838F67A18535213005DB7BF /* libz.dylib */; };
 		683F31E718B2ACBE00D37C05 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 683F31E618B2ACBE00D37C05 /* Track.m */; };
 		683F31EA18B2AD1000D37C05 /* Track+Provider.m in Sources */ = {isa = PBXBuildFile; fileRef = 683F31E918B2AD1000D37C05 /* Track+Provider.m */; };
+		683F31F018B61D1500D37C05 /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 683F31EF18B61D1500D37C05 /* NSString+HTML.m */; };
 		68787D901826533700FC3FFF /* PlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787D8E1826533700FC3FFF /* PlayerViewController.m */; };
 		68787D9218265B3D00FC3FFF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED981417270D190009C2F6 /* AVFoundation.framework */; };
 		68787D9418265B7C00FC3FFF /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68787D9318265B7C00FC3FFF /* CoreMedia.framework */; };
@@ -48,8 +46,6 @@
 		68ED981A1729AD8D0009C2F6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */; };
 		68ED981C1729ADC90009C2F6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED981B1729ADC90009C2F6 /* CFNetwork.framework */; };
 		68ED9827172B13ED0009C2F6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED9826172B13ED0009C2F6 /* QuartzCore.framework */; };
-		68F7D4D31850FEE000094192 /* NSString+FontAwesome.m in Sources */ = {isa = PBXBuildFile; fileRef = 68F7D4D21850FEE000094192 /* NSString+FontAwesome.m */; };
-		68F7D4D7185102C600094192 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 68F7D4D51851009300094192 /* FontAwesome.ttf */; };
 		68F7D4D81851045000094192 /* MyWave-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 688453CD172182260092260B /* MyWave-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -59,17 +55,13 @@
 		6833F80C184A958A00C156AB /* SongCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongCell.m; sourceTree = "<group>"; };
 		6833F80D184A958A00C156AB /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
 		6833F94E184C93CD00C156AB /* SongCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SongCell.xib; sourceTree = "<group>"; };
-		6838F67118535118005DB7BF /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
-		6838F67218535118005DB7BF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
-		6838F67318535118005DB7BF /* release_notes.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = release_notes.md; sourceTree = "<group>"; };
-		6838F67418535118005DB7BF /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+AsyncLogging.h"; sourceTree = "<group>"; };
-		6838F67518535118005DB7BF /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
-		6838F67618535118005DB7BF /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		6838F67A18535213005DB7BF /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		683F31E518B2ACBE00D37C05 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
 		683F31E618B2ACBE00D37C05 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
 		683F31E818B2AD1000D37C05 /* Track+Provider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Track+Provider.h"; sourceTree = "<group>"; };
 		683F31E918B2AD1000D37C05 /* Track+Provider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Track+Provider.m"; sourceTree = "<group>"; };
+		683F31EE18B61D1500D37C05 /* NSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+HTML.h"; sourceTree = "<group>"; };
+		683F31EF18B61D1500D37C05 /* NSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+HTML.m"; sourceTree = "<group>"; };
 		68787D8D1826533700FC3FFF /* PlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerViewController.h; sourceTree = "<group>"; };
 		68787D8E1826533700FC3FFF /* PlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerViewController.m; sourceTree = "<group>"; };
 		68787D9318265B7C00FC3FFF /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -115,9 +107,6 @@
 		68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		68ED981B1729ADC90009C2F6 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		68ED9826172B13ED0009C2F6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		68F7D4D11850FEE000094192 /* NSString+FontAwesome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+FontAwesome.h"; path = "../Classes/Vkontakte/NSString+FontAwesome.h"; sourceTree = "<group>"; };
-		68F7D4D21850FEE000094192 /* NSString+FontAwesome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+FontAwesome.m"; path = "../Classes/Vkontakte/NSString+FontAwesome.m"; sourceTree = "<group>"; };
-		68F7D4D51851009300094192 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.ttf; sourceTree = "<group>"; };
 		BD8C0EDBA8EE446AB9CD421B /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		FD2D23D6CB8649B98A0835DC /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -139,7 +128,6 @@
 				68ED9827172B13ED0009C2F6 /* QuartzCore.framework in Frameworks */,
 				68ED981C1729ADC90009C2F6 /* CFNetwork.framework in Frameworks */,
 				688453CA172182260092260B /* CoreGraphics.framework in Frameworks */,
-				6838F67718535118005DB7BF /* libTestFlight.a in Frameworks */,
 				68ED981A1729AD8D0009C2F6 /* MediaPlayer.framework in Frameworks */,
 				68ED98181729AD630009C2F6 /* AudioToolbox.framework in Frameworks */,
 				688453C6172182260092260B /* UIKit.framework in Frameworks */,
@@ -151,19 +139,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6838F67018535118005DB7BF /* TestFlightSDK2.0.2 */ = {
-			isa = PBXGroup;
-			children = (
-				6838F67118535118005DB7BF /* libTestFlight.a */,
-				6838F67218535118005DB7BF /* README.md */,
-				6838F67318535118005DB7BF /* release_notes.md */,
-				6838F67418535118005DB7BF /* TestFlight+AsyncLogging.h */,
-				6838F67518535118005DB7BF /* TestFlight+ManualSessions.h */,
-				6838F67618535118005DB7BF /* TestFlight.h */,
-			);
-			path = TestFlightSDK2.0.2;
-			sourceTree = "<group>";
-		};
 		68787EB31827AA5500FC3FFF /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -196,7 +171,6 @@
 		688453B9172182250092260B = {
 			isa = PBXGroup;
 			children = (
-				6838F67018535118005DB7BF /* TestFlightSDK2.0.2 */,
 				688453CB172182260092260B /* MyWave */,
 				688453C4172182260092260B /* Frameworks */,
 				688453C3172182260092260B /* Products */,
@@ -240,7 +214,6 @@
 		688453CB172182260092260B /* MyWave */ = {
 			isa = PBXGroup;
 			children = (
-				68F7D4D41851005900094192 /* Resources */,
 				68ED98161729ACF40009C2F6 /* Classes */,
 				682CD8E4184E7D0C006000E6 /* Images.xcassets */,
 				68ED9825172B109B0009C2F6 /* InterfaceBuilder */,
@@ -271,6 +244,8 @@
 				688453ED172183970092260B /* Vkontakte.m */,
 				688453F3172185E70092260B /* VkontakteViewController.h */,
 				688453F4172185E70092260B /* VkontakteViewController.m */,
+				683F31EE18B61D1500D37C05 /* NSString+HTML.h */,
+				683F31EF18B61D1500D37C05 /* NSString+HTML.m */,
 			);
 			path = Vkontakte;
 			sourceTree = "<group>";
@@ -315,16 +290,6 @@
 				6833F80C184A958A00C156AB /* SongCell.m */,
 			);
 			path = UI;
-			sourceTree = "<group>";
-		};
-		68F7D4D41851005900094192 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				68F7D4D11850FEE000094192 /* NSString+FontAwesome.h */,
-				68F7D4D21850FEE000094192 /* NSString+FontAwesome.m */,
-				68F7D4D51851009300094192 /* FontAwesome.ttf */,
-			);
-			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -386,10 +351,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				688453D0172182260092260B /* InfoPlist.strings in Resources */,
-				6838F67818535118005DB7BF /* README.md in Resources */,
 				6833F80F184A958A00C156AB /* MainViewController.xib in Resources */,
-				6838F67918535118005DB7BF /* release_notes.md in Resources */,
-				68F7D4D7185102C600094192 /* FontAwesome.ttf in Resources */,
 				682CD8E5184E7D0C006000E6 /* Images.xcassets in Resources */,
 				68787EEA1828374400FC3FFF /* VkMusicViewController.xib in Resources */,
 				6833F94F184C93CD00C156AB /* SongCell.xib in Resources */,
@@ -443,9 +405,9 @@
 				688453D2172182260092260B /* main.m in Sources */,
 				688453D6172182260092260B /* AppDelegate.m in Sources */,
 				688453EB172182FF0092260B /* NSString+Gender.m in Sources */,
+				683F31F018B61D1500D37C05 /* NSString+HTML.m in Sources */,
 				688453EE172183970092260B /* Vkontakte.m in Sources */,
 				688453F21721848B0092260B /* MBProgressHUD.m in Sources */,
-				68F7D4D31850FEE000094192 /* NSString+FontAwesome.m in Sources */,
 				683F31E718B2ACBE00D37C05 /* Track.m in Sources */,
 				688453F5172185E70092260B /* VkontakteViewController.m in Sources */,
 				68787EE81828373700FC3FFF /* VkMusicViewController.m in Sources */,
@@ -497,7 +459,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "206C6C38-2DF2-4028-90D0-DEBB2E603F99";
 				SDKROOT = iphoneos7.0;
@@ -523,7 +485,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "9BA3C01D-D400-4827-857F-6EDE1F727482";
 				SDKROOT = iphoneos7.0;
@@ -542,11 +504,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyWave/MyWave-Prefix.pch";
 				INFOPLIST_FILE = "MyWave/MyWave-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/dmitrij/xCode/MyWave/TestFlightSDK2.0.2,
-				);
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = MyWave;
 				PROVISIONING_PROFILE = "206C6C38-2DF2-4028-90D0-DEBB2E603F99";
 				WRAPPER_EXTENSION = app;
@@ -564,11 +523,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyWave/MyWave-Prefix.pch";
 				INFOPLIST_FILE = "MyWave/MyWave-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/dmitrij/xCode/MyWave/TestFlightSDK2.0.2,
-				);
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = MyWave;
 				PROVISIONING_PROFILE = "9BA3C01D-D400-4827-857F-6EDE1F727482";
 				WRAPPER_EXTENSION = app;

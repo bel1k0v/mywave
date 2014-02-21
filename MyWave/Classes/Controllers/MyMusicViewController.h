@@ -1,5 +1,5 @@
 //
-//  DownloadedViewController.h
+//  MyMusicViewController.h
 //  MyWave
 //
 //  Created by Дмитрий on 03.11.13.
