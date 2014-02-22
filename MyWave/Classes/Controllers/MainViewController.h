@@ -8,8 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MainViewController : UIViewController
-{
+@interface MainViewController : UIViewController {
     IBOutlet UIButton *_vkMusicButton;
     IBOutlet UIButton *_myMusicButton;
 }

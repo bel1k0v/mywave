@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <AVFoundation/AVFoundation.h>
 
-@interface PlayerViewController : UIViewController <AVAudioSessionDelegate>
+@interface PlayerViewController : UIViewController
 
 @property (nonatomic, copy) NSArray *tracks;
 @property (nonatomic, readwrite) NSUInteger currentTrackIndex;
+@property (nonatomic, readwrite) BOOL tracksFromRemote;
 
 @end

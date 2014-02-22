@@ -16,8 +16,7 @@
 @implementation VkMusicViewController
 @synthesize data = _data;
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
+- (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
         searchCache = [[NSCache alloc] init];
@@ -26,8 +25,7 @@
     return self;
 }
 
-- (void)initSearch
-{
+- (void)initSearch {
     searchData = [NSMutableArray arrayWithCapacity:[_data count]];
     searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
     
@@ -38,17 +36,14 @@
     
     self.tableView.tableHeaderView = searchBar;
 }
-- (void)setupData
-{
+- (void)setupData {
     _data = nil;
     _data = [self getSongs];
 }
--(NSArray *)getSongs
-{
+-(NSArray *)getSongs {
     return ((BOOL)[_vkInstance isAuthorized] != FALSE) ? [_vkInstance getUserAudio] : [[NSArray alloc]init];
 }
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     _vkInstance = [Vkontakte sharedInstance];
     _vkInstance.delegate = self;
@@ -73,38 +68,32 @@
     [self initSearch];
 }
 
-- (void) viewDidAppear:(BOOL)animated
-{
+- (void) viewDidAppear:(BOOL)animated {
     [self.tableView reloadData];
 }
 
-- (void) back
-{
+- (void) back {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)loginBarButtonItemPressed:(id)sender
-{
+- (IBAction)loginBarButtonItemPressed:(id)sender {
     if ((BOOL)[_vkInstance isAuthorized] == FALSE)
         [_vkInstance authenticate];
     else
         [_vkInstance logout];
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (tableView == self.searchDisplayController.searchResultsTableView) {
         return [searchData count];
     } else {
@@ -112,11 +101,9 @@
     }
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"SongCell";
     SongCell *cell = (SongCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
     if (cell == nil) {
         NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"SongCell" owner:nil options:nil];
         for (id currentObject in topLevelObjects){
@@ -126,13 +113,10 @@
             }
         }
     }
-    
     NSDictionary *song = [_data objectAtIndex:indexPath.row];
     if (tableView == self.searchDisplayController.searchResultsTableView) {
         song = [searchData objectAtIndex:indexPath.row];
     }
-
-
     
     cell.titleLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"title"]];
     cell.artistLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"artist"]];
@@ -146,8 +130,7 @@
     return cell;
 }
 
-- (void)refreshButtonState
-{
+- (void)refreshButtonState {
     if (![_vkInstance isAuthorized])
         _loginBarButtonItem.title = @"Войти";
     else
@@ -156,8 +139,7 @@
 
 #pragma mark - Table view delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     PlayerViewController *playerViewController = [PlayerViewController new];
     NSArray *songs = [NSArray new];
     if (tableView == self.searchDisplayController.searchResultsTableView) {
@@ -167,13 +149,14 @@
     }
     [playerViewController setCurrentTrackIndex:indexPath.row];
     [playerViewController setTracks:[Track tracksWithArray:songs url:YES]];
+    [playerViewController setTracksFromRemote:YES];
+    
     [self.navigationController pushViewController:playerViewController animated:YES];
 }
 
 #pragma mark - VkontakteDelegate
 
-- (void)vkontakteDidFailedWithError:(NSError *)error
-{
+- (void)vkontakteDidFailedWithError:(NSError *)error {
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Fail!"
                                                     message:@"VK Error"
                                                    delegate:nil
@@ -182,26 +165,22 @@
     [alert show];
 }
 
-- (void)showVkontakteAuthController:(UIViewController *)controller
-{
+- (void)showVkontakteAuthController:(UIViewController *)controller {
     [self presentViewController:controller animated:YES completion:nil];
 }
 
-- (void)vkontakteAuthControllerDidCancelled
-{
+- (void)vkontakteAuthControllerDidCancelled {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)vkontakteDidFinishLogin:(Vkontakte *)vkontakte
-{
+- (void)vkontakteDidFinishLogin:(Vkontakte *)vkontakte {
     [self refreshButtonState];
     [self setupData];
     [self.tableView reloadData];
 }
 
 
-- (void)vkontakteDidFinishLogOut:(Vkontakte *)vkontakte
-{
+- (void)vkontakteDidFinishLogOut:(Vkontakte *)vkontakte {
     [self refreshButtonState];
 }
 

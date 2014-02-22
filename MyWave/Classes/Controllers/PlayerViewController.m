@@ -6,11 +6,15 @@
 //  Copyright (c) 2013 MyWave. All rights reserved.
 //
 
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
 #import "PlayerViewController.h"
 #import "DOUAudioStreamer.h"
 #import "DOUAudioStreamer+Options.h"
 #import "Track.h"
 #import "NSString+HTML.h"
+#import "DBManager.h"
+#import "AFHTTPRequestOperation.h"
 
 static void *kStatusKVOKey = &kStatusKVOKey;
 static void *kDurationKVOKey = &kDurationKVOKey;
@@ -27,6 +31,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     UIButton *_buttonPlayPause;
     UIButton *_buttonNext;
     UIButton *_buttonPrevious;
+    UIButton *_buttonDownload;
     
     UISlider *_progressSlider;
     
@@ -47,7 +52,8 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [self setTitle:@"♫"];
     
     UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    [view setBackgroundColor:[UIColor whiteColor]];
+    view.backgroundColor = [UIColor whiteColor];
+
     NSString *labelFontName = @"HelveticaNeue-CondensedBlack";
     
     CGFloat topPoint = 34.0;
@@ -55,43 +61,40 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         topPoint = 84.0;
     }
 
-    _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, topPoint, CGRectGetWidth([view bounds]), 30.0)];
+    _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, topPoint, CGRectGetWidth([view bounds]) - 40, 30.0)];
     [_titleLabel setFont:[UIFont fontWithName:labelFontName size:18.0]];
     [_titleLabel setTextColor:[UIColor blackColor]];
     [_titleLabel setTextAlignment:NSTextAlignmentCenter];
     [_titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
-    //[_titleLabel setBackgroundColor:[UIColor redColor]];
     [view addSubview:_titleLabel];
     
-    _artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, CGRectGetMaxY([_titleLabel frame]), CGRectGetWidth([view bounds]), 30.0)];
+    _artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_titleLabel frame]) + 10.0, CGRectGetWidth([view bounds]) - 40, 30.0)];
     [_artistLabel setFont:[UIFont fontWithName:labelFontName size:16.0]];
     [_artistLabel setTextColor:[UIColor blackColor]];
     [_artistLabel setTextAlignment:NSTextAlignmentCenter];
     [_artistLabel setLineBreakMode:NSLineBreakByTruncatingTail];
-    //[_artistLabel setBackgroundColor:[UIColor greenColor]];
     [view addSubview:_artistLabel];
-    
-    _statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, CGRectGetMaxY([_artistLabel frame]), CGRectGetWidth([view bounds]), 30.0)];
+
+    _statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_artistLabel frame]) + 10.0, CGRectGetWidth([view bounds]) - 40, 30.0)];
     [_statusLabel setFont:[UIFont fontWithName:labelFontName size:14.0]];
     [_statusLabel setTextColor:[UIColor darkGrayColor]];
     [_statusLabel setTextAlignment:NSTextAlignmentCenter];
     [_statusLabel setLineBreakMode:NSLineBreakByTruncatingTail];
-    //[_statusLabel setBackgroundColor:[UIColor blueColor]];
     [view addSubview:_statusLabel];
-    /*
-    _miscLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, CGRectGetMaxY([_statusLabel frame]) + 10.0, CGRectGetWidth([view bounds]), 20.0)];
+    
+    _miscLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_statusLabel frame]) + 10.0, CGRectGetWidth([view bounds]) - 40, 20.0)];
     [_miscLabel setFont:[UIFont fontWithName:labelFontName size:10.0]];
-    [_miscLabel setTextColor:[UIColor greenColor]];
+    [_miscLabel setTextColor:[UIColor darkGrayColor]];
     [_miscLabel setTextAlignment:NSTextAlignmentCenter];
     [_miscLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_miscLabel];
-    */
-    _miscProgress = [[UIProgressView alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY([_statusLabel frame]) + 8.0, 280, 3)];
+    
+    _miscProgress = [[UIProgressView alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY([_miscLabel frame]) + 10.0, 280, 3)];
     _miscProgress.progress = 0.0f;
     [view addSubview:_miscProgress];
     
     _buttonPlayPause = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonPlayPause setFrame:CGRectMake((CGRectGetWidth([view bounds]) - 99.0) / 2 , CGRectGetMaxY([_miscProgress frame]) + 20.0, 99.0, 99.0)];
+    [_buttonPlayPause setFrame:CGRectMake((CGRectGetWidth([view bounds]) - 99.0) / 2 , CGRectGetMaxY([_miscProgress frame]) + 10.0, 99.0, 99.0)];
     [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
     [_buttonPlayPause addTarget:self action:@selector(_actionPlayPause:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonPlayPause];
@@ -102,6 +105,14 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [_buttonNext addTarget:self action:@selector(_actionNext:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonNext];
     
+    if (self.tracksFromRemote == YES) {
+        _buttonDownload = [UIButton buttonWithType:UIButtonTypeSystem];
+        [_buttonDownload setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 20.0 - 32.0, CGRectGetMaxY([_buttonNext frame]) + 10.0, 32.0, 32.0)];
+        [_buttonDownload setBackgroundImage:[UIImage imageNamed:@"plus"] forState:UIControlStateNormal];
+        [_buttonDownload addTarget:self action:@selector(_actionDownload:) forControlEvents:UIControlEventTouchDown];
+        [view addSubview:_buttonDownload];
+    }
+    
     _buttonPrevious = [UIButton buttonWithType:UIButtonTypeSystem];
     [_buttonPrevious setFrame:CGRectMake(20, CGRectGetMinY([_buttonPlayPause frame]), 53.0, 53.0)];
     [_buttonPrevious setBackgroundImage:[UIImage imageNamed:@"arrow_left"] forState:UIControlStateNormal];
@@ -110,13 +121,22 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     
     _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_buttonPlayPause frame]) + 20.0, CGRectGetWidth([view bounds]) - 40.0, 40.0)];
     [_progressSlider addTarget:self action:@selector(_actionSliderProgress:) forControlEvents:UIControlEventValueChanged];
-    [_progressSlider setThumbImage:[UIImage imageNamed:@"position"] forState:UIControlStateNormal];
     [view addSubview:_progressSlider];
     
     _volumeSlider = [[UISlider alloc] initWithFrame:CGRectMake(20.0, CGRectGetMinY([_progressSlider frame]) + 30.0, CGRectGetWidth([view bounds]) - 40.0, 40.0)];
     [_volumeSlider addTarget:self action:@selector(_actionSliderVolume:) forControlEvents:UIControlEventValueChanged];
-    [_volumeSlider setThumbImage:[UIImage imageNamed:@"position"] forState:UIControlStateNormal];
     [view addSubview:_volumeSlider];
+
+    [[UISlider appearance] setMaximumTrackImage:[UIImage imageNamed:@"slider_max"]
+                                       forState:UIControlStateNormal];
+    [[UISlider appearance] setMinimumTrackImage:[UIImage imageNamed:@"slider_min"]
+                                       forState:UIControlStateNormal];
+    [[UISlider appearance] setThumbImage:[UIImage imageNamed:@"position"]
+                                forState:UIControlStateNormal];
+    
+    if ([[UIDevice currentDevice].systemVersion floatValue] > 6.1f) {
+        _miscProgress.tintColor = [UIColor blackColor];
+    }
     
     [self setView:view];
 }
@@ -163,6 +183,13 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         [_progressSlider setValue:0.0f animated:NO];
     }
     else {
+        int minutes = (int) floor([_streamer duration] / 60);
+        int seconds = [_streamer duration] - (minutes * 60);
+        
+        int currentMinutes = (int) floor([_streamer currentTime] / 60);
+        int currentSeconds = [_streamer currentTime] - (currentMinutes * 60);
+
+        [_miscLabel setText:[NSString stringWithFormat:@"%d:%02d - %d:%02d", currentMinutes, currentSeconds, minutes, seconds]];
         [_progressSlider setValue:[_streamer currentTime] / [_streamer duration] animated:YES];
     }
 }
@@ -200,12 +227,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 }
 
 - (void)_updateBufferingStatus {
-    //[_miscLabel setText:[NSString stringWithFormat:@"Received %.2f/%.2f MB (%.2f %%), Speed %.2f MB/s", (double)[_streamer receivedLength] / 1024 / 1024, (double)[_streamer expectedLength] / 1024 / 1024, [_streamer bufferingRatio] * 100.0, (double)[_streamer downloadSpeed] / 1024 / 1024]];
-    
     _miscProgress.progress = (float) [_streamer receivedLength] / [_streamer expectedLength];
-    if ([_streamer bufferingRatio] >= 1.0) {
-        NSLog(@"sha256: %@", [_streamer sha256]);
-    }
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -317,6 +339,52 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 
 - (void)_actionSliderVolume:(id)sender {
     [DOUAudioStreamer setVolume:[_volumeSlider value]];
+}
+
+- (void)_actionDownload:(id)sender {
+    [sender setEnabled:NO];
+    
+    Track *track = [_tracks objectAtIndex:_currentTrackIndex];
+    DBManager *db = [DBManager getSharedInstance];
+    if ([db findByTitle:track.title andArtist:track.artist] != nil) {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Скачивание отменено"
+                                                        message:@"Этот трек уже сохранён"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles:nil];
+        [alert show];
+        [sender setEnabled:YES];
+    } else {
+        NSURL *url = track.audioFileURL;
+        NSString *filename = [NSString stringWithFormat:@"%@ - %@.mp3", track.artist, track.title];
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *filepath = [[paths objectAtIndex:0] stringByAppendingPathComponent:filename];
+        operation.outputStream = [NSOutputStream outputStreamToFileAtPath:filepath append:NO];
+        
+        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+            if ([db saveData:track.artist title:track.title duration:@"undefined" filename:filename]) {
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"ОК"
+                                                                message:@"Трек сохранён"
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"Ok"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            }
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            [[NSFileManager defaultManager]removeItemAtPath:filepath error:&error];
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Скачивание отменено"
+                                                            message:@"Произошла ошибка, попробуйте ещё раз"
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Ok"
+                                                  otherButtonTitles:nil];
+            [alert show];
+            [sender setEnabled:YES];
+        }];
+        
+        [operation start];
+    }
 }
 
 @end
