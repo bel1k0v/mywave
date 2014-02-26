@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
+#import "GTScrollNavigationBar.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -18,7 +19,9 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     MainViewController *mainViewController = [[MainViewController alloc] initWithNibName:@"MainViewController" bundle:nil];
-    self.navigationController = [[UINavigationController alloc] initWithRootViewController:mainViewController];
+    self.navigationController = [[UINavigationController alloc] initWithNavigationBarClass:[GTScrollNavigationBar class]
+                                                                              toolbarClass:nil];
+    [self.navigationController setViewControllers:@[mainViewController] animated:YES];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     
     

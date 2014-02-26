@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Vkontakte.h"
 
-@interface VkMusicViewController : UITableViewController <VkontakteDelegate, UISearchBarDelegate, UISearchDisplayDelegate>
+@interface VkMusicViewController : UITableViewController<VkontakteDelegate, UISearchBarDelegate, UISearchDisplayDelegate>
 {
     NSMutableArray *searchData;
     UISearchBar *searchBar;
@@ -21,4 +21,5 @@
 }
 
 @property (nonatomic, strong) NSArray *data;
+
 @end

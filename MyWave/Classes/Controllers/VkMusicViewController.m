@@ -12,6 +12,7 @@
 #import "NSString+Gender.h"
 #import "NSString+HTML.h"
 #import "Track+Provider.h"
+#import "GTScrollNavigationBar.h"
 
 @implementation VkMusicViewController
 @synthesize data = _data;
@@ -40,6 +41,7 @@
     _data = nil;
     _data = [self getSongs];
 }
+
 -(NSArray *)getSongs {
     return ((BOOL)[_vkInstance isAuthorized] != FALSE) ? [_vkInstance getUserAudio] : [[NSArray alloc]init];
 }
@@ -66,6 +68,24 @@
     self.navigationItem.rightBarButtonItem = _loginBarButtonItem;
     [self refreshButtonState];
     [self initSearch];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.scrollNavigationBar.scrollView = self.tableView;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    self.navigationController.scrollNavigationBar.scrollView = nil;
+}
+
+- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView
+{
+    [self.navigationController.scrollNavigationBar resetToDefaultPosition:YES];
 }
 
 - (void) viewDidAppear:(BOOL)animated {

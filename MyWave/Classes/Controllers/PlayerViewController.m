@@ -52,8 +52,13 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [self setTitle:@"♫"];
     
     UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    view.backgroundColor = [UIColor whiteColor];
-
+    view.backgroundColor = UIColorFromRGB(0xF8F8F8);
+    /*
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.frame = view.bounds;
+    gradient.colors = [NSArray arrayWithObjects:(id)[UIColorFromRGB(0xF8F8F8) CGColor], (id)[UIColorFromRGB(0x18AAD6) CGColor], nil];
+    [view.layer insertSublayer:gradient atIndex:0];
+    */
     NSString *labelFontName = @"HelveticaNeue-CondensedBlack";
     
     CGFloat topPoint = 34.0;
@@ -82,19 +87,23 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [_statusLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_statusLabel];
     
-    _miscLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_statusLabel frame]) + 10.0, CGRectGetWidth([view bounds]) - 40, 20.0)];
+    _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_statusLabel frame]) + 15.0, CGRectGetWidth([view bounds]) - 40.0, 40.0)];
+    [_progressSlider addTarget:self action:@selector(_actionSliderProgress:) forControlEvents:UIControlEventValueChanged];
+    [view addSubview:_progressSlider];
+    
+    _miscLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_progressSlider frame]) + 8.0, CGRectGetWidth([view bounds]) - 40, 20.0)];
     [_miscLabel setFont:[UIFont fontWithName:labelFontName size:10.0]];
     [_miscLabel setTextColor:[UIColor darkGrayColor]];
     [_miscLabel setTextAlignment:NSTextAlignmentCenter];
     [_miscLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_miscLabel];
-    
+    /*
     _miscProgress = [[UIProgressView alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY([_miscLabel frame]) + 10.0, 280, 3)];
     _miscProgress.progress = 0.0f;
     [view addSubview:_miscProgress];
-    
+    */
     _buttonPlayPause = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonPlayPause setFrame:CGRectMake((CGRectGetWidth([view bounds]) - 99.0) / 2 , CGRectGetMaxY([_miscProgress frame]) + 10.0, 99.0, 99.0)];
+    [_buttonPlayPause setFrame:CGRectMake((CGRectGetWidth([view bounds]) - 99.0) / 2 , CGRectGetMaxY([_miscLabel frame]) + 10.0, 99.0, 99.0)];
     [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
     [_buttonPlayPause addTarget:self action:@selector(_actionPlayPause:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonPlayPause];
@@ -119,11 +128,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [_buttonPrevious addTarget:self action:@selector(_actionPrevious:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonPrevious];
     
-    _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_buttonPlayPause frame]) + 20.0, CGRectGetWidth([view bounds]) - 40.0, 40.0)];
-    [_progressSlider addTarget:self action:@selector(_actionSliderProgress:) forControlEvents:UIControlEventValueChanged];
-    [view addSubview:_progressSlider];
-    
-    _volumeSlider = [[UISlider alloc] initWithFrame:CGRectMake(20.0, CGRectGetMinY([_progressSlider frame]) + 30.0, CGRectGetWidth([view bounds]) - 40.0, 40.0)];
+    _volumeSlider = [[UISlider alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_buttonPlayPause frame]) + 10.0, CGRectGetWidth([view bounds]) - 40.0, 40.0)];
     [_volumeSlider addTarget:self action:@selector(_actionSliderVolume:) forControlEvents:UIControlEventValueChanged];
     [view addSubview:_volumeSlider];
 
@@ -133,9 +138,15 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
                                        forState:UIControlStateNormal];
     [[UISlider appearance] setThumbImage:[UIImage imageNamed:@"position"]
                                 forState:UIControlStateNormal];
-    
-    if ([[UIDevice currentDevice].systemVersion floatValue] > 6.1f) {
-        _miscProgress.tintColor = [UIColor blackColor];
+    /*
+    [[UIProgressView appearance] setProgressTintColor:[UIColor whiteColor]];
+    [[UIProgressView appearance] setTrackTintColor:UIColorFromRGB(0x136f8a)];
+    */
+    if ([[UIDevice currentDevice].systemVersion floatValue] < 7.0f) {
+        [_titleLabel setBackgroundColor:[UIColor clearColor]];
+        [_artistLabel setBackgroundColor:[UIColor clearColor]];
+        [_miscLabel setBackgroundColor:[UIColor clearColor]];
+        [_statusLabel setBackgroundColor:[UIColor clearColor]];
     }
     
     [self setView:view];
@@ -181,15 +192,14 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 - (void)_timerAction:(id)timer {
     if ([_streamer duration] == 0.0) {
         [_progressSlider setValue:0.0f animated:NO];
-    }
-    else {
-        int minutes = (int) floor([_streamer duration] / 60);
-        int seconds = [_streamer duration] - (minutes * 60);
+    } else {
+        //int minutes = (int) floor([_streamer duration] / 60);
+        //int seconds = [_streamer duration] - (minutes * 60);
         
         int currentMinutes = (int) floor([_streamer currentTime] / 60);
         int currentSeconds = [_streamer currentTime] - (currentMinutes * 60);
 
-        [_miscLabel setText:[NSString stringWithFormat:@"%d:%02d - %d:%02d", currentMinutes, currentSeconds, minutes, seconds]];
+        [_miscLabel setText:[NSString stringWithFormat:@"%d:%02d", currentMinutes, currentSeconds]];
         [_progressSlider setValue:[_streamer currentTime] / [_streamer duration] animated:YES];
     }
 }
