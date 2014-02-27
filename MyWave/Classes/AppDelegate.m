@@ -1,6 +1,6 @@
 //
 //  AppDelegate.m
-//  TheSameWave
+//  MySameWave
 //
 //  Created by Дмитрий on 19.04.13.
 //  Copyright (c) 2013 SameWave. All rights reserved.

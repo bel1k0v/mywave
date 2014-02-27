@@ -15,6 +15,7 @@
 #import "NSString+HTML.h"
 #import "DBManager.h"
 #import "AFHTTPRequestOperation.h"
+#import <MediaPlayer/MediaPlayer.h>
 
 static void *kStatusKVOKey = &kStatusKVOKey;
 static void *kDurationKVOKey = &kDurationKVOKey;
@@ -175,6 +176,14 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [_streamer addObserver:self forKeyPath:@"bufferingRatio" options:NSKeyValueObservingOptionNew context:kBufferingRatioKVOKey];
     
     [_streamer play];
+    
+    if ([MPNowPlayingInfoCenter class]) {
+        NSArray *keys = [NSArray arrayWithObjects:MPMediaItemPropertyTitle, MPMediaItemPropertyArtist, MPMediaItemPropertyPlaybackDuration, MPNowPlayingInfoPropertyPlaybackRate, nil];
+        NSArray *values = [NSArray arrayWithObjects:track.title, track.artist, track.duration, [NSNumber numberWithInt:1], nil];
+        NSDictionary *currentlyPlayingTrackInfo = [NSDictionary dictionaryWithObjects:values forKeys:keys];
+        
+        [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = currentlyPlayingTrackInfo;
+    }
     
     [self _updateBufferingStatus];
     [self _setupHintForStreamer];
@@ -352,8 +361,6 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 }
 
 - (void)_actionDownload:(id)sender {
-    [sender setEnabled:NO];
-    
     Track *track = [_tracks objectAtIndex:_currentTrackIndex];
     DBManager *db = [DBManager getSharedInstance];
     if ([db findByTitle:track.title andArtist:track.artist] != nil) {
@@ -363,7 +370,6 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
                                               cancelButtonTitle:@"Ok"
                                               otherButtonTitles:nil];
         [alert show];
-        [sender setEnabled:YES];
     } else {
         NSURL *url = track.audioFileURL;
         NSString *filename = [NSString stringWithFormat:@"%@ - %@.mp3", track.artist, track.title];
@@ -374,7 +380,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         operation.outputStream = [NSOutputStream outputStreamToFileAtPath:filepath append:NO];
         
         [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            if ([db saveData:track.artist title:track.title duration:@"undefined" filename:filename]) {
+            if ([db saveData:track.artist title:track.title duration:track.duration filename:filename]) {
                 UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"ОК"
                                                                 message:@"Трек сохранён"
                                                                delegate:nil
@@ -390,7 +396,6 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
                                                   cancelButtonTitle:@"Ok"
                                                   otherButtonTitles:nil];
             [alert show];
-            [sender setEnabled:YES];
         }];
         
         [operation start];

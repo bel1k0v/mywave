@@ -86,6 +86,7 @@
         [track setArtist:[song objectForKey:@"artist"]];
         [track setTitle:[song objectForKey:@"title"]];
         [track setAudioFileURL: (url ? [NSURL URLWithString:[song objectForKey:@"url"]] : [NSURL fileURLWithPath:[song objectForKey:@"url"]])];
+        [track setDuration:[song objectForKey:@"duration"]];
         [allTracks addObject:track];
     }
     
