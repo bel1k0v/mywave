@@ -65,7 +65,7 @@ static sqlite3_stmt *statement = nil;
     {
         NSString *insertSQL = [NSString stringWithFormat:@"insert into mp3 (artist, title, duration, filename) values(\"%@\", \"%@\", \"%@\",  \"%@\")", artist, title, duration, filename];
         const char *insert_stmt = [insertSQL UTF8String];
-        sqlite3_prepare_v2(database, insert_stmt,-1, &statement, NULL);
+        sqlite3_prepare_v2(database, insert_stmt, -1, &statement, NULL);
         if (sqlite3_step(statement) == SQLITE_DONE)
         {
             return YES;
@@ -76,7 +76,8 @@ static sqlite3_stmt *statement = nil;
             return NO;
         }
         
-        sqlite3_reset(statement);
+        sqlite3_finalize(statement);
+        sqlite3_close(database);
     }
     
     return NO;
@@ -143,6 +144,7 @@ static sqlite3_stmt *statement = nil;
             
             return resultArray;
         }
+        
         sqlite3_close(database);
     }
     return nil;

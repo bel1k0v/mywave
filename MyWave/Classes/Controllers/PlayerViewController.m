@@ -98,11 +98,13 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [_miscLabel setTextAlignment:NSTextAlignmentCenter];
     [_miscLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_miscLabel];
+    
     /*
     _miscProgress = [[UIProgressView alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY([_miscLabel frame]) + 10.0, 280, 3)];
     _miscProgress.progress = 0.0f;
     [view addSubview:_miscProgress];
     */
+    
     _buttonPlayPause = [UIButton buttonWithType:UIButtonTypeSystem];
     [_buttonPlayPause setFrame:CGRectMake((CGRectGetWidth([view bounds]) - 99.0) / 2 , CGRectGetMaxY([_miscLabel frame]) + 10.0, 99.0, 99.0)];
     [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
@@ -152,7 +154,16 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     
     [self setView:view];
 }
-
+- (void) setNowPlayingTrack:(Track *)track
+{
+    if ([MPNowPlayingInfoCenter class]) {
+        NSArray *keys = [NSArray arrayWithObjects:MPMediaItemPropertyTitle, MPMediaItemPropertyArtist, MPMediaItemPropertyPlaybackDuration, MPNowPlayingInfoPropertyPlaybackRate, nil];
+        NSArray *values = [NSArray arrayWithObjects:track.title, track.artist, track.duration, [NSNumber numberWithInt:1], nil];
+        NSDictionary *currentlyPlayingTrackInfo = [NSDictionary dictionaryWithObjects:values forKeys:keys];
+        
+        [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = currentlyPlayingTrackInfo;
+    }
+}
 - (void)_cancelStreamer {
     if (_streamer != nil) {
         [_streamer pause];
@@ -176,14 +187,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [_streamer addObserver:self forKeyPath:@"bufferingRatio" options:NSKeyValueObservingOptionNew context:kBufferingRatioKVOKey];
     
     [_streamer play];
-    
-    if ([MPNowPlayingInfoCenter class]) {
-        NSArray *keys = [NSArray arrayWithObjects:MPMediaItemPropertyTitle, MPMediaItemPropertyArtist, MPMediaItemPropertyPlaybackDuration, MPNowPlayingInfoPropertyPlaybackRate, nil];
-        NSArray *values = [NSArray arrayWithObjects:track.title, track.artist, track.duration, [NSNumber numberWithInt:1], nil];
-        NSDictionary *currentlyPlayingTrackInfo = [NSDictionary dictionaryWithObjects:values forKeys:keys];
-        
-        [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = currentlyPlayingTrackInfo;
-    }
+    [self setNowPlayingTrack:track];
     
     [self _updateBufferingStatus];
     [self _setupHintForStreamer];
@@ -204,7 +208,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     } else {
         //int minutes = (int) floor([_streamer duration] / 60);
         //int seconds = [_streamer duration] - (minutes * 60);
-        
+
         int currentMinutes = (int) floor([_streamer currentTime] / 60);
         int currentSeconds = [_streamer currentTime] - (currentMinutes * 60);
 
@@ -216,31 +220,31 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 - (void)_updateStatus {
     switch ([_streamer status]) {
         case DOUAudioStreamerPlaying:
-            [_statusLabel setText:@"playing"];
+            [_statusLabel setText:@"Playing"];
             [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
             break;
             
         case DOUAudioStreamerPaused:
-            [_statusLabel setText:@"paused"];
+            [_statusLabel setText:@"Paused"];
             [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
             break;
             
         case DOUAudioStreamerIdle:
-            [_statusLabel setText:@"idle"];
+            [_statusLabel setText:@"Idle"];
             [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
             break;
             
         case DOUAudioStreamerFinished:
-            [_statusLabel setText:@"finished"];
+            [_statusLabel setText:@"Finished"];
             [self _actionNext:nil];
             break;
             
         case DOUAudioStreamerBuffering:
-            [_statusLabel setText:@"buffering"];
+            [_statusLabel setText:@"Buffering"];
             break;
             
         case DOUAudioStreamerError:
-            [_statusLabel setText:@"error"];
+            [_statusLabel setText:@"Error"];
             break;
     }
 }
@@ -295,10 +299,10 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
                 [self _actionPlayPause:self];
                 break;
             case UIEventSubtypeRemoteControlPlay:
-                [self _actionPlayPause:self];
+                [_streamer play];
                 break;
             case UIEventSubtypeRemoteControlPause:
-                [self _actionPlayPause:self];
+                [_streamer pause];
             case UIEventSubtypeRemoteControlStop:
                 [self _actionStop:self];
                 break;
@@ -379,10 +383,28 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         NSString *filepath = [[paths objectAtIndex:0] stringByAppendingPathComponent:filename];
         operation.outputStream = [NSOutputStream outputStreamToFileAtPath:filepath append:NO];
         
+        [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+            float progress = (float)totalBytesRead / totalBytesExpectedToRead;
+            if (progress < 1.0f) {
+                [_statusLabel setText:@"Downloading"];
+            } else if (progress == 1.0f) {
+                [_statusLabel setText:@"Downloaded"];
+            }
+            
+            NSLog(@"%f", progress);
+        }];
+        
         [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            if ([db saveData:track.artist title:track.title duration:track.duration filename:filename]) {
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"ОК"
+            if (YES == [db saveData:track.artist title:track.title duration:track.duration filename:filename]) {
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ok"
                                                                 message:@"Трек сохранён"
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"Ok"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            } else {
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Скачивание отменено"
+                                                                message:@"Произошла ошибка, попробуйте ещё раз"
                                                                delegate:nil
                                                       cancelButtonTitle:@"Ok"
                                                       otherButtonTitles:nil];
