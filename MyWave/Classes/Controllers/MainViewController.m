@@ -15,7 +15,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationItem.title = @"Cвоя Волна" ;
+    self.navigationItem.title = @"My Wave" ;
 }
 
 - (void)didReceiveMemoryWarning

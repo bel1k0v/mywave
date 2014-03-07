@@ -368,8 +368,8 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     Track *track = [_tracks objectAtIndex:_currentTrackIndex];
     DBManager *db = [DBManager getSharedInstance];
     if ([db findByTitle:track.title andArtist:track.artist] != nil) {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Скачивание отменено"
-                                                        message:@"Этот трек уже сохранён"
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning"
+                                                        message:@"You already have this track"
                                                        delegate:nil
                                               cancelButtonTitle:@"Ok"
                                               otherButtonTitles:nil];
@@ -397,14 +397,14 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
             if (YES == [db saveData:track.artist title:track.title duration:track.duration filename:filename]) {
                 UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ok"
-                                                                message:@"Трек сохранён"
+                                                                message:@"Saved"
                                                                delegate:nil
                                                       cancelButtonTitle:@"Ok"
                                                       otherButtonTitles:nil];
                 [alert show];
             } else {
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Скачивание отменено"
-                                                                message:@"Произошла ошибка, попробуйте ещё раз"
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                message:@"Please try again later"
                                                                delegate:nil
                                                       cancelButtonTitle:@"Ok"
                                                       otherButtonTitles:nil];
@@ -412,8 +412,8 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
             }
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             [[NSFileManager defaultManager]removeItemAtPath:filepath error:&error];
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Скачивание отменено"
-                                                            message:@"Произошла ошибка, попробуйте ещё раз"
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                            message:@"Please try again later"
                                                            delegate:nil
                                                   cancelButtonTitle:@"Ok"
                                                   otherButtonTitles:nil];

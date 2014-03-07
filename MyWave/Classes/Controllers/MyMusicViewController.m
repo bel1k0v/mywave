@@ -56,7 +56,7 @@
     [super viewDidLoad];
     [self setupData];
     [self initSearch];
-    self.navigationItem.title = @"Моя Музыка";
+    self.navigationItem.title = @"My Music";
     UIBarButtonItem *cameraItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(back)];
     self.navigationItem.leftBarButtonItem = cameraItem;
 }

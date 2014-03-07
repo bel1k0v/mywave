@@ -55,13 +55,13 @@
         [self.tableView reloadData];
     }
     
-    self.navigationItem.title = @"Вконтакте";
+    self.navigationItem.title = @"VK";
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind
                                                                               target:self
                                                                               action:@selector(back)];
     self.navigationItem.leftBarButtonItem = backItem;
     
-    _loginBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Войти"
+    _loginBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Login"
                                                            style:UIBarButtonItemStylePlain
                                                           target:self
                                                           action:@selector(loginBarButtonItemPressed:)];
@@ -152,9 +152,9 @@
 
 - (void)refreshButtonState {
     if (![_vkInstance isAuthorized])
-        _loginBarButtonItem.title = @"Войти";
+        _loginBarButtonItem.title = @"Login";
     else
-        _loginBarButtonItem.title = @"Выйти";
+        _loginBarButtonItem.title = @"Logout";
 }
 
 #pragma mark - Table view delegate
@@ -211,7 +211,7 @@
         if (cachedData == NULL) {
             cachedData = [_vkInstance searchAudio:searchString];
             if (cachedData != NULL) [searchCache setObject:cachedData forKey:searchString];
-            else cachedData = [[NSArray alloc]init];
+            else cachedData = [NSArray new];
         }
         searchData = [[NSMutableArray alloc]initWithArray:cachedData];
         [self.tableView reloadData];
