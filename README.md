@@ -1,3 +1,2 @@
-Sample iPhone application
+My Wave
 ==
-iphone-vk-streming-player
