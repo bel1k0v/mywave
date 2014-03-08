@@ -383,7 +383,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         NSString *filepath = [[paths objectAtIndex:0] stringByAppendingPathComponent:filename];
         operation.outputStream = [NSOutputStream outputStreamToFileAtPath:filepath append:NO];
         
-        [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        [operation setDownloadProgressBlock:^(NSUInteger bytesRead, NSInteger totalBytesRead, NSInteger totalBytesExpectedToRead) {
             float progress = (float)totalBytesRead / totalBytesExpectedToRead;
             if (progress < 1.0f) {
                 [_statusLabel setText:@"Downloading"];
