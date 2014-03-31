@@ -9,6 +9,9 @@
 #import "MainViewController.h"
 #import "VkMusicViewController.h"
 #import "MyMusicViewController.h"
+#import "JASidePanelController.h"
+#import "UIViewController+JASidePanel.h"
+#import "AppHelper.h"
 
 @implementation MainViewController
 
@@ -23,16 +26,29 @@
     [super didReceiveMemoryWarning];
 }
 
+- (void)_changeViewController:(UIViewController *)controller {
+    UINavigationController *navigationController = [UINavigationController new];
+    if ([[UIDevice currentDevice].systemVersion floatValue] > 6.1f) {
+        [navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    } else {
+        navigationController.navigationBar.tintColor = UIColorFromRGB(0x18AAD6);
+    }
+
+    [navigationController setViewControllers:@[controller]];
+    self.sidePanelController.centerPanel = navigationController;
+}
+
 - (void)vkMusicButtonPressed:(id)sender
 {
     VkMusicViewController* musicViewController = [VkMusicViewController new];
-    [self.navigationController pushViewController:musicViewController animated:YES];
+    [self _changeViewController:musicViewController];
+
 }
 
 - (void)myMusicButtonPressed:(id)sender
 {
-    MyMusicViewController* downloadedViewController = [MyMusicViewController new];
-    [self.navigationController pushViewController:downloadedViewController animated:YES];
+    MyMusicViewController* musicViewController = [MyMusicViewController new];
+    [self _changeViewController:musicViewController];
 }
 
 @end

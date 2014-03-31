@@ -13,7 +13,6 @@
 #import "NSString+HTML.h"
 #import "Track+Provider.h"
 #import "DBManager.h"
-#import "GTScrollNavigationBar.h"
 
 @implementation MyMusicViewController
 @synthesize data = _data;
@@ -56,32 +55,8 @@
     [super viewDidLoad];
     [self setupData];
     [self initSearch];
-    self.navigationItem.title = @"My Music";
-    UIBarButtonItem *cameraItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(back)];
-    self.navigationItem.leftBarButtonItem = cameraItem;
+    self.navigationItem.title = @"My Wave";
 }
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    self.navigationController.scrollNavigationBar.scrollView = self.tableView;
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    self.navigationController.scrollNavigationBar.scrollView = nil;
-}
-
-- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView
-{
-    [self.navigationController.scrollNavigationBar resetToDefaultPosition:YES];
-}
-
-- (void) back {
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

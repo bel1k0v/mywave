@@ -1,6 +1,6 @@
 //
 //  AppDelegate.m
-//  MySameWave
+//  MyWave
 //
 //  Created by Дмитрий on 19.04.13.
 //  Copyright (c) 2013 SameWave. All rights reserved.
@@ -8,10 +8,9 @@
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
-#import "GTScrollNavigationBar.h"
-
-#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
-
+#import "MyMusicViewController.h"
+#import "SidePanelController.h"
+#import "AppHelper.h"
 
 @implementation AppDelegate
 
@@ -19,31 +18,30 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     MainViewController *mainViewController = [[MainViewController alloc] initWithNibName:@"MainViewController" bundle:nil];
-    self.navigationController = [[UINavigationController alloc] initWithNavigationBarClass:[GTScrollNavigationBar class]
-                                                                              toolbarClass:nil];
-    [self.navigationController setViewControllers:@[mainViewController] animated:YES];
-    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    MyMusicViewController *musicViewController = [[MyMusicViewController alloc]initWithNibName:@"MyMusicViewController" bundle:nil];
     
+    UINavigationController *navigationController = [UINavigationController new];
+    [navigationController setViewControllers:@[musicViewController] animated:YES];
+    [navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     
     CGSize shadowOffset = CGSizeMake(0, 2);
     NSShadow *shadow = [[NSShadow alloc] init];
     shadow.shadowColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8];
     shadow.shadowOffset = shadowOffset;
     NSDictionary *barButtorTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            [UIColor whiteColor], NSForegroundColorAttributeName,
-                                            shadow, NSShadowAttributeName,
-                                            [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:14.0], NSFontAttributeName, nil];
+                                             [UIColor whiteColor], NSForegroundColorAttributeName,
+                                             shadow, NSShadowAttributeName,
+                                             [UIFont fontWithName:BaseFont size:14.0], NSFontAttributeName, nil];
     
     if ([[UIDevice currentDevice].systemVersion floatValue] > 6.1f) {
-        
         NSDictionary *textAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                         [UIColor whiteColor], NSForegroundColorAttributeName,
                                         shadow, NSShadowAttributeName,
-                                        [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:21.0], NSFontAttributeName, nil];
+                                        [UIFont fontWithName:BaseFont size:21.0], NSFontAttributeName, nil];
         [[UINavigationBar appearance] setTitleTextAttributes: textAttributes];
         [[UINavigationBar appearance] setBarTintColor:UIColorFromRGB(0x18AAD6)];
     } else { // Less than 6.1
-        self.navigationController.navigationBar.tintColor = UIColorFromRGB(0x18AAD6);
+        navigationController.navigationBar.tintColor = UIColorFromRGB(0x18AAD6);
         // Customize the title text for *all* UINavigationBars
         [[UINavigationBar appearance] setTitleTextAttributes:
          [NSDictionary dictionaryWithObjectsAndKeys:
@@ -53,13 +51,19 @@
           UITextAttributeTextShadowColor,
           [NSValue valueWithUIOffset:UIOffsetMake(0, 2)],
           UITextAttributeTextShadowOffset,
-          [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:21.0],
+          [UIFont fontWithName:BaseFont size:21.0],
           UITextAttributeFont,
           nil]];
     }
-    [[UIBarButtonItem appearance] setTitleTextAttributes:barButtorTextAttributes forState:UIControlStateNormal];
 
-    self.window.rootViewController = self.navigationController;
+    [[UIBarButtonItem appearance] setTitleTextAttributes:barButtorTextAttributes forState:UIControlStateNormal];
+    
+    self.viewController = [[SidePanelController alloc]init];
+    self.viewController.shouldDelegateAutorotateToVisiblePanel = NO;
+    self.viewController.leftPanel = mainViewController;
+    self.viewController.centerPanel = navigationController;
+    
+    self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
     return YES;
 }

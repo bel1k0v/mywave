@@ -16,6 +16,8 @@
 		683F31E718B2ACBE00D37C05 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 683F31E618B2ACBE00D37C05 /* Track.m */; };
 		683F31EA18B2AD1000D37C05 /* Track+Provider.m in Sources */ = {isa = PBXBuildFile; fileRef = 683F31E918B2AD1000D37C05 /* Track+Provider.m */; };
 		683F31F018B61D1500D37C05 /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 683F31EF18B61D1500D37C05 /* NSString+HTML.m */; };
+		68695FA918E94D100033E3E1 /* AppHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 68695FA818E94D100033E3E1 /* AppHelper.m */; };
+		68695FAC18E956470033E3E1 /* SidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68695FAB18E956470033E3E1 /* SidePanelController.m */; };
 		68787D901826533700FC3FFF /* PlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787D8E1826533700FC3FFF /* PlayerViewController.m */; };
 		68787D9218265B3D00FC3FFF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED981417270D190009C2F6 /* AVFoundation.framework */; };
 		68787D9418265B7C00FC3FFF /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68787D9318265B7C00FC3FFF /* CoreMedia.framework */; };
@@ -62,6 +64,10 @@
 		683F31E918B2AD1000D37C05 /* Track+Provider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Track+Provider.m"; sourceTree = "<group>"; };
 		683F31EE18B61D1500D37C05 /* NSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+HTML.h"; sourceTree = "<group>"; };
 		683F31EF18B61D1500D37C05 /* NSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+HTML.m"; sourceTree = "<group>"; };
+		68695FA718E94D100033E3E1 /* AppHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppHelper.h; sourceTree = "<group>"; };
+		68695FA818E94D100033E3E1 /* AppHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppHelper.m; sourceTree = "<group>"; };
+		68695FAA18E956470033E3E1 /* SidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidePanelController.h; sourceTree = "<group>"; };
+		68695FAB18E956470033E3E1 /* SidePanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidePanelController.m; sourceTree = "<group>"; };
 		68787D8D1826533700FC3FFF /* PlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerViewController.h; sourceTree = "<group>"; };
 		68787D8E1826533700FC3FFF /* PlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerViewController.m; sourceTree = "<group>"; };
 		68787D9318265B7C00FC3FFF /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -164,6 +170,8 @@
 				68787EE11828368600FC3FFF /* MyMusicViewController.m */,
 				68787D8D1826533700FC3FFF /* PlayerViewController.h */,
 				68787D8E1826533700FC3FFF /* PlayerViewController.m */,
+				68695FAA18E956470033E3E1 /* SidePanelController.h */,
+				68695FAB18E956470033E3E1 /* SidePanelController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -268,6 +276,8 @@
 				688453E81721824E0092260B /* Vkontakte */,
 				688453D4172182260092260B /* AppDelegate.h */,
 				688453D5172182260092260B /* AppDelegate.m */,
+				68695FA718E94D100033E3E1 /* AppHelper.h */,
+				68695FA818E94D100033E3E1 /* AppHelper.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -401,6 +411,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				683F31EA18B2AD1000D37C05 /* Track+Provider.m in Sources */,
+				68695FAC18E956470033E3E1 /* SidePanelController.m in Sources */,
 				68787EB21827A8BC00FC3FFF /* DBManager.m in Sources */,
 				688453D2172182260092260B /* main.m in Sources */,
 				688453D6172182260092260B /* AppDelegate.m in Sources */,
@@ -414,6 +425,7 @@
 				68787EE5182836AE00FC3FFF /* MainViewController.m in Sources */,
 				68787EE21828368600FC3FFF /* MyMusicViewController.m in Sources */,
 				68787D901826533700FC3FFF /* PlayerViewController.m in Sources */,
+				68695FA918E94D100033E3E1 /* AppHelper.m in Sources */,
 				68A3D7A518A2B2FF00E9C026 /* NSString+URLEncoding.m in Sources */,
 				6833F80E184A958A00C156AB /* SongCell.m in Sources */,
 			);

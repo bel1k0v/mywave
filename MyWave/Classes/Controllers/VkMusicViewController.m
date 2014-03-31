@@ -12,7 +12,6 @@
 #import "NSString+Gender.h"
 #import "NSString+HTML.h"
 #import "Track+Provider.h"
-#import "GTScrollNavigationBar.h"
 
 @implementation VkMusicViewController
 @synthesize data = _data;
@@ -56,11 +55,6 @@
     }
     
     self.navigationItem.title = @"VK";
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind
-                                                                              target:self
-                                                                              action:@selector(back)];
-    self.navigationItem.leftBarButtonItem = backItem;
-    
     _loginBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Login"
                                                            style:UIBarButtonItemStylePlain
                                                           target:self
@@ -70,30 +64,8 @@
     [self initSearch];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    self.navigationController.scrollNavigationBar.scrollView = self.tableView;
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    
-    self.navigationController.scrollNavigationBar.scrollView = nil;
-}
-
-- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView
-{
-    [self.navigationController.scrollNavigationBar resetToDefaultPosition:YES];
-}
-
 - (void) viewDidAppear:(BOOL)animated {
     [self.tableView reloadData];
-}
-
-- (void) back {
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)loginBarButtonItemPressed:(id)sender {

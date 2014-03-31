@@ -151,7 +151,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         [_miscLabel setBackgroundColor:[UIColor clearColor]];
         [_statusLabel setBackgroundColor:[UIColor clearColor]];
     }
-    
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
     [self setView:view];
 }
 - (void) setNowPlayingTrack:(Track *)track
@@ -277,6 +277,10 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     }
 }
 
+- (BOOL) canBecomeFirstResponder {
+    return YES;
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -286,8 +290,11 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [_volumeSlider setValue:[DOUAudioStreamer volume]];
 
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+
     if ([self canBecomeFirstResponder]) {
         [self becomeFirstResponder];
+    } else {
+        NSLog(@"Cannot become first responder");
     }
 }
 
