@@ -8,18 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "Vkontakte.h"
+#import "TracksTableViewController.h"
 
-@interface VkMusicViewController : UITableViewController<VkontakteDelegate, UISearchBarDelegate, UISearchDisplayDelegate>
+@interface VkMusicViewController : TracksTableViewController<VkontakteDelegate, UISearchBarDelegate, UISearchDisplayDelegate>
 {
-    NSMutableArray *searchData;
-    UISearchBar *searchBar;
-    UISearchDisplayController *searchDisplayController;
     NSCache *searchCache;
-    
     Vkontakte *_vkInstance;
     UIBarButtonItem *_loginBarButtonItem;
 }
-
-@property (nonatomic, strong) NSArray *data;
 
 @end

@@ -18,6 +18,7 @@
 		683F31F018B61D1500D37C05 /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 683F31EF18B61D1500D37C05 /* NSString+HTML.m */; };
 		68695FA918E94D100033E3E1 /* AppHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 68695FA818E94D100033E3E1 /* AppHelper.m */; };
 		68695FAC18E956470033E3E1 /* SidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68695FAB18E956470033E3E1 /* SidePanelController.m */; };
+		68695FAF18E981880033E3E1 /* TracksTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68695FAE18E981880033E3E1 /* TracksTableViewController.m */; };
 		68787D901826533700FC3FFF /* PlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787D8E1826533700FC3FFF /* PlayerViewController.m */; };
 		68787D9218265B3D00FC3FFF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED981417270D190009C2F6 /* AVFoundation.framework */; };
 		68787D9418265B7C00FC3FFF /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68787D9318265B7C00FC3FFF /* CoreMedia.framework */; };
@@ -68,6 +69,8 @@
 		68695FA818E94D100033E3E1 /* AppHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppHelper.m; sourceTree = "<group>"; };
 		68695FAA18E956470033E3E1 /* SidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidePanelController.h; sourceTree = "<group>"; };
 		68695FAB18E956470033E3E1 /* SidePanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidePanelController.m; sourceTree = "<group>"; };
+		68695FAD18E981880033E3E1 /* TracksTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TracksTableViewController.h; sourceTree = "<group>"; };
+		68695FAE18E981880033E3E1 /* TracksTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TracksTableViewController.m; sourceTree = "<group>"; };
 		68787D8D1826533700FC3FFF /* PlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerViewController.h; sourceTree = "<group>"; };
 		68787D8E1826533700FC3FFF /* PlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerViewController.m; sourceTree = "<group>"; };
 		68787D9318265B7C00FC3FFF /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -172,6 +175,8 @@
 				68787D8E1826533700FC3FFF /* PlayerViewController.m */,
 				68695FAA18E956470033E3E1 /* SidePanelController.h */,
 				68695FAB18E956470033E3E1 /* SidePanelController.m */,
+				68695FAD18E981880033E3E1 /* TracksTableViewController.h */,
+				68695FAE18E981880033E3E1 /* TracksTableViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -412,6 +417,7 @@
 			files = (
 				683F31EA18B2AD1000D37C05 /* Track+Provider.m in Sources */,
 				68695FAC18E956470033E3E1 /* SidePanelController.m in Sources */,
+				68695FAF18E981880033E3E1 /* TracksTableViewController.m in Sources */,
 				68787EB21827A8BC00FC3FFF /* DBManager.m in Sources */,
 				688453D2172182260092260B /* main.m in Sources */,
 				688453D6172182260092260B /* AppDelegate.m in Sources */,

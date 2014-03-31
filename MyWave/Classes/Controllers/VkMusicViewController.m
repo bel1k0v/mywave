@@ -7,14 +7,9 @@
 //
 
 #import "VkMusicViewController.h"
-#import "PlayerViewController.h"
-#import "SongCell.h"
 #import "NSString+Gender.h"
-#import "NSString+HTML.h"
-#import "Track+Provider.h"
 
 @implementation VkMusicViewController
-@synthesize data = _data;
 
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
@@ -26,7 +21,7 @@
 }
 
 - (void)initSearch {
-    searchData = [NSMutableArray arrayWithCapacity:[_data count]];
+    searchData = [NSMutableArray arrayWithCapacity:[self->tracks count]];
     searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
     
     searchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
@@ -37,8 +32,8 @@
     self.tableView.tableHeaderView = searchBar;
 }
 - (void)setupData {
-    _data = nil;
-    _data = [self getSongs];
+    self->tracks = nil;
+    self->tracks = [self getSongs];
 }
 
 -(NSArray *)getSongs {
@@ -75,6 +70,10 @@
         [_vkInstance logout];
 }
 
+- (BOOL)isTracksRemote {
+    return YES;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
@@ -89,37 +88,8 @@
     if (tableView == self.searchDisplayController.searchResultsTableView) {
         return [searchData count];
     } else {
-        return [_data count];
+        return [self->tracks count];
     }
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"SongCell";
-    SongCell *cell = (SongCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"SongCell" owner:nil options:nil];
-        for (id currentObject in topLevelObjects){
-            if ([currentObject isKindOfClass:[UITableViewCell class]]){
-                cell = (SongCell *) currentObject;
-                break;
-            }
-        }
-    }
-    NSDictionary *song = [_data objectAtIndex:indexPath.row];
-    if (tableView == self.searchDisplayController.searchResultsTableView) {
-        song = [searchData objectAtIndex:indexPath.row];
-    }
-    
-    cell.titleLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"title"]];
-    cell.artistLabel.text = [NSString htmlEntityDecode:[song objectForKey:@"artist"]];
-    
-    double duration = [[song objectForKey:@"duration"]doubleValue];
-    int minutes = (int) floor(duration / 60);
-    int seconds = duration - (minutes * 60);
-    NSString *durationLabel = [NSString stringWithFormat:@"%d:%02d", minutes, seconds];
-    cell.durationLabel.text = durationLabel;
-    
-    return cell;
 }
 
 - (void)refreshButtonState {
@@ -127,23 +97,6 @@
         _loginBarButtonItem.title = @"Login";
     else
         _loginBarButtonItem.title = @"Logout";
-}
-
-#pragma mark - Table view delegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    PlayerViewController *playerViewController = [PlayerViewController new];
-    NSArray *songs = [NSArray new];
-    if (tableView == self.searchDisplayController.searchResultsTableView) {
-        songs = searchData;
-    } else {
-        songs = _data;
-    }
-    [playerViewController setCurrentTrackIndex:indexPath.row];
-    [playerViewController setTracks:[Track tracksWithArray:songs url:YES]];
-    [playerViewController setTracksFromRemote:YES];
-    
-    [self.navigationController pushViewController:playerViewController animated:YES];
 }
 
 #pragma mark - VkontakteDelegate
@@ -170,7 +123,6 @@
     [self setupData];
     [self.tableView reloadData];
 }
-
 
 - (void)vkontakteDidFinishLogOut:(Vkontakte *)vkontakte {
     [self refreshButtonState];

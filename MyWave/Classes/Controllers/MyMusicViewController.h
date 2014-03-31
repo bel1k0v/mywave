@@ -7,13 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TracksTableViewController.h"
 
-@interface MyMusicViewController : UITableViewController <UISearchBarDelegate, UISearchDisplayDelegate>
-{
-    NSMutableArray *searchData;
-    UISearchBar *searchBar;
-    UISearchDisplayController *searchDisplayController;
-}
+@interface MyMusicViewController : TracksTableViewController<UISearchBarDelegate, UISearchDisplayDelegate>
 
-@property (nonatomic, strong) NSArray *data;
 @end
