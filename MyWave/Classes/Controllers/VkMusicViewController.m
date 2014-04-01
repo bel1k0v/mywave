@@ -9,6 +9,9 @@
 #import "VkMusicViewController.h"
 #import "NSString+Gender.h"
 
+#define MinSearchLength 2
+#define MaxSearchLength 25
+
 @implementation VkMusicViewController
 
 - (id)initWithStyle:(UITableViewStyle)style {
@@ -31,6 +34,7 @@
     
     self.tableView.tableHeaderView = searchBar;
 }
+
 - (void)setupData {
     self->tracks = nil;
     self->tracks = [self getSongs];
@@ -39,6 +43,7 @@
 -(NSArray *)getSongs {
     return ((BOOL)[_vkInstance isAuthorized] != FALSE) ? [_vkInstance getUserAudio] : [[NSArray alloc]init];
 }
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     _vkInstance = [Vkontakte sharedInstance];
@@ -49,18 +54,19 @@
         [self.tableView reloadData];
     }
     
+    [self setUpNavigationBar];
+    [self refreshButtonState];
+    [self initSearch];
+}
+
+- (void) setUpNavigationBar
+{
     self.navigationItem.title = @"VK";
     _loginBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Login"
                                                            style:UIBarButtonItemStylePlain
                                                           target:self
                                                           action:@selector(loginBarButtonItemPressed:)];
     self.navigationItem.rightBarButtonItem = _loginBarButtonItem;
-    [self refreshButtonState];
-    [self initSearch];
-}
-
-- (void) viewDidAppear:(BOOL)animated {
-    [self.tableView reloadData];
 }
 
 - (IBAction)loginBarButtonItemPressed:(id)sender {
@@ -72,24 +78,6 @@
 
 - (BOOL)isTracksRemote {
     return YES;
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (tableView == self.searchDisplayController.searchResultsTableView) {
-        return [searchData count];
-    } else {
-        return [self->tracks count];
-    }
 }
 
 - (void)refreshButtonState {
@@ -130,7 +118,7 @@
 
 #pragma mark - Search display delegate
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
-    if (searchString.length > 3 && searchString.length < 25) {
+    if (searchString.length > MinSearchLength && searchString.length < MaxSearchLength) {
         NSArray *cachedData = [searchCache objectForKey:searchString];
         if (cachedData == NULL) {
             cachedData = [_vkInstance searchAudio:searchString];

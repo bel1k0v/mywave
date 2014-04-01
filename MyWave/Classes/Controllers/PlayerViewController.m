@@ -6,8 +6,6 @@
 //  Copyright (c) 2013 MyWave. All rights reserved.
 //
 
-#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
-
 #import "PlayerViewController.h"
 #import "DOUAudioStreamer.h"
 #import "DOUAudioStreamer+Options.h"
@@ -16,6 +14,7 @@
 #import "DBManager.h"
 #import "AFHTTPRequestOperation.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "AppHelper.h"
 
 static void *kStatusKVOKey = &kStatusKVOKey;
 static void *kDurationKVOKey = &kDurationKVOKey;
@@ -60,7 +59,6 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     gradient.colors = [NSArray arrayWithObjects:(id)[UIColorFromRGB(0xF8F8F8) CGColor], (id)[UIColorFromRGB(0x18AAD6) CGColor], nil];
     [view.layer insertSublayer:gradient atIndex:0];
     */
-    NSString *labelFontName = @"HelveticaNeue-CondensedBlack";
     
     CGFloat topPoint = 34.0;
     if ([[UIDevice currentDevice].systemVersion floatValue] > 6.1f) {
@@ -68,21 +66,21 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     }
 
     _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, topPoint, CGRectGetWidth([view bounds]) - 40, 30.0)];
-    [_titleLabel setFont:[UIFont fontWithName:labelFontName size:18.0]];
+    [_titleLabel setFont:[UIFont fontWithName:BaseFont size:18.0]];
     [_titleLabel setTextColor:[UIColor blackColor]];
     [_titleLabel setTextAlignment:NSTextAlignmentCenter];
     [_titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_titleLabel];
     
     _artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_titleLabel frame]) + 10.0, CGRectGetWidth([view bounds]) - 40, 30.0)];
-    [_artistLabel setFont:[UIFont fontWithName:labelFontName size:16.0]];
+    [_artistLabel setFont:[UIFont fontWithName:BaseFont size:16.0]];
     [_artistLabel setTextColor:[UIColor blackColor]];
     [_artistLabel setTextAlignment:NSTextAlignmentCenter];
     [_artistLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_artistLabel];
 
     _statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_artistLabel frame]) + 10.0, CGRectGetWidth([view bounds]) - 40, 30.0)];
-    [_statusLabel setFont:[UIFont fontWithName:labelFontName size:14.0]];
+    [_statusLabel setFont:[UIFont fontWithName:BaseFont size:14.0]];
     [_statusLabel setTextColor:[UIColor darkGrayColor]];
     [_statusLabel setTextAlignment:NSTextAlignmentCenter];
     [_statusLabel setLineBreakMode:NSLineBreakByTruncatingTail];
@@ -93,7 +91,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [view addSubview:_progressSlider];
     
     _miscLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_progressSlider frame]) + 8.0, CGRectGetWidth([view bounds]) - 40, 20.0)];
-    [_miscLabel setFont:[UIFont fontWithName:labelFontName size:10.0]];
+    [_miscLabel setFont:[UIFont fontWithName:BaseFont size:10.0]];
     [_miscLabel setTextColor:[UIColor darkGrayColor]];
     [_miscLabel setTextAlignment:NSTextAlignmentCenter];
     [_miscLabel setLineBreakMode:NSLineBreakByTruncatingTail];
@@ -145,6 +143,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [[UIProgressView appearance] setProgressTintColor:[UIColor whiteColor]];
     [[UIProgressView appearance] setTrackTintColor:UIColorFromRGB(0x136f8a)];
     */
+    
     if ([[UIDevice currentDevice].systemVersion floatValue] < 7.0f) {
         [_titleLabel setBackgroundColor:[UIColor clearColor]];
         [_artistLabel setBackgroundColor:[UIColor clearColor]];

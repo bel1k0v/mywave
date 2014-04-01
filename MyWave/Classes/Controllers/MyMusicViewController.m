@@ -53,23 +53,9 @@
     self.navigationItem.title = @"My Wave";
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-#pragma mark - Table view data source
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (tableView == self.searchDisplayController.searchResultsTableView) {
-        return [searchData count];
-    } else {
-        return [self->tracks count];
-    }
-}
-
 #pragma mark - Table view delegate
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
+    if (editingStyle == UITableViewCellEditingStyleDelete) { // Delete track
         NSDictionary *song = [self->tracks objectAtIndex:indexPath.row];
         if (tableView == self.searchDisplayController.searchResultsTableView) {
             song = [searchData objectAtIndex:indexPath.row];
