@@ -10,11 +10,12 @@
 #import "Vkontakte.h"
 #import "TracksTableViewController.h"
 
-@interface VkMusicViewController : TracksTableViewController<VkontakteDelegate, UISearchBarDelegate, UISearchDisplayDelegate>
+@interface VkMusicViewController : TracksTableViewController
 {
+    Vkontakte *_vk;
     NSCache *searchCache;
-    Vkontakte *_vkInstance;
-    UIBarButtonItem *_loginBarButtonItem;
 }
+
+- (void) setVk:(Vkontakte *)vk;
 
 @end

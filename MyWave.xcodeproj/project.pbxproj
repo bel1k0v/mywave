@@ -10,7 +10,6 @@
 		35FCAAB96D754E878723214C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FD2D23D6CB8649B98A0835DC /* libPods.a */; };
 		682CD8E5184E7D0C006000E6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 682CD8E4184E7D0C006000E6 /* Images.xcassets */; };
 		6833F80E184A958A00C156AB /* SongCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6833F80C184A958A00C156AB /* SongCell.m */; };
-		6833F80F184A958A00C156AB /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6833F80D184A958A00C156AB /* MainViewController.xib */; };
 		6833F94F184C93CD00C156AB /* SongCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6833F94E184C93CD00C156AB /* SongCell.xib */; };
 		6838F67B18535213005DB7BF /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6838F67A18535213005DB7BF /* libz.dylib */; };
 		683F31E718B2ACBE00D37C05 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 683F31E618B2ACBE00D37C05 /* Track.m */; };
@@ -56,7 +55,6 @@
 		682CD8E4184E7D0C006000E6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6833F80B184A958A00C156AB /* SongCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongCell.h; sourceTree = "<group>"; };
 		6833F80C184A958A00C156AB /* SongCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongCell.m; sourceTree = "<group>"; };
-		6833F80D184A958A00C156AB /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
 		6833F94E184C93CD00C156AB /* SongCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SongCell.xib; sourceTree = "<group>"; };
 		6838F67A18535213005DB7BF /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		683F31E518B2ACBE00D37C05 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
@@ -71,6 +69,7 @@
 		68695FAB18E956470033E3E1 /* SidePanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidePanelController.m; sourceTree = "<group>"; };
 		68695FAD18E981880033E3E1 /* TracksTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TracksTableViewController.h; sourceTree = "<group>"; };
 		68695FAE18E981880033E3E1 /* TracksTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TracksTableViewController.m; sourceTree = "<group>"; };
+		68695FB018EAE6950033E3E1 /* MyWave.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MyWave.entitlements; sourceTree = "<group>"; };
 		68787D8D1826533700FC3FFF /* PlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerViewController.h; sourceTree = "<group>"; };
 		68787D8E1826533700FC3FFF /* PlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerViewController.m; sourceTree = "<group>"; };
 		68787D9318265B7C00FC3FFF /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -227,6 +226,7 @@
 		688453CB172182260092260B /* MyWave */ = {
 			isa = PBXGroup;
 			children = (
+				68695FB018EAE6950033E3E1 /* MyWave.entitlements */,
 				68ED98161729ACF40009C2F6 /* Classes */,
 				682CD8E4184E7D0C006000E6 /* Images.xcassets */,
 				68ED9825172B109B0009C2F6 /* InterfaceBuilder */,
@@ -291,7 +291,6 @@
 			isa = PBXGroup;
 			children = (
 				6833F94E184C93CD00C156AB /* SongCell.xib */,
-				6833F80D184A958A00C156AB /* MainViewController.xib */,
 				68787EE91828374400FC3FFF /* VkMusicViewController.xib */,
 				68787D971826CA5500FC3FFF /* MyMusicViewController.xib */,
 			);
@@ -366,7 +365,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				688453D0172182260092260B /* InfoPlist.strings in Resources */,
-				6833F80F184A958A00C156AB /* MainViewController.xib in Resources */,
 				682CD8E5184E7D0C006000E6 /* Images.xcassets in Resources */,
 				68787EEA1828374400FC3FFF /* VkMusicViewController.xib in Resources */,
 				6833F94F184C93CD00C156AB /* SongCell.xib in Resources */,
@@ -517,6 +515,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = MyWave/MyWave.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -536,6 +535,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = MyWave/MyWave.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

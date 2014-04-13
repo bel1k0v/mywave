@@ -3,12 +3,12 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "vk-icon.png"
+      "filename" : "volume_low.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "vk-icon@2x.png"
+      "filename" : "volume_low@2x.png"
     }
   ],
   "info" : {

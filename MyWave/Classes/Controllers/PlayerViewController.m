@@ -15,6 +15,7 @@
 #import "AFHTTPRequestOperation.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "AppHelper.h"
+#import "DOUAudioVisualizer.h"
 
 static void *kStatusKVOKey = &kStatusKVOKey;
 static void *kDurationKVOKey = &kDurationKVOKey;
@@ -26,7 +27,8 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     UILabel *_titleLabel;
     UILabel *_artistLabel;
     UILabel *_statusLabel;
-    UILabel *_miscLabel;
+    UILabel *_currentTimeLabel;
+    UILabel *_elapsedTimeLabel;
     
     UIButton *_buttonPlayPause;
     UIButton *_buttonNext;
@@ -36,12 +38,13 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     UISlider *_progressSlider;
     
     UISlider *_volumeSlider;
-    
-    UIProgressView *_miscProgress;
+    UIImageView *_imageVolumeLow;
+    UIImageView *_imageVolumeHigh;
     
     NSTimer *_timer;
     
     DOUAudioStreamer *_streamer;
+    DOUAudioVisualizer *_audioVisualizer;
 }
 
 @end
@@ -49,89 +52,98 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 @implementation PlayerViewController
 
 - (void)loadView {
-    [self setTitle:@"♫"];
-    
     UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    view.backgroundColor = UIColorFromRGB(0xF8F8F8);
-    /*
-    CAGradientLayer *gradient = [CAGradientLayer layer];
-    gradient.frame = view.bounds;
-    gradient.colors = [NSArray arrayWithObjects:(id)[UIColorFromRGB(0xF8F8F8) CGColor], (id)[UIColorFromRGB(0x18AAD6) CGColor], nil];
-    [view.layer insertSublayer:gradient atIndex:0];
-    */
+    view.backgroundColor = UIColorFromRGB(0xFFFFFF);
     
     CGFloat topPoint = 34.0;
     if ([[UIDevice currentDevice].systemVersion floatValue] > 6.1f) {
         topPoint = 84.0;
     }
-
-    _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, topPoint, CGRectGetWidth([view bounds]) - 40, 30.0)];
-    [_titleLabel setFont:[UIFont fontWithName:BaseFont size:18.0]];
+    _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, topPoint, CGRectGetWidth([view bounds]) - 40, 20.0)];
+    [_titleLabel setFont:[UIFont fontWithName:BaseFont size:16.0]];
     [_titleLabel setTextColor:[UIColor blackColor]];
     [_titleLabel setTextAlignment:NSTextAlignmentCenter];
     [_titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_titleLabel];
     
-    _artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_titleLabel frame]) + 10.0, CGRectGetWidth([view bounds]) - 40, 30.0)];
-    [_artistLabel setFont:[UIFont fontWithName:BaseFont size:16.0]];
+    _artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_titleLabel frame]) + 6.0, CGRectGetWidth([view bounds]) - 40, 20.0)];
+    [_artistLabel setFont:[UIFont fontWithName:BaseFont size:14.0]];
     [_artistLabel setTextColor:[UIColor blackColor]];
     [_artistLabel setTextAlignment:NSTextAlignmentCenter];
     [_artistLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_artistLabel];
 
-    _statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_artistLabel frame]) + 10.0, CGRectGetWidth([view bounds]) - 40, 30.0)];
+    _statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_artistLabel frame]) + 10.0, CGRectGetWidth([view bounds]) - 40, 20.0)];
     [_statusLabel setFont:[UIFont fontWithName:BaseFont size:14.0]];
     [_statusLabel setTextColor:[UIColor darkGrayColor]];
     [_statusLabel setTextAlignment:NSTextAlignmentCenter];
     [_statusLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_statusLabel];
     
-    _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_statusLabel frame]) + 15.0, CGRectGetWidth([view bounds]) - 40.0, 40.0)];
+    _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(50.0, CGRectGetMaxY([_statusLabel frame]) + 15.0, CGRectGetWidth([view bounds]) - 100.0, 40.0)];
     [_progressSlider addTarget:self action:@selector(_actionSliderProgress:) forControlEvents:UIControlEventValueChanged];
     [view addSubview:_progressSlider];
     
-    _miscLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_progressSlider frame]) + 8.0, CGRectGetWidth([view bounds]) - 40, 20.0)];
-    [_miscLabel setFont:[UIFont fontWithName:BaseFont size:10.0]];
-    [_miscLabel setTextColor:[UIColor darkGrayColor]];
-    [_miscLabel setTextAlignment:NSTextAlignmentCenter];
-    [_miscLabel setLineBreakMode:NSLineBreakByTruncatingTail];
-    [view addSubview:_miscLabel];
+    _currentTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMinY([_progressSlider frame]) + 10.0, 30.0, 20.0)];
+    [_currentTimeLabel setFont:[UIFont fontWithName:BaseFont size:10.0]];
+    [_currentTimeLabel setTextColor:[UIColor darkGrayColor]];
+    [_currentTimeLabel setTextAlignment:NSTextAlignmentLeft];
+    [_currentTimeLabel setLineBreakMode:NSLineBreakByTruncatingTail];
+    [view addSubview:_currentTimeLabel];
     
-    /*
-    _miscProgress = [[UIProgressView alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY([_miscLabel frame]) + 10.0, 280, 3)];
-    _miscProgress.progress = 0.0f;
-    [view addSubview:_miscProgress];
-    */
+    _elapsedTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth([view bounds]) - 50.0, CGRectGetMinY([_progressSlider frame]) + 10.0, 30.0, 20.0)];
+    [_elapsedTimeLabel setFont:[UIFont fontWithName:BaseFont size:10.0]];
+    [_elapsedTimeLabel setTextColor:[UIColor darkGrayColor]];
+    [_elapsedTimeLabel setTextAlignment:NSTextAlignmentRight];
+    [_elapsedTimeLabel setLineBreakMode:NSLineBreakByTruncatingTail];
+    [view addSubview:_elapsedTimeLabel];
+    
+    if (self.tracksFromRemote == YES) {
+        _buttonDownload = [UIButton buttonWithType:UIButtonTypeSystem];
+        [_buttonDownload setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 40.0, CGRectGetMaxY([_progressSlider frame]) + 5.0, 20.0, 20.0)];
+        [_buttonDownload setBackgroundImage:[UIImage imageNamed:@"download"] forState:UIControlStateNormal];
+        [_buttonDownload addTarget:self action:@selector(_actionDownload:) forControlEvents:UIControlEventTouchDown];
+        [view addSubview:_buttonDownload];
+    }
     
     _buttonPlayPause = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonPlayPause setFrame:CGRectMake((CGRectGetWidth([view bounds]) - 99.0) / 2 , CGRectGetMaxY([_miscLabel frame]) + 10.0, 99.0, 99.0)];
+    [_buttonPlayPause setFrame:CGRectMake((CGRectGetWidth([view bounds]) - 94.0) / 2 , CGRectGetMaxY([_progressSlider frame]) + 30, 94.0, 94.0)];
     [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
     [_buttonPlayPause addTarget:self action:@selector(_actionPlayPause:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonPlayPause];
     
     _buttonNext = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonNext setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 20.0 - 53.0, CGRectGetMinY([_buttonPlayPause frame]), 53.0, 53.0)];
+    [_buttonNext setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 20.0 - 53.0, CGRectGetMinY([_buttonPlayPause frame]) + 20.5 , 53.0, 53.0)];
     [_buttonNext setBackgroundImage:[UIImage imageNamed:@"arrow_right"] forState:UIControlStateNormal];
     [_buttonNext addTarget:self action:@selector(_actionNext:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonNext];
     
-    if (self.tracksFromRemote == YES) {
-        _buttonDownload = [UIButton buttonWithType:UIButtonTypeSystem];
-        [_buttonDownload setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 20.0 - 32.0, CGRectGetMaxY([_buttonNext frame]) + 10.0, 32.0, 32.0)];
-        [_buttonDownload setBackgroundImage:[UIImage imageNamed:@"plus"] forState:UIControlStateNormal];
-        [_buttonDownload addTarget:self action:@selector(_actionDownload:) forControlEvents:UIControlEventTouchDown];
-        [view addSubview:_buttonDownload];
-    }
-    
     _buttonPrevious = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonPrevious setFrame:CGRectMake(20, CGRectGetMinY([_buttonPlayPause frame]), 53.0, 53.0)];
+    [_buttonPrevious setFrame:CGRectMake(20, CGRectGetMinY([_buttonPlayPause frame]) + 20.5, 53.0, 53.0)];
     [_buttonPrevious setBackgroundImage:[UIImage imageNamed:@"arrow_left"] forState:UIControlStateNormal];
     [_buttonPrevious addTarget:self action:@selector(_actionPrevious:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonPrevious];
-    
-    _volumeSlider = [[UISlider alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_buttonPlayPause frame]) + 10.0, CGRectGetWidth([view bounds]) - 40.0, 40.0)];
+
+    _volumeSlider = [[UISlider alloc] initWithFrame:CGRectMake(50.0, CGRectGetMaxY([_buttonPlayPause frame]) + 10.0, CGRectGetWidth([view bounds]) - 100.0, 20.0)];
     [_volumeSlider addTarget:self action:@selector(_actionSliderVolume:) forControlEvents:UIControlEventValueChanged];
     [view addSubview:_volumeSlider];
+    
+    _imageVolumeLow = [[UIImageView alloc]initWithFrame:CGRectMake(20.0, CGRectGetMinY([_volumeSlider frame]), 20.0, 20.0)];
+    [_imageVolumeLow setImage:[UIImage imageNamed:@"volume_low"]];
+    [view addSubview:_imageVolumeLow];
+    
+    _imageVolumeHigh = [[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetWidth([view bounds]) - 40.0, CGRectGetMinY([_volumeSlider frame]), 20.0, 20.0)];
+    [_imageVolumeHigh setImage:[UIImage imageNamed:@"volume_high"]];
+    [view addSubview:_imageVolumeHigh];
+    
+    CGFloat visStart = CGRectGetMaxY([_volumeSlider frame]) + 10.0;
+    CGFloat visHeight = CGRectGetHeight([view bounds]) - visStart;
+    if (view.bounds.size.height <= 480.0) {
+        visHeight = visHeight - 64.0;
+    }
+    _audioVisualizer = [[DOUAudioVisualizer alloc] initWithFrame:CGRectMake(0.0, visStart, CGRectGetWidth([view bounds]), visHeight)];
+    [_audioVisualizer setBackgroundColor:[UIColor colorWithRed:255.0 / 255.0 green:255.0 / 255.0 blue:255.0 / 255.0 alpha:1.0]];
+    [view addSubview:_audioVisualizer];
 
     [[UISlider appearance] setMaximumTrackImage:[UIImage imageNamed:@"slider_max"]
                                        forState:UIControlStateNormal];
@@ -139,17 +151,15 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
                                        forState:UIControlStateNormal];
     [[UISlider appearance] setThumbImage:[UIImage imageNamed:@"position"]
                                 forState:UIControlStateNormal];
-    /*
-    [[UIProgressView appearance] setProgressTintColor:[UIColor whiteColor]];
-    [[UIProgressView appearance] setTrackTintColor:UIColorFromRGB(0x136f8a)];
-    */
-    
+
     if ([[UIDevice currentDevice].systemVersion floatValue] < 7.0f) {
         [_titleLabel setBackgroundColor:[UIColor clearColor]];
         [_artistLabel setBackgroundColor:[UIColor clearColor]];
-        [_miscLabel setBackgroundColor:[UIColor clearColor]];
         [_statusLabel setBackgroundColor:[UIColor clearColor]];
+        [_currentTimeLabel setBackgroundColor:[UIColor clearColor]];
+        [_elapsedTimeLabel setBackgroundColor:[UIColor clearColor]];
     }
+    
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
     [self setView:view];
 }
@@ -188,7 +198,6 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [_streamer play];
     [self setNowPlayingTrack:track];
     
-    [self _updateBufferingStatus];
     [self _setupHintForStreamer];
 }
 
@@ -205,15 +214,23 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     if ([_streamer duration] == 0.0) {
         [_progressSlider setValue:0.0f animated:NO];
     } else {
-        //int minutes = (int) floor([_streamer duration] / 60);
-        //int seconds = [_streamer duration] - (minutes * 60);
-
-        int currentMinutes = (int) floor([_streamer currentTime] / 60);
-        int currentSeconds = [_streamer currentTime] - (currentMinutes * 60);
-
-        [_miscLabel setText:[NSString stringWithFormat:@"%d:%02d", currentMinutes, currentSeconds]];
+        [self _updateCurrentTimeLabel];
+        [self _updateElapsedLabel];
         [_progressSlider setValue:[_streamer currentTime] / [_streamer duration] animated:YES];
     }
+}
+
+- (void)_updateCurrentTimeLabel {
+    int currentMinutes = (int) floor([_streamer currentTime] / 60);
+    int currentSeconds = [_streamer currentTime] - (currentMinutes * 60);
+    [_currentTimeLabel setText:[NSString stringWithFormat:@"%d:%02d", currentMinutes, currentSeconds]];
+}
+
+- (void)_updateElapsedLabel {
+    int elapsedTime = (int) floor([_streamer duration]) - (int) floor([_streamer currentTime]);
+    int elapsedMinutes = (int) floor(elapsedTime / 60);
+    int elapsedSeconds = (int) (elapsedTime - elapsedMinutes * 60);
+    [_elapsedTimeLabel setText:[NSString stringWithFormat:@"%d:%02d", elapsedMinutes, elapsedSeconds]];
 }
 
 - (void)_updateStatus {
@@ -248,8 +265,13 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     }
 }
 
-- (void)_updateBufferingStatus {
-    _miscProgress.progress = (float) [_streamer receivedLength] / [_streamer expectedLength];
+- (void)_updateBufferingStatus
+{
+    NSLog(@"%@", [NSString stringWithFormat:@"Received %.2f/%.2f MB (%.2f %%), Speed %.2f MB/s", (double)[_streamer receivedLength] / 1024 / 1024, (double)[_streamer expectedLength] / 1024 / 1024, [_streamer bufferingRatio] * 100.0, (double)[_streamer downloadSpeed] / 1024 / 1024]);
+    
+    if ([_streamer bufferingRatio] >= 1.0) {
+        NSLog(@"sha256: %@", [_streamer sha256]);
+    }
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -296,7 +318,6 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         NSLog(@"Cannot become first responder");
     }
 }
-
 
 - (void)remoteControlReceivedWithEvent:(UIEvent *)theEvent {
     if (theEvent.type == UIEventTypeRemoteControl) {
@@ -364,6 +385,8 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 
 - (void)_actionSliderProgress:(id)sender {
     [_streamer setCurrentTime:[_streamer duration] * [_progressSlider value]];
+    [self _updateCurrentTimeLabel];
+    [self _updateElapsedLabel];
 }
 
 - (void)_actionSliderVolume:(id)sender {

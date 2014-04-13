@@ -7,14 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Vkontakte.h"
+#import "DBManager.h"
 
-@interface MainViewController : UIViewController {
-    IBOutlet UIButton *_vkMusicButton;
-    IBOutlet UIButton *_myMusicButton;
+@interface MainViewController : UIViewController <VkontakteDelegate> {
+    Vkontakte *_vk;
+    DBManager *_db;
 }
 
-
-- (IBAction)vkMusicButtonPressed:(id)sender;
-- (IBAction)myMusicButtonPressed:(id)sender;
 @end
 

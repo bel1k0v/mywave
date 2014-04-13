@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TracksTableViewController : UITableViewController
+@interface TracksTableViewController : UITableViewController<UISearchBarDelegate, UISearchDisplayDelegate>
 {
     @public
     NSArray *tracks;
@@ -17,5 +17,8 @@
     UISearchBar *searchBar;
     UISearchDisplayController *searchDisplayController;
 }
+
+- (void) initSearch;
 - (BOOL) isTracksRemote;
+
 @end

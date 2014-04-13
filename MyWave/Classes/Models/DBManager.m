@@ -89,7 +89,7 @@ static sqlite3_stmt *statement = nil;
     const char *dbpath = [databasePath UTF8String];
     if (sqlite3_open(dbpath, &database) == SQLITE_OK)
     {
-        NSString *deleteSQL = [NSString stringWithFormat:@"delete from mp3 where id = %d", [registeredNumber integerValue]];
+        NSString *deleteSQL = [NSString stringWithFormat:@"delete from mp3 where id = %ld", (long)[registeredNumber integerValue]];
         const char *insert_stmt = [deleteSQL UTF8String];
         sqlite3_prepare_v2(database, insert_stmt,-1, &statement, NULL);
         if (sqlite3_step(statement) == SQLITE_DONE)

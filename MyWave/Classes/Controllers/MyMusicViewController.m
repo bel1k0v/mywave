@@ -12,45 +12,21 @@
 
 @implementation MyMusicViewController
 
-- (id)initWithStyle:(UITableViewStyle)style {
-    self = [super initWithStyle:style];
-    if (self) {
-        searchData = [NSMutableArray arrayWithArray:[self getSongs]];
-    }
-    return self;
-}
-
-- (NSArray *)getSongs {
-    DBManager *db = [DBManager getSharedInstance];
-    return [db getSongs];
-}
-
-- (void)setupData {
+- (void)refreshData {
     self->tracks = nil;
-    self->tracks = [self getSongs];
-}
-
-- (void)initSearch {
-    searchData = [NSMutableArray arrayWithCapacity:[self->tracks count]];
-    searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-    
-    searchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
-    searchDisplayController.delegate = self;
-    searchDisplayController.searchResultsDelegate = self;
-    searchDisplayController.searchResultsDataSource = self;
-    
-    self.tableView.tableHeaderView = searchBar;
+    DBManager *db = [DBManager getSharedInstance];
+    self->tracks = [db getSongs];
+    [self.tableView reloadData];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
-    [self.tableView reloadData];
+    [self refreshData];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setupData];
     [self initSearch];
-    self.navigationItem.title = @"My Wave";
+    self.title = @"My music";
 }
 
 #pragma mark - Table view delegate
@@ -64,7 +40,7 @@
         [[NSFileManager defaultManager]removeItemAtPath:[song objectForKey:@"url"] error:&error];
         [[DBManager getSharedInstance] deleteById:[song objectForKey:@"regNum"]];
         [searchData removeObject:song];
-        [self setupData];
+        [self refreshData];
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         [self.tableView reloadData];
     } else

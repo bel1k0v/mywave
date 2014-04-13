@@ -385,10 +385,8 @@ NSString * const vkRedirectUrl = @"http://oauth.vk.com/blank.html";
     if (![self isAuthorized]) return NULL;
     
     NSString *url = [NSString stringWithFormat:@"https://api.vk.com/method/audio.get?oid=%@&access_token=%@", userId, accessToken];
-    //NSLog(@"action URL: %@", url);
-    
-    NSDictionary *parsedDictionary = [self sendRequest:url withCaptcha:NO];
 
+    NSDictionary *parsedDictionary = [self sendRequest:url withCaptcha:NO];
     NSArray *array = [parsedDictionary objectForKey:@"response"];
     
     if ([parsedDictionary objectForKey:@"response"])

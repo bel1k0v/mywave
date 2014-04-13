@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "TracksTableViewController.h"
 
-@interface MyMusicViewController : TracksTableViewController<UISearchBarDelegate, UISearchDisplayDelegate>
+@interface MyMusicViewController : TracksTableViewController
 
 @end

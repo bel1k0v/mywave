@@ -26,6 +26,18 @@
     return self;
 }
 
+- (void)initSearch {
+    searchData = [NSMutableArray arrayWithCapacity:[self->tracks count]];
+    searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    
+    searchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
+    searchDisplayController.delegate = self;
+    searchDisplayController.searchResultsDelegate = self;
+    searchDisplayController.searchResultsDataSource = self;
+    
+    self.tableView.tableHeaderView = searchBar;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -88,6 +100,11 @@
     return NO;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 50.0f;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     PlayerViewController *playerViewController = [PlayerViewController new];
     NSArray *songs = [NSArray new];
@@ -98,6 +115,7 @@
     }
 
     [playerViewController setCurrentTrackIndex:indexPath.row];
+    [playerViewController setTracksFromRemote:[self isTracksRemote]];
     [playerViewController setTracks:[Track tracksWithArray:songs url:[self isTracksRemote]]];
     [self.navigationController pushViewController:playerViewController animated:YES];
 }
