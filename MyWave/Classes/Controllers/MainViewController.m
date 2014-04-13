@@ -47,13 +47,13 @@
     [_buttonVkMusic setFrame:CGRectMake(20.0, 155.0, 80.0, 20.0)];
     //[_buttonVkMusic setBackgroundImage:[UIImage imageNamed:@"vk-icon2"] forState:UIControlStateNormal];
     [_buttonVkMusic setTitle:@"Vk music" forState:UIControlStateNormal];
-    _buttonVkMusic.titleLabel.font = [UIFont fontWithName:BaseFont size:14.0];
+    _buttonVkMusic.titleLabel.font = [UIFont fontWithName:BaseFont size:BaseFontSizeDefault];
     [_buttonVkMusic addTarget:self action:@selector(_vkMusicButtonPressed:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonVkMusic];
     
     _buttonVkLogin = [UIButton buttonWithType:UIButtonTypeSystem];
     [_buttonVkLogin setFrame:CGRectMake(110.0, 155.0, 80.0, 20.0)];
-    _buttonVkLogin.titleLabel.font = [UIFont fontWithName:BaseFont size:14.0];
+    _buttonVkLogin.titleLabel.font = [UIFont fontWithName:BaseFont size:BaseFontSizeDefault];
     [_buttonVkLogin addTarget:self action:@selector(_vkLoginButtonPressed:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonVkLogin];
     

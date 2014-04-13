@@ -25,25 +25,34 @@
     [navigationController.navigationBar setTintColor:[UIColor whiteColor]];
 
     NSDictionary *barButtorTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                             [UIColor whiteColor], NSForegroundColorAttributeName,
-                                             [UIFont fontWithName:BaseFont size:14.0], NSFontAttributeName, nil];
+                                             [UIColor whiteColor],
+                                             NSForegroundColorAttributeName,
+                                             [UIFont fontWithName:BaseFont size:14.0],
+                                             NSFontAttributeName, nil];
     
     if ([[UIDevice currentDevice].systemVersion floatValue] > 6.1f) {
+        
         NSDictionary *textAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        [UIColor whiteColor], NSForegroundColorAttributeName,
-                                        [UIFont fontWithName:BaseFont size:BaseFontSizeHeader], NSFontAttributeName, nil];
+                                        [UIColor whiteColor],
+                                        NSForegroundColorAttributeName,
+                                        [UIFont fontWithName:BaseFont size:BaseFontSizeHeader],
+                                        NSFontAttributeName, nil];
+        
         [[UINavigationBar appearance] setTitleTextAttributes: textAttributes];
         [[UINavigationBar appearance] setBarTintColor:UIColorFromRGB(0x18AAD6)];
+        
     } else { // Less than 6.1
+        
         navigationController.navigationBar.tintColor = UIColorFromRGB(0x18AAD6);
         // Customize the title text for *all* UINavigationBars
         [[UINavigationBar appearance] setTitleTextAttributes:
          [NSDictionary dictionaryWithObjectsAndKeys:
-          [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0],
+          [UIColor whiteColor],
           UITextAttributeTextColor,
           [UIFont fontWithName:BaseFont size:BaseFontSizeHeader],
           UITextAttributeFont,
           nil]];
+        
     }
 
     [[UIBarButtonItem appearance] setTitleTextAttributes:barButtorTextAttributes forState:UIControlStateNormal];

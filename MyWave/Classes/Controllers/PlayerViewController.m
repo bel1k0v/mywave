@@ -60,21 +60,21 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         topPoint = 84.0;
     }
     _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, topPoint, CGRectGetWidth([view bounds]) - 40, 20.0)];
-    [_titleLabel setFont:[UIFont fontWithName:BaseFont size:16.0]];
+    [_titleLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeLead]];
     [_titleLabel setTextColor:[UIColor blackColor]];
     [_titleLabel setTextAlignment:NSTextAlignmentCenter];
     [_titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_titleLabel];
     
     _artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_titleLabel frame]) + 6.0, CGRectGetWidth([view bounds]) - 40, 20.0)];
-    [_artistLabel setFont:[UIFont fontWithName:BaseFont size:14.0]];
+    [_artistLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeDefault]];
     [_artistLabel setTextColor:[UIColor blackColor]];
     [_artistLabel setTextAlignment:NSTextAlignmentCenter];
     [_artistLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_artistLabel];
 
     _statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_artistLabel frame]) + 10.0, CGRectGetWidth([view bounds]) - 40, 20.0)];
-    [_statusLabel setFont:[UIFont fontWithName:BaseFont size:14.0]];
+    [_statusLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeDefault]];
     [_statusLabel setTextColor:[UIColor darkGrayColor]];
     [_statusLabel setTextAlignment:NSTextAlignmentCenter];
     [_statusLabel setLineBreakMode:NSLineBreakByTruncatingTail];
@@ -85,29 +85,30 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [view addSubview:_progressSlider];
     
     _currentTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMinY([_progressSlider frame]) + 10.0, 30.0, 20.0)];
-    [_currentTimeLabel setFont:[UIFont fontWithName:BaseFont size:10.0]];
+    [_currentTimeLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeExtraSmall]];
     [_currentTimeLabel setTextColor:[UIColor darkGrayColor]];
     [_currentTimeLabel setTextAlignment:NSTextAlignmentLeft];
     [_currentTimeLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_currentTimeLabel];
     
     _elapsedTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth([view bounds]) - 50.0, CGRectGetMinY([_progressSlider frame]) + 10.0, 30.0, 20.0)];
-    [_elapsedTimeLabel setFont:[UIFont fontWithName:BaseFont size:10.0]];
+    [_elapsedTimeLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeExtraSmall]];
     [_elapsedTimeLabel setTextColor:[UIColor darkGrayColor]];
     [_elapsedTimeLabel setTextAlignment:NSTextAlignmentRight];
     [_elapsedTimeLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_elapsedTimeLabel];
     
     if (self.tracksFromRemote == YES) {
-        _buttonDownload = [UIButton buttonWithType:UIButtonTypeSystem];
-        [_buttonDownload setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 40.0, CGRectGetMaxY([_progressSlider frame]) + 5.0, 20.0, 20.0)];
-        [_buttonDownload setBackgroundImage:[UIImage imageNamed:@"download"] forState:UIControlStateNormal];
+        _buttonDownload = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_buttonDownload setFrame:CGRectMake(2, 3, 30.0, 30.0)];
+        [_buttonDownload setBackgroundImage:[UIImage imageNamed:@"download-white"] forState:UIControlStateNormal];
         [_buttonDownload addTarget:self action:@selector(_actionDownload:) forControlEvents:UIControlEventTouchDown];
-        [view addSubview:_buttonDownload];
+        UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc]initWithCustomView:_buttonDownload];
+        self.navigationItem.rightBarButtonItem = rightBarItem;
     }
     
     _buttonPlayPause = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonPlayPause setFrame:CGRectMake((CGRectGetWidth([view bounds]) - 94.0) / 2 , CGRectGetMaxY([_progressSlider frame]) + 30, 94.0, 94.0)];
+    [_buttonPlayPause setFrame:CGRectMake((CGRectGetWidth([view bounds]) - 94.0) / 2 , CGRectGetMaxY([_progressSlider frame]) + 10, 94.0, 94.0)];
     [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
     [_buttonPlayPause addTarget:self action:@selector(_actionPlayPause:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonPlayPause];
@@ -138,11 +139,13 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     
     CGFloat visStart = CGRectGetMaxY([_volumeSlider frame]) + 10.0;
     CGFloat visHeight = CGRectGetHeight([view bounds]) - visStart;
+    
+    // Hacky
     if (view.bounds.size.height <= 480.0) {
         visHeight = visHeight - 64.0;
     }
     _audioVisualizer = [[DOUAudioVisualizer alloc] initWithFrame:CGRectMake(0.0, visStart, CGRectGetWidth([view bounds]), visHeight)];
-    [_audioVisualizer setBackgroundColor:[UIColor colorWithRed:255.0 / 255.0 green:255.0 / 255.0 blue:255.0 / 255.0 alpha:1.0]];
+    [_audioVisualizer setBackgroundColor:[UIColor whiteColor]];
     [view addSubview:_audioVisualizer];
 
     [[UISlider appearance] setMaximumTrackImage:[UIImage imageNamed:@"slider_max"]
@@ -415,7 +418,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         [operation setDownloadProgressBlock:^(NSUInteger bytesRead, NSInteger totalBytesRead, NSInteger totalBytesExpectedToRead) {
             float progress = (float)totalBytesRead / totalBytesExpectedToRead;
             if (progress < 1.0f) {
-                [_statusLabel setText:@"Downloading"];
+                [_statusLabel setText:[NSString stringWithFormat:@"Downloading: %.1f%%", progress * 100.0f]];
             } else if (progress == 1.0f) {
                 [_statusLabel setText:@"Downloaded"];
             }

@@ -10,6 +10,11 @@
 
 #define BaseFont @"Helvetica-Light"
 #define BaseFontSizeHeader 18.0
+#define BaseFontSizeLead 16.0
+#define BaseFontSizeDefault 14.0
+#define BaseFontSizeSmall 12.0
+#define BaseFontSizeExtraSmall 10.0
+
 @interface AppHelper : NSObject
 
 @end
