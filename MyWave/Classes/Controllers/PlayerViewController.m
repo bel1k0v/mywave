@@ -55,9 +55,9 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     view.backgroundColor = UIColorFromRGB(0xFFFFFF);
     
-    CGFloat topPoint = 34.0;
-    if ([[UIDevice currentDevice].systemVersion floatValue] > 6.1f) {
-        topPoint = 84.0;
+    CGFloat topPoint = 84.0;
+    if ([[UIDevice currentDevice].systemVersion floatValue] < 7.0f) {
+        topPoint = 34.0;
     }
     _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, topPoint, CGRectGetWidth([view bounds]) - 40, 20.0)];
     [_titleLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeLead]];
@@ -80,18 +80,18 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [_statusLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_statusLabel];
     
-    _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(50.0, CGRectGetMaxY([_statusLabel frame]) + 15.0, CGRectGetWidth([view bounds]) - 100.0, 40.0)];
+    _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(50.0, CGRectGetMaxY([_statusLabel frame]) + 15.0, CGRectGetWidth([view bounds]) - 100.0, 20.0)];
     [_progressSlider addTarget:self action:@selector(_actionSliderProgress:) forControlEvents:UIControlEventValueChanged];
     [view addSubview:_progressSlider];
     
-    _currentTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMinY([_progressSlider frame]) + 10.0, 30.0, 20.0)];
+    _currentTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMinY([_progressSlider frame]), 30.0, 20.0)];
     [_currentTimeLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeExtraSmall]];
     [_currentTimeLabel setTextColor:[UIColor darkGrayColor]];
     [_currentTimeLabel setTextAlignment:NSTextAlignmentLeft];
     [_currentTimeLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_currentTimeLabel];
     
-    _elapsedTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth([view bounds]) - 50.0, CGRectGetMinY([_progressSlider frame]) + 10.0, 30.0, 20.0)];
+    _elapsedTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth([view bounds]) - 50.0, CGRectGetMinY([_progressSlider frame]), 30.0, 20.0)];
     [_elapsedTimeLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeExtraSmall]];
     [_elapsedTimeLabel setTextColor:[UIColor darkGrayColor]];
     [_elapsedTimeLabel setTextAlignment:NSTextAlignmentRight];
@@ -100,7 +100,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     
     if (self.tracksFromRemote == YES) {
         _buttonDownload = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_buttonDownload setFrame:CGRectMake(2, 3, 30.0, 30.0)];
+        [_buttonDownload setFrame:CGRectMake(0, 0, 30.0, 30.0)];
         [_buttonDownload setBackgroundImage:[UIImage imageNamed:@"download-white"] forState:UIControlStateNormal];
         [_buttonDownload addTarget:self action:@selector(_actionDownload:) forControlEvents:UIControlEventTouchDown];
         UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc]initWithCustomView:_buttonDownload];
@@ -137,12 +137,17 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [_imageVolumeHigh setImage:[UIImage imageNamed:@"volume_high"]];
     [view addSubview:_imageVolumeHigh];
     
+    
     CGFloat visStart = CGRectGetMaxY([_volumeSlider frame]) + 10.0;
     CGFloat visHeight = CGRectGetHeight([view bounds]) - visStart;
-    
-    // Hacky
-    if (view.bounds.size.height <= 480.0) {
+
+    if ([[UIDevice currentDevice].systemVersion floatValue] < 7.0f) {
         visHeight = visHeight - 64.0;
+        [_titleLabel setBackgroundColor:[UIColor clearColor]];
+        [_artistLabel setBackgroundColor:[UIColor clearColor]];
+        [_statusLabel setBackgroundColor:[UIColor clearColor]];
+        [_currentTimeLabel setBackgroundColor:[UIColor clearColor]];
+        [_elapsedTimeLabel setBackgroundColor:[UIColor clearColor]];
     }
     _audioVisualizer = [[DOUAudioVisualizer alloc] initWithFrame:CGRectMake(0.0, visStart, CGRectGetWidth([view bounds]), visHeight)];
     [_audioVisualizer setBackgroundColor:[UIColor whiteColor]];
@@ -154,14 +159,6 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
                                        forState:UIControlStateNormal];
     [[UISlider appearance] setThumbImage:[UIImage imageNamed:@"position"]
                                 forState:UIControlStateNormal];
-
-    if ([[UIDevice currentDevice].systemVersion floatValue] < 7.0f) {
-        [_titleLabel setBackgroundColor:[UIColor clearColor]];
-        [_artistLabel setBackgroundColor:[UIColor clearColor]];
-        [_statusLabel setBackgroundColor:[UIColor clearColor]];
-        [_currentTimeLabel setBackgroundColor:[UIColor clearColor]];
-        [_elapsedTimeLabel setBackgroundColor:[UIColor clearColor]];
-    }
     
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
     [self setView:view];

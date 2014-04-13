@@ -38,24 +38,17 @@
     self.tableView.tableHeaderView = searchBar;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
 }
 
-- (void) viewDidAppear:(BOOL)animated {
-    [self.tableView reloadData];
-}
-
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
@@ -70,6 +63,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"SongCell";
     SongCell *cell = (SongCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
     if (cell == nil) {
         NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"SongCell" owner:nil options:nil];
         for (id currentObject in topLevelObjects){
@@ -79,6 +73,7 @@
             }
         }
     }
+    
     NSDictionary *song = [self->tracks objectAtIndex:indexPath.row];
     if (tableView == self.searchDisplayController.searchResultsTableView) {
         song = [searchData objectAtIndex:indexPath.row];
@@ -100,14 +95,14 @@
     return NO;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 50.0f;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     PlayerViewController *playerViewController = [PlayerViewController new];
     NSArray *songs = [NSArray new];
+    
     if (tableView == self.searchDisplayController.searchResultsTableView) {
         songs = searchData;
     } else {
@@ -117,6 +112,7 @@
     [playerViewController setCurrentTrackIndex:indexPath.row];
     [playerViewController setTracksFromRemote:[self isTracksRemote]];
     [playerViewController setTracks:[Track tracksWithArray:songs url:[self isTracksRemote]]];
+    
     [self.navigationController pushViewController:playerViewController animated:YES];
 }
 

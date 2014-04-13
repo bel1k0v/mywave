@@ -1,5 +1,5 @@
 //
-//  ViewController.m
+//  MainViewController.m
 //  MyWave
 //
 //  Created by Дмитрий on 19.04.13.
