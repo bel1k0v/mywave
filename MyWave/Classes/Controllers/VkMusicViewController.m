@@ -8,6 +8,7 @@
 
 #import "VkMusicViewController.h"
 #import "NSString+Gender.h"
+#import "Track+Provider.h"
 
 #define MinSearchLength 2
 #define MaxSearchLength 25
@@ -20,7 +21,7 @@
 
 - (void)refreshData {
     self->tracks = nil;
-    self->tracks = [_vk getUserAudio];
+    self->tracks = [[NSMutableArray alloc]initWithArray:[Track vkontakteTracks]];
     [self.tableView reloadData];
 }
 
@@ -32,16 +33,13 @@
     return self;
 }
 
-- (void) viewDidAppear:(BOOL)animated {
-    [self refreshData];
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     if  (_vk && [_vk isAuthorized]) {
         [self initSearch];
     }
     self.title = @"Vk music";
+    [self refreshData];
 }
 
 - (BOOL) isTracksRemote {
@@ -53,7 +51,7 @@
     if (searchString.length > MinSearchLength && searchString.length < MaxSearchLength) {
         NSArray *cachedData = [searchCache objectForKey:searchString];
         if (cachedData == NULL) {
-            cachedData = [_vk searchAudio:searchString];
+            cachedData = [Track tracksWithArray:[_vk searchAudio:searchString] url:YES];
             if (cachedData != NULL) [searchCache setObject:cachedData forKey:searchString];
             else cachedData = [NSArray new];
         }

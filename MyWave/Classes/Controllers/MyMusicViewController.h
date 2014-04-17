@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TracksTableViewController.h"
+#import "TracksViewController.h"
 
-@interface MyMusicViewController : TracksTableViewController
+@interface MyMusicViewController : TracksViewController
 
 @end

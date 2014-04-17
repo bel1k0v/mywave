@@ -16,5 +16,5 @@
 #define BaseFontSizeExtraSmall 10.0
 
 @interface AppHelper : NSObject
-
++ (BOOL) isNetworkAvailable;
 @end

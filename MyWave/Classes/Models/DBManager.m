@@ -4,7 +4,6 @@
 //  Created by Дмитрий on 04.11.13.
 
 #import "DBManager.h"
-#import <MediaPlayer/MediaPlayer.h>
 
 static DBManager *sharedInstance = nil;
 static sqlite3 *database = nil;

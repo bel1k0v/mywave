@@ -9,40 +9,45 @@
 #import "MyMusicViewController.h"
 #import "NSString+Gender.h"
 #import "DBManager.h"
+#import "Track+Provider.h"
 
 @implementation MyMusicViewController
 
 - (void)refreshData {
     self->tracks = nil;
     DBManager *db = [DBManager getSharedInstance];
-    self->tracks = [db getSongs];
+    self->tracks = [[NSMutableArray alloc]initWithArray:[Track tracksWithArray:[db getSongs] url:NO]];
     [self.tableView reloadData];
-}
-
-- (void) viewDidAppear:(BOOL)animated {
-    [self refreshData];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initSearch];
     self.title = @"My music";
+    [self refreshData];
 }
 
 #pragma mark - Table view delegate
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) { // Delete track
-        NSDictionary *song = [self->tracks objectAtIndex:indexPath.row];
+        Track *track = [self->tracks objectAtIndex:indexPath.row];
+
         if (tableView == self.searchDisplayController.searchResultsTableView) {
-            song = [searchData objectAtIndex:indexPath.row];
+            track = [searchData objectAtIndex:indexPath.row];
+            [searchData removeObject:track];
+        } else {
+            [self->tracks removeObject:track];
         }
+        
         NSError *error = nil;
-        [[NSFileManager defaultManager]removeItemAtPath:[song objectForKey:@"url"] error:&error];
-        [[DBManager getSharedInstance] deleteById:[song objectForKey:@"regNum"]];
-        [searchData removeObject:song];
+        [[NSFileManager defaultManager]removeItemAtPath:track.audioFileURL error:&error];
+        if (error) {
+            NSLog(@"%@",[error description]);
+        }
+        [[DBManager getSharedInstance] deleteById:track.regID];
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+                         withRowAnimation:UITableViewRowAnimationFade];
         [self refreshData];
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView reloadData];
     } else
         return ;
 }

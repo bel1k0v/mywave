@@ -11,9 +11,12 @@
 
 @interface Track : NSObject <DOUAudioFile>
 
+@property (nonatomic, strong) NSString *regID;
 @property (nonatomic, strong) NSString *artist;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *duration;
 @property (nonatomic, strong) NSURL *audioFileURL;
 
+- (NSString *) getArtist;
+- (NSString *) getTitle;
 @end

@@ -9,8 +9,10 @@
 #import "PlayerViewController.h"
 #import "DOUAudioStreamer.h"
 #import "DOUAudioStreamer+Options.h"
+#import "DOUAudioEventLoop.h"
 #import "Track.h"
 #import "NSString+HTML.h"
+#import "NSString+MD5.h"
 #import "DBManager.h"
 #import "AFHTTPRequestOperation.h"
 #import <MediaPlayer/MediaPlayer.h>
@@ -53,47 +55,46 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 
 - (void)loadView {
     UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    view.backgroundColor = UIColorFromRGB(0xFFFFFF);
-    
+    view.backgroundColor = UIColorFromRGB(0xFFFFFFF);
     CGFloat topPoint = 84.0;
     if ([[UIDevice currentDevice].systemVersion floatValue] < 7.0f) {
         topPoint = 34.0;
     }
     _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, topPoint, CGRectGetWidth([view bounds]) - 40, 20.0)];
     [_titleLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeLead]];
-    [_titleLabel setTextColor:[UIColor blackColor]];
+    [_titleLabel setTextColor:UIColorFromRGB(0x333333)];
     [_titleLabel setTextAlignment:NSTextAlignmentCenter];
     [_titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_titleLabel];
     
     _artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_titleLabel frame]) + 6.0, CGRectGetWidth([view bounds]) - 40, 20.0)];
     [_artistLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeDefault]];
-    [_artistLabel setTextColor:[UIColor blackColor]];
+    [_artistLabel setTextColor:UIColorFromRGB(0x666666)];
     [_artistLabel setTextAlignment:NSTextAlignmentCenter];
     [_artistLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_artistLabel];
 
     _statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_artistLabel frame]) + 10.0, CGRectGetWidth([view bounds]) - 40, 20.0)];
-    [_statusLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeDefault]];
-    [_statusLabel setTextColor:[UIColor darkGrayColor]];
+    [_statusLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeSmall]];
+    [_statusLabel setTextColor:UIColorFromRGB(0x333333)];
     [_statusLabel setTextAlignment:NSTextAlignmentCenter];
     [_statusLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_statusLabel];
     
-    _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(50.0, CGRectGetMaxY([_statusLabel frame]) + 15.0, CGRectGetWidth([view bounds]) - 100.0, 20.0)];
+    _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(50.0, CGRectGetMaxY([_statusLabel frame]) + 25.0, CGRectGetWidth([view bounds]) - 100.0, 20.0)];
     [_progressSlider addTarget:self action:@selector(_actionSliderProgress:) forControlEvents:UIControlEventValueChanged];
     [view addSubview:_progressSlider];
     
     _currentTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMinY([_progressSlider frame]), 30.0, 20.0)];
     [_currentTimeLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeExtraSmall]];
-    [_currentTimeLabel setTextColor:[UIColor darkGrayColor]];
+    [_currentTimeLabel setTextColor:UIColorFromRGB(0xA5A5A5)];
     [_currentTimeLabel setTextAlignment:NSTextAlignmentLeft];
     [_currentTimeLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_currentTimeLabel];
     
     _elapsedTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth([view bounds]) - 50.0, CGRectGetMinY([_progressSlider frame]), 30.0, 20.0)];
     [_elapsedTimeLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeExtraSmall]];
-    [_elapsedTimeLabel setTextColor:[UIColor darkGrayColor]];
+    [_elapsedTimeLabel setTextColor:UIColorFromRGB(0xA5A5A5)];
     [_elapsedTimeLabel setTextAlignment:NSTextAlignmentRight];
     [_elapsedTimeLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_elapsedTimeLabel];
@@ -108,37 +109,37 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     }
     
     _buttonPlayPause = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonPlayPause setFrame:CGRectMake((CGRectGetWidth([view bounds]) - 94.0) / 2 , CGRectGetMaxY([_progressSlider frame]) + 10, 94.0, 94.0)];
+    [_buttonPlayPause setFrame:CGRectMake((CGRectGetWidth([view bounds]) - 99.0) / 2 , CGRectGetMaxY([_progressSlider frame]) + 25.0, 99.0, 99.0)];
     [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
     [_buttonPlayPause addTarget:self action:@selector(_actionPlayPause:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonPlayPause];
     
     _buttonNext = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonNext setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 20.0 - 53.0, CGRectGetMinY([_buttonPlayPause frame]) + 20.5 , 53.0, 53.0)];
-    [_buttonNext setBackgroundImage:[UIImage imageNamed:@"arrow_right"] forState:UIControlStateNormal];
+    [_buttonNext setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 20.0 - 53.0, CGRectGetMinY([_buttonPlayPause frame]) + 23, 53.0, 53.0)];
+    [_buttonNext setBackgroundImage:[UIImage imageNamed:@"ff"] forState:UIControlStateNormal];
     [_buttonNext addTarget:self action:@selector(_actionNext:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonNext];
     
     _buttonPrevious = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonPrevious setFrame:CGRectMake(20, CGRectGetMinY([_buttonPlayPause frame]) + 20.5, 53.0, 53.0)];
-    [_buttonPrevious setBackgroundImage:[UIImage imageNamed:@"arrow_left"] forState:UIControlStateNormal];
+    [_buttonPrevious setFrame:CGRectMake(20, CGRectGetMinY([_buttonPlayPause frame]) + 23, 53.0, 53.0)];
+    [_buttonPrevious setBackgroundImage:[UIImage imageNamed:@"rw"] forState:UIControlStateNormal];
     [_buttonPrevious addTarget:self action:@selector(_actionPrevious:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonPrevious];
 
-    _volumeSlider = [[UISlider alloc] initWithFrame:CGRectMake(50.0, CGRectGetMaxY([_buttonPlayPause frame]) + 10.0, CGRectGetWidth([view bounds]) - 100.0, 20.0)];
+    _volumeSlider = [[UISlider alloc] initWithFrame:CGRectMake(50.0, CGRectGetMaxY([_buttonPlayPause frame]) + 25.0, CGRectGetWidth([view bounds]) - 100.0, 20.0)];
     [_volumeSlider addTarget:self action:@selector(_actionSliderVolume:) forControlEvents:UIControlEventValueChanged];
     [view addSubview:_volumeSlider];
     
-    _imageVolumeLow = [[UIImageView alloc]initWithFrame:CGRectMake(20.0, CGRectGetMinY([_volumeSlider frame]), 20.0, 20.0)];
-    [_imageVolumeLow setImage:[UIImage imageNamed:@"volume_low"]];
+    _imageVolumeLow = [[UIImageView alloc]initWithFrame:CGRectMake(20.0, CGRectGetMinY([_volumeSlider frame]), 18.0, 22.0)];
+    [_imageVolumeLow setImage:[UIImage imageNamed:@"vol_min"]];
     [view addSubview:_imageVolumeLow];
     
-    _imageVolumeHigh = [[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetWidth([view bounds]) - 40.0, CGRectGetMinY([_volumeSlider frame]), 20.0, 20.0)];
-    [_imageVolumeHigh setImage:[UIImage imageNamed:@"volume_high"]];
+    _imageVolumeHigh = [[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetWidth([view bounds]) - 38.0, CGRectGetMinY([_volumeSlider frame]), 18.0, 22.0)];
+    [_imageVolumeHigh setImage:[UIImage imageNamed:@"vol_max"]];
     [view addSubview:_imageVolumeHigh];
     
     
-    CGFloat visStart = CGRectGetMaxY([_volumeSlider frame]) + 10.0;
+    CGFloat visStart = CGRectGetMaxY([_volumeSlider frame]) + 25;
     CGFloat visHeight = CGRectGetHeight([view bounds]) - visStart;
 
     if ([[UIDevice currentDevice].systemVersion floatValue] < 7.0f) {
@@ -150,29 +151,32 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         [_elapsedTimeLabel setBackgroundColor:[UIColor clearColor]];
     }
     _audioVisualizer = [[DOUAudioVisualizer alloc] initWithFrame:CGRectMake(0.0, visStart, CGRectGetWidth([view bounds]), visHeight)];
-    [_audioVisualizer setBackgroundColor:[UIColor whiteColor]];
+    [_audioVisualizer setInterpolationType:DOUAudioVisualizerSmoothInterpolation];
     [view addSubview:_audioVisualizer];
 
-    [[UISlider appearance] setMaximumTrackImage:[UIImage imageNamed:@"slider_max"]
-                                       forState:UIControlStateNormal];
-    [[UISlider appearance] setMinimumTrackImage:[UIImage imageNamed:@"slider_min"]
-                                       forState:UIControlStateNormal];
-    [[UISlider appearance] setThumbImage:[UIImage imageNamed:@"position"]
+    [[UISlider appearance] setMaximumTrackTintColor:UIColorFromRGB(0xA5A5A5)];
+    [[UISlider appearance] setMinimumTrackTintColor:UIColorFromRGB(0x33a853)];
+    [[UISlider appearance] setThumbTintColor:UIColorFromRGB(0x33a853)];
+    /*[[UISlider appearance] setThumbImage:[UIImage imageNamed:@"position"]
                                 forState:UIControlStateNormal];
-    
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+    */
+    UIImage *logo = [UIImage imageNamed: @"logo3"];
+    UIImageView *logoView = [[UIImageView alloc] initWithImage: logo];
+    self.navigationItem.titleView = logoView;
     [self setView:view];
 }
+
 - (void) setNowPlayingTrack:(Track *)track
 {
     if ([MPNowPlayingInfoCenter class]) {
         NSArray *keys = [NSArray arrayWithObjects:MPMediaItemPropertyTitle, MPMediaItemPropertyArtist, MPMediaItemPropertyPlaybackDuration, MPNowPlayingInfoPropertyPlaybackRate, nil];
-        NSArray *values = [NSArray arrayWithObjects:track.title, track.artist, track.duration, [NSNumber numberWithInt:1], nil];
+        NSArray *values = [NSArray arrayWithObjects:[track getTitle], [track getArtist], track.duration, [NSNumber numberWithInt:1], nil];
         NSDictionary *currentlyPlayingTrackInfo = [NSDictionary dictionaryWithObjects:values forKeys:keys];
         
         [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = currentlyPlayingTrackInfo;
     }
 }
+
 - (void)_cancelStreamer {
     if (_streamer != nil) {
         [_streamer pause];
@@ -187,8 +191,8 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [self _cancelStreamer];
     
     Track *track = [_tracks objectAtIndex:_currentTrackIndex];
-    [_titleLabel setText:[NSString htmlEntityDecode:track.title]];
-    [_artistLabel setText:[NSString htmlEntityDecode:track.artist]];
+    [_titleLabel setText:[track getTitle]];
+    [_artistLabel setText:[track getArtist]];
     
     _streamer = [DOUAudioStreamer streamerWithAudioFile:track];
     [_streamer addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:kStatusKVOKey];
@@ -405,7 +409,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         [alert show];
     } else {
         NSURL *url = track.audioFileURL;
-        NSString *filename = [NSString stringWithFormat:@"%@ - %@.mp3", track.artist, track.title];
+        NSString *filename = [[[NSString stringWithFormat:@"%@.%@", track.artist, track.title]MD5] stringByAppendingString:@".mp3"];
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
         AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);

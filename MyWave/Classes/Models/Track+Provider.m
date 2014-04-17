@@ -15,7 +15,7 @@
 + (void)load
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        [self remoteTracks];
+        [self vkontakteTracks];
     });
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
@@ -23,7 +23,7 @@
     });
 }
 
-+ (NSArray *)remoteTracks
++ (NSArray *)vkontakteTracks
 {
     static NSArray *tracks = nil;
     
@@ -37,6 +37,7 @@
             Track *track = [[Track alloc] init];
             [track setArtist:[song objectForKey:@"artist"]];
             [track setTitle:[song objectForKey:@"title"]];
+            [track setDuration:[song objectForKey:@"duration"]];
             [track setAudioFileURL:[NSURL URLWithString:[song objectForKey:@"url"]]];
             [allTracks addObject:track];
         }
@@ -77,15 +78,16 @@
     return tracks;
 }
 
-+ (NSArray *)tracksWithArray:(NSArray *)songs url:(BOOL)url {
++ (NSArray *)tracksWithArray:(NSArray *)songs url:(BOOL)isRemote {
     static NSArray *tracks = nil;
     
     NSMutableArray *allTracks = [NSMutableArray array];
     for (NSDictionary *song in songs) {
         Track *track = [[Track alloc] init];
+        [track setRegID:[song objectForKey:@"regNum"]];
         [track setArtist:[song objectForKey:@"artist"]];
         [track setTitle:[song objectForKey:@"title"]];
-        [track setAudioFileURL: (url ? [NSURL URLWithString:[song objectForKey:@"url"]] : [NSURL fileURLWithPath:[song objectForKey:@"url"]])];
+        [track setAudioFileURL: (isRemote ? [NSURL URLWithString:[song objectForKey:@"url"]] : [NSURL fileURLWithPath:[song objectForKey:@"url"]])];
         [track setDuration:[song objectForKey:@"duration"]];
         [allTracks addObject:track];
     }

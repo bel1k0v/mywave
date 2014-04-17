@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "Vkontakte.h"
-#import "TracksTableViewController.h"
+#import "TracksViewController.h"
 
-@interface VkMusicViewController : TracksTableViewController
+@interface VkMusicViewController : TracksViewController
 {
     Vkontakte *_vk;
     NSCache *searchCache;

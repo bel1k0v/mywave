@@ -10,7 +10,7 @@
 #import "Vkontakte.h"
 #import "DBManager.h"
 
-@interface MainViewController : UIViewController <VkontakteDelegate> {
+@interface MainViewController : UIViewController<VkontakteDelegate, UITableViewDelegate, UITableViewDataSource> {
     Vkontakte *_vk;
     DBManager *_db;
 }
