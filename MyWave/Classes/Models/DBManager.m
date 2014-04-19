@@ -11,7 +11,7 @@ static sqlite3_stmt *statement = nil;
 
 @implementation DBManager
 
-+(DBManager*)getSharedInstance{
++(DBManager*) sharedInstance{
     if (!sharedInstance) {
         sharedInstance = [[super allocWithZone:NULL]init];
         [sharedInstance createDB];

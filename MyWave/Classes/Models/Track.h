@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "DOUAudioFile.h"
+#import "Vkontakte.h"
+#import "DBManager.h"
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface Track : NSObject <DOUAudioFile>
 
@@ -19,4 +22,9 @@
 
 - (NSString *) getArtist;
 - (NSString *) getTitle;
+- (NSString *) getDuration;
+
++ (Track *)createTrackFromVkWithSong:(NSDictionary *) song;
++ (Track *)createTrackFromDbWithSong:(NSDictionary *) song;
+
 @end

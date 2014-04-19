@@ -13,6 +13,7 @@
 #import "JASidePanelController.h"
 #import "UIViewController+JASidePanel.h"
 #import "AppHelper.h"
+#import "Track+Provider.h"
 
 @interface MainViewController () {
     
@@ -33,7 +34,7 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
     [super viewWillAppear:animated];
     _vk = [Vkontakte sharedInstance];
     _vk.delegate = self;
-    _db = [DBManager getSharedInstance];
+    _db = [DBManager sharedInstance];
 }
 
 - (void)loadView {
@@ -102,33 +103,13 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
         [_vk logout];
 }
 
-/*
-- (void)refreshButtonState {
-    if (![_vk isAuthorized])
-        [_buttonVkLogin setTitle:@"Login" forState:UIControlStateNormal];
-    else
-        [_buttonVkLogin setTitle:@"Logout" forState:UIControlStateNormal];
-}
-*/
-
 - (void)_vkMusicControlPressed:(id)sender
 {
-    /*
-    if (![AppHelper isNetworkAvailable]) {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error"
-                                                       message:@"No internet connection"
-                                                      delegate:self
-                                             cancelButtonTitle:@"Ok"
-                                             otherButtonTitles: nil];
-        [alert show];
-        return ;
-    }
-    */
-    
     if (![_vk isAuthorized]) {
         [_vk authenticate];
     } else {
         VkMusicViewController* musicViewController = [VkMusicViewController new];
+        musicViewController->tracks = [[NSMutableArray alloc]initWithArray:[Track vkontakteTracks]];
         [musicViewController setVk:_vk];
         
         [self _changeViewController:musicViewController];
@@ -138,6 +119,7 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
 - (void)_myMusicControlPressed:(id)sender
 {
     MyMusicViewController* musicViewController = [MyMusicViewController new];
+    musicViewController->tracks = [[NSMutableArray alloc]initWithArray:[Track myTracks]];
     [self _changeViewController:musicViewController];
 }
 
@@ -158,6 +140,7 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
 
 - (void)vkontakteAuthControllerDidCancelled {
     [self dismissViewControllerAnimated:YES completion:nil];
+    [self _vkMusicControlPressed:self];
 }
 
 - (void)vkontakteDidFinishLogin:(Vkontakte *)vkontakte {
@@ -165,7 +148,6 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
 }
 
 - (void)vkontakteDidFinishLogOut:(Vkontakte *)vkontakte {
-    //[self refreshButtonState];
 }
 
 @end

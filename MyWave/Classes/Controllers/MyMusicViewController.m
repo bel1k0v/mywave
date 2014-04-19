@@ -13,18 +13,12 @@
 
 @implementation MyMusicViewController
 
-- (void)refreshData {
-    self->tracks = nil;
-    DBManager *db = [DBManager getSharedInstance];
-    self->tracks = [[NSMutableArray alloc]initWithArray:[Track tracksWithArray:[db getSongs] url:NO]];
-    [self.tableView reloadData];
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self initSearch];
     self.title = @"My music";
-    [self refreshData];
+    
+    [self initSearch];
+    [self.tableView reloadData];
 }
 
 #pragma mark - Table view delegate
@@ -40,14 +34,15 @@
         }
         
         NSError *error = nil;
-        [[NSFileManager defaultManager]removeItemAtPath:track.audioFileURL error:&error];
+        NSURL *filepath = track.audioFileURL;
+        [[NSFileManager defaultManager]removeItemAtPath:filepath error:&error];
         if (error) {
             NSLog(@"%@",[error description]);
         }
-        [[DBManager getSharedInstance] deleteById:track.regID];
+        [[DBManager sharedInstance] deleteById:track.regID];
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
                          withRowAnimation:UITableViewRowAnimationFade];
-        [self refreshData];
+        [self.tableView reloadData];
     } else
         return ;
 }

@@ -35,11 +35,11 @@
                                         NSFontAttributeName, nil];
         
         [[UINavigationBar appearance] setTitleTextAttributes: textAttributes];
-        [[UINavigationBar appearance] setBarTintColor:UIColorFromRGB(0x33a853)];
+        [[UINavigationBar appearance] setBarTintColor:UIColorFromRGB(0x0892d0)];
     }
     else
-    { // Less than 6.1
-        self.navigationBar.tintColor = UIColorFromRGB(0x33a853);
+    { // 6.1, 6.0
+        self.navigationBar.tintColor = UIColorFromRGB(0x0892d0);
         // Customize the title text for *all* UINavigationBars
         [[UINavigationBar appearance] setTitleTextAttributes:
          [NSDictionary dictionaryWithObjectsAndKeys:
@@ -50,7 +50,6 @@
           nil]];
     }
     
-    // Navigation Bar
     [self.navigationBar setTintColor:[UIColor whiteColor]];
     NSDictionary *barButtorTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                              [UIColor whiteColor],

@@ -75,12 +75,7 @@
 
     cell.labelTitle.text = [track getTitle];
     cell.labelArtist.text = [track getArtist];
-    
-    double duration = [track.duration doubleValue];
-    int minutes = (int) floor(duration / 60);
-    int seconds = duration - (minutes * 60);
-    NSString *durationText = [NSString stringWithFormat:@"%d:%02d", minutes, seconds];
-    cell.labelDuration.text = durationText;
+    cell.labelDuration.text = [track getDuration];
     
     return cell;
 }
@@ -106,7 +101,6 @@
     [playerViewController setCurrentTrackIndex:indexPath.row];
     [playerViewController setTracksFromRemote:[self isTracksRemote]];
     [playerViewController setTracks:tracksData];
-    
     [self.navigationController pushViewController:playerViewController animated:YES];
 }
 

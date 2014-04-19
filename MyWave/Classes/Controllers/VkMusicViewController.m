@@ -9,6 +9,7 @@
 #import "VkMusicViewController.h"
 #import "NSString+Gender.h"
 #import "Track+Provider.h"
+#import "Track+Search.h"
 
 #define MinSearchLength 2
 #define MaxSearchLength 25
@@ -19,27 +20,23 @@
     _vk = vk;
 }
 
-- (void)refreshData {
-    self->tracks = nil;
-    self->tracks = [[NSMutableArray alloc]initWithArray:[Track vkontakteTracks]];
-    [self.tableView reloadData];
-}
-
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
-        searchCache = [[NSCache alloc] init];
+        _searchCache = [[NSCache alloc] init];
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"Vk music";
+    
     if  (_vk && [_vk isAuthorized]) {
         [self initSearch];
     }
-    self.title = @"Vk music";
-    [self refreshData];
+    
+    [self.tableView reloadData];
 }
 
 - (BOOL) isTracksRemote {
@@ -49,10 +46,10 @@
 #pragma mark - Search display delegate
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
     if (searchString.length > MinSearchLength && searchString.length < MaxSearchLength) {
-        NSArray *cachedData = [searchCache objectForKey:searchString];
+        NSArray *cachedData = [_searchCache objectForKey:searchString];
         if (cachedData == NULL) {
-            cachedData = [Track tracksWithArray:[_vk searchAudio:searchString] url:YES];
-            if (cachedData != NULL) [searchCache setObject:cachedData forKey:searchString];
+            cachedData = [Track vkontakteTracksForSearchString:searchString];
+            if (cachedData != NULL) [_searchCache setObject:cachedData forKey:searchString];
             else cachedData = [NSArray new];
         }
         searchData = [[NSMutableArray alloc]initWithArray:cachedData];

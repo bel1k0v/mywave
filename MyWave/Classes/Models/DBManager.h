@@ -11,7 +11,7 @@
     NSString *databasePath;
 }
 
-+ (DBManager*) getSharedInstance;
++ (DBManager*) sharedInstance;
 
 // C
 - (BOOL) createDB;

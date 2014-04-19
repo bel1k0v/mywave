@@ -11,6 +11,7 @@
 @interface Track (Provider)
 
 + (NSArray *)vkontakteTracks;
++ (NSArray *)myTracks;
 + (NSArray *)musicLibraryTracks;
 + (NSArray *)tracksWithArray:(NSArray *)songs url:(BOOL)url;
 @end

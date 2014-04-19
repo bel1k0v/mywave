@@ -13,7 +13,7 @@
 @interface VkMusicViewController : TracksViewController
 {
     Vkontakte *_vk;
-    NSCache *searchCache;
+    NSCache *_searchCache;
 }
 
 - (void) setVk:(Vkontakte *)vk;

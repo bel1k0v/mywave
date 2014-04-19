@@ -7,8 +7,6 @@
 //
 
 #import "Track+Provider.h"
-#import "Vkontakte.h"
-#import <MediaPlayer/MediaPlayer.h>
 
 @implementation Track (Provider)
 
@@ -17,28 +15,25 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         [self vkontakteTracks];
     });
-    
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        [self musicLibraryTracks];
+        [self myTracks];
     });
 }
 
 + (NSArray *)vkontakteTracks
 {
     static NSArray *tracks = nil;
+    Vkontakte *vk = [Vkontakte sharedInstance];
+    if (![vk isAuthorized]) return nil;
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        Vkontakte *vk = [Vkontakte sharedInstance];
         NSArray *songs = [vk getUserAudio];
         
         NSMutableArray *allTracks = [NSMutableArray array];
         for (NSDictionary *song in songs) {
-            Track *track = [[Track alloc] init];
-            [track setArtist:[song objectForKey:@"artist"]];
-            [track setTitle:[song objectForKey:@"title"]];
-            [track setDuration:[song objectForKey:@"duration"]];
-            [track setAudioFileURL:[NSURL URLWithString:[song objectForKey:@"url"]]];
+            Track *track = [self createTrackFromVkWithSong:song];
             [allTracks addObject:track];
         }
         
@@ -48,6 +43,27 @@
     return tracks;
 }
 
++ (NSArray *)myTracks {
+    static NSArray *tracks = nil;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        DBManager *db = [DBManager sharedInstance];
+        NSArray *songs = [db getSongs];
+        
+        NSMutableArray *allTracks = [NSMutableArray array];
+        for (NSDictionary *song in songs) {
+            Track *track = [self createTrackFromDbWithSong:song];
+            [allTracks addObject:track];
+        }
+        
+        tracks = [allTracks copy];
+    });
+    
+    return tracks;
+}
+
+// NIU
 + (NSArray *)musicLibraryTracks
 {
     static NSArray *tracks = nil;
@@ -77,24 +93,4 @@
     
     return tracks;
 }
-
-+ (NSArray *)tracksWithArray:(NSArray *)songs url:(BOOL)isRemote {
-    static NSArray *tracks = nil;
-    
-    NSMutableArray *allTracks = [NSMutableArray array];
-    for (NSDictionary *song in songs) {
-        Track *track = [[Track alloc] init];
-        [track setRegID:[song objectForKey:@"regNum"]];
-        [track setArtist:[song objectForKey:@"artist"]];
-        [track setTitle:[song objectForKey:@"title"]];
-        [track setAudioFileURL: (isRemote ? [NSURL URLWithString:[song objectForKey:@"url"]] : [NSURL fileURLWithPath:[song objectForKey:@"url"]])];
-        [track setDuration:[song objectForKey:@"duration"]];
-        [allTracks addObject:track];
-    }
-    
-    tracks = [allTracks copy];
-    
-    return tracks;
-}
-
 @end

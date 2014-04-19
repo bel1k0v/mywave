@@ -12,6 +12,7 @@
 #import "MyMusicViewController.h"
 #import "SidePanelController.h"
 #import "AppHelper.h"
+#import "Track+Provider.h"
 
 @implementation AppDelegate
 
@@ -21,6 +22,7 @@
     MainViewController *mainViewController = [MainViewController new];
     MyMusicViewController *musicViewController = [[MyMusicViewController alloc]initWithNibName:@"MyMusicViewController"
                                                                                         bundle:nil];
+    musicViewController->tracks = [[NSMutableArray alloc]initWithArray:[Track myTracks]];
     
     NavigationController *navigationController = [NavigationController new];
     [navigationController setViewControllers:@[musicViewController] animated:YES];

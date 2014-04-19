@@ -155,11 +155,11 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [view addSubview:_audioVisualizer];
 
     [[UISlider appearance] setMaximumTrackTintColor:UIColorFromRGB(0xA5A5A5)];
-    [[UISlider appearance] setMinimumTrackTintColor:UIColorFromRGB(0x33a853)];
-    [[UISlider appearance] setThumbTintColor:UIColorFromRGB(0x33a853)];
-    /*[[UISlider appearance] setThumbImage:[UIImage imageNamed:@"position"]
+    [[UISlider appearance] setMinimumTrackTintColor:UIColorFromRGB(0x0892d0)];
+    [[UISlider appearance] setThumbTintColor:UIColorFromRGB(0x0892d0)];
+    [[UISlider appearance] setThumbImage:[UIImage imageNamed:@"position"]
                                 forState:UIControlStateNormal];
-    */
+    
     UIImage *logo = [UIImage imageNamed: @"logo3"];
     UIImageView *logoView = [[UIImageView alloc] initWithImage: logo];
     self.navigationItem.titleView = logoView;
@@ -399,7 +399,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 
 - (void)_actionDownload:(id)sender {
     Track *track = [_tracks objectAtIndex:_currentTrackIndex];
-    DBManager *db = [DBManager getSharedInstance];
+    DBManager *db = [DBManager sharedInstance];
     if ([db findByTitle:track.title andArtist:track.artist] != nil) {
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning"
                                                         message:@"You already have this track"
