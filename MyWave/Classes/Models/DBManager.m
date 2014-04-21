@@ -152,7 +152,6 @@ static sqlite3_stmt *statement = nil;
 - (NSArray *)getSongs
 {
     NSArray *data = [self findAll];
-    ;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSMutableArray *songs = [[NSMutableArray alloc]init];

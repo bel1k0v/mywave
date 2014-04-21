@@ -50,7 +50,6 @@
 		68ED981A1729AD8D0009C2F6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */; };
 		68ED981C1729ADC90009C2F6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED981B1729ADC90009C2F6 /* CFNetwork.framework */; };
 		68ED9827172B13ED0009C2F6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED9826172B13ED0009C2F6 /* QuartzCore.framework */; };
-		68F7D4D81851045000094192 /* MyWave-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 688453CD172182260092260B /* MyWave-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -354,7 +353,7 @@
 		688453BA172182250092260B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					688453C1172182260092260B = {
@@ -387,7 +386,6 @@
 				688453D0172182260092260B /* InfoPlist.strings in Resources */,
 				682CD8E5184E7D0C006000E6 /* Images.xcassets in Resources */,
 				68787EEA1828374400FC3FFF /* VkMusicViewController.xib in Resources */,
-				68F7D4D81851045000094192 /* MyWave-Info.plist in Resources */,
 				68787D991826CA5500FC3FFF /* MyMusicViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -500,7 +498,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "92E702E0-876D-4FD5-ABE1-3E5FDA8037CF";
-				SDKROOT = iphoneos7.0;
+				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
@@ -526,7 +524,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "4DC60458-14D6-48B0-8F4A-6A4247B45676";
-				SDKROOT = iphoneos7.0;
+				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

@@ -20,11 +20,14 @@
 @property (nonatomic, strong) NSString *duration;
 @property (nonatomic, strong) NSURL *audioFileURL;
 
+- (void) deleteFile;
+- (void) deleteDbRecord;
+
 - (NSString *) getArtist;
 - (NSString *) getTitle;
 - (NSString *) getDuration;
 
-+ (Track *)createTrackFromVkWithSong:(NSDictionary *) song;
-+ (Track *)createTrackFromDbWithSong:(NSDictionary *) song;
++ (Track *) createTrackFromVkWithSong:(NSDictionary *) song;
++ (Track *) createTrackFromDbWithSong:(NSDictionary *) song;
 
 @end

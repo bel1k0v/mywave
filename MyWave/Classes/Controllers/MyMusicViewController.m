@@ -33,13 +33,8 @@
             [self->tracks removeObject:track];
         }
         
-        NSError *error = nil;
-        NSURL *filepath = track.audioFileURL;
-        [[NSFileManager defaultManager]removeItemAtPath:filepath error:&error];
-        if (error) {
-            NSLog(@"%@",[error description]);
-        }
-        [[DBManager sharedInstance] deleteById:track.regID];
+        [track deleteFile];
+        [track deleteDbRecord];
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
                          withRowAnimation:UITableViewRowAnimationFade];
         [self.tableView reloadData];

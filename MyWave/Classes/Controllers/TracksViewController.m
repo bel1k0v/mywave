@@ -30,7 +30,8 @@
     searchData = [NSMutableArray arrayWithCapacity:[self->tracks count]];
     searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
     
-    searchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
+    searchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:searchBar
+                                                                contentsController:self];
     searchDisplayController.delegate = self;
     searchDisplayController.searchResultsDelegate = self;
     searchDisplayController.searchResultsDataSource = self;

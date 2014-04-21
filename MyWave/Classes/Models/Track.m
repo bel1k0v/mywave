@@ -11,6 +11,18 @@
 
 @implementation Track
 
+- (void) deleteFile {
+    NSError *error;
+    [[NSFileManager defaultManager]removeItemAtPath:[self.audioFileURL path] error:&error];
+    if (error) {
+        NSLog(@"%@",[error description]);
+    }
+}
+
+- (void) deleteDbRecord {
+    [[DBManager sharedInstance] deleteById:self.regID];
+}
+
 - (NSString *) getTitle {
     return [NSString htmlEntityDecode:[self.title stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
 }

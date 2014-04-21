@@ -308,7 +308,6 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
     [self _resetStreamer];
     
     _timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_timerAction:) userInfo:nil repeats:YES];
@@ -428,7 +427,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         }];
         
         [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            if (YES == [db saveData:track.artist title:track.title duration:track.duration filename:filename]) {
+            if (YES == [db saveData:track.artist title:track.title duration:track.duration filename:filename]) {// [Track save:track];
                 UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ok"
                                                                 message:@"Saved"
                                                                delegate:nil

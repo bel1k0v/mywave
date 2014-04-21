@@ -35,7 +35,6 @@
     if  (_vk && [_vk isAuthorized]) {
         [self initSearch];
     }
-    
     [self.tableView reloadData];
 }
 

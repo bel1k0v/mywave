@@ -10,8 +10,8 @@
 
 @interface Track (Provider)
 
-+ (NSArray *)vkontakteTracks;
-+ (NSArray *)myTracks;
-+ (NSArray *)musicLibraryTracks;
-+ (NSArray *)tracksWithArray:(NSArray *)songs url:(BOOL)url;
++ (NSArray *) myTracks;
++ (NSArray *) vkontakteTracks;
++ (NSArray *) musicLibraryTracks;
+
 @end

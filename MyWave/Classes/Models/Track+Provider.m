@@ -10,61 +10,45 @@
 
 @implementation Track (Provider)
 
-+ (void)load
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        [self vkontakteTracks];
-    });
-
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        [self myTracks];
-    });
++ (NSArray *) myTracks {
+    static NSArray *tracks = nil;
+    
+    DBManager *db = [DBManager sharedInstance];
+    NSArray *songs = [db getSongs];
+    
+    NSMutableArray *allTracks = [NSMutableArray array];
+    for (NSDictionary *song in songs) {
+        Track *track = [self createTrackFromDbWithSong:song];
+        [allTracks addObject:track];
+    }
+    
+    tracks = [allTracks copy];
+    
+    return tracks;
 }
 
-+ (NSArray *)vkontakteTracks
++ (NSArray *) vkontakteTracks
 {
     static NSArray *tracks = nil;
     Vkontakte *vk = [Vkontakte sharedInstance];
     if (![vk isAuthorized]) return nil;
     
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSArray *songs = [vk getUserAudio];
-        
-        NSMutableArray *allTracks = [NSMutableArray array];
-        for (NSDictionary *song in songs) {
-            Track *track = [self createTrackFromVkWithSong:song];
-            [allTracks addObject:track];
-        }
-        
-        tracks = [allTracks copy];
-    });
+    NSArray *songs = [vk getUserAudio];
     
-    return tracks;
-}
+    NSMutableArray *allTracks = [NSMutableArray array];
+    for (NSDictionary *song in songs) {
+        Track *track = [self createTrackFromVkWithSong:song];
+        [allTracks addObject:track];
+    }
+    
+    tracks = [allTracks copy];
 
-+ (NSArray *)myTracks {
-    static NSArray *tracks = nil;
-    
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        DBManager *db = [DBManager sharedInstance];
-        NSArray *songs = [db getSongs];
-        
-        NSMutableArray *allTracks = [NSMutableArray array];
-        for (NSDictionary *song in songs) {
-            Track *track = [self createTrackFromDbWithSong:song];
-            [allTracks addObject:track];
-        }
-        
-        tracks = [allTracks copy];
-    });
     
     return tracks;
 }
 
 // NIU
-+ (NSArray *)musicLibraryTracks
++ (NSArray *) musicLibraryTracks
 {
     static NSArray *tracks = nil;
     
