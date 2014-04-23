@@ -35,11 +35,11 @@
                                         NSFontAttributeName, nil];
         
         [[UINavigationBar appearance] setTitleTextAttributes: textAttributes];
-        [[UINavigationBar appearance] setBarTintColor:UIColorFromRGB(0x0892d0)];
+        [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:0.0902f green:0.6941f blue:0.9647f alpha:1.0f]];
     }
     else
     { // 6.1, 6.0
-        self.navigationBar.tintColor = UIColorFromRGB(0x0892d0);
+        self.navigationBar.tintColor = [UIColor colorWithRed:0.0902f green:0.6941f blue:0.9647f alpha:1.0f];
         // Customize the title text for *all* UINavigationBars
         [[UINavigationBar appearance] setTitleTextAttributes:
          [NSDictionary dictionaryWithObjectsAndKeys:

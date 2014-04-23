@@ -67,14 +67,14 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [_titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_titleLabel];
     
-    _artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_titleLabel frame]) + 6.0, CGRectGetWidth([view bounds]) - 40, 20.0)];
+    _artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_titleLabel frame]) + 4.0, CGRectGetWidth([view bounds]) - 40, 20.0)];
     [_artistLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeDefault]];
     [_artistLabel setTextColor:UIColorFromRGB(0x666666)];
     [_artistLabel setTextAlignment:NSTextAlignmentCenter];
     [_artistLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_artistLabel];
 
-    _statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_artistLabel frame]) + 10.0, CGRectGetWidth([view bounds]) - 40, 20.0)];
+    _statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_artistLabel frame]) + 8.0, CGRectGetWidth([view bounds]) - 40, 20.0)];
     [_statusLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeSmall]];
     [_statusLabel setTextColor:UIColorFromRGB(0x333333)];
     [_statusLabel setTextAlignment:NSTextAlignmentCenter];
@@ -99,34 +99,25 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [_elapsedTimeLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_elapsedTimeLabel];
     
-    if (self.tracksFromRemote == YES) {
-        _buttonDownload = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_buttonDownload setFrame:CGRectMake(0, 0, 30.0, 30.0)];
-        [_buttonDownload setBackgroundImage:[UIImage imageNamed:@"download-white"] forState:UIControlStateNormal];
-        [_buttonDownload addTarget:self action:@selector(_actionDownload:) forControlEvents:UIControlEventTouchDown];
-        UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc]initWithCustomView:_buttonDownload];
-        self.navigationItem.rightBarButtonItem = rightBarItem;
-    }
-    
     _buttonPlayPause = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonPlayPause setFrame:CGRectMake((CGRectGetWidth([view bounds]) - 99.0) / 2 , CGRectGetMaxY([_progressSlider frame]) + 25.0, 99.0, 99.0)];
-    [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+    [_buttonPlayPause setFrame:CGRectMake((CGRectGetWidth([view bounds]) - 99.0) / 2 , CGRectGetMaxY([_progressSlider frame]) + 55.0, 99.0, 99.0)];
+    [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"mw_play"] forState:UIControlStateNormal];
     [_buttonPlayPause addTarget:self action:@selector(_actionPlayPause:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonPlayPause];
     
     _buttonNext = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonNext setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 20.0 - 53.0, CGRectGetMinY([_buttonPlayPause frame]) + 23, 53.0, 53.0)];
-    [_buttonNext setBackgroundImage:[UIImage imageNamed:@"ff"] forState:UIControlStateNormal];
+    [_buttonNext setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 20.0 - 60.0, CGRectGetMinY([_buttonPlayPause frame]) + 34.0, 60.0, 31.0)];
+    [_buttonNext setBackgroundImage:[UIImage imageNamed:@"mw_fw"] forState:UIControlStateNormal];
     [_buttonNext addTarget:self action:@selector(_actionNext:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonNext];
     
     _buttonPrevious = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonPrevious setFrame:CGRectMake(20, CGRectGetMinY([_buttonPlayPause frame]) + 23, 53.0, 53.0)];
-    [_buttonPrevious setBackgroundImage:[UIImage imageNamed:@"rw"] forState:UIControlStateNormal];
+    [_buttonPrevious setFrame:CGRectMake(20, CGRectGetMinY([_buttonPlayPause frame]) + 34.0, 60.0, 31.0)];
+    [_buttonPrevious setBackgroundImage:[UIImage imageNamed:@"mw_bw"] forState:UIControlStateNormal];
     [_buttonPrevious addTarget:self action:@selector(_actionPrevious:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonPrevious];
 
-    _volumeSlider = [[UISlider alloc] initWithFrame:CGRectMake(50.0, CGRectGetMaxY([_buttonPlayPause frame]) + 25.0, CGRectGetWidth([view bounds]) - 100.0, 20.0)];
+    _volumeSlider = [[UISlider alloc] initWithFrame:CGRectMake(50.0, CGRectGetMaxY([_buttonPlayPause frame]) + 55.0, CGRectGetWidth([view bounds]) - 100.0, 20.0)];
     [_volumeSlider addTarget:self action:@selector(_actionSliderVolume:) forControlEvents:UIControlEventValueChanged];
     [view addSubview:_volumeSlider];
     
@@ -138,6 +129,14 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [_imageVolumeHigh setImage:[UIImage imageNamed:@"vol_max"]];
     [view addSubview:_imageVolumeHigh];
     
+    if (self.tracksFromRemote == YES) {
+        _buttonDownload = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_buttonDownload setFrame:CGRectMake(0, 0, 30.0, 30.0)];
+        [_buttonDownload setBackgroundImage:[UIImage imageNamed:@"download-white"] forState:UIControlStateNormal];
+        [_buttonDownload addTarget:self action:@selector(_actionDownload:) forControlEvents:UIControlEventTouchDown];
+        UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc]initWithCustomView:_buttonDownload];
+        self.navigationItem.rightBarButtonItem = rightBarItem;
+    }
     
     CGFloat visStart = CGRectGetMaxY([_volumeSlider frame]) + 25;
     CGFloat visHeight = CGRectGetHeight([view bounds]) - visStart;
@@ -155,10 +154,11 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [view addSubview:_audioVisualizer];
 
     [[UISlider appearance] setMaximumTrackTintColor:UIColorFromRGB(0xA5A5A5)];
-    [[UISlider appearance] setMinimumTrackTintColor:UIColorFromRGB(0x0892d0)];
-    [[UISlider appearance] setThumbTintColor:UIColorFromRGB(0x0892d0)];
-    [[UISlider appearance] setThumbImage:[UIImage imageNamed:@"position"]
+    [[UISlider appearance] setMinimumTrackTintColor:UIColorFromRGB(0x17b1f6)];
+    [[UISlider appearance] setThumbImage:[UIImage imageNamed:@"mw_pos"]
                                 forState:UIControlStateNormal];
+    [[UISlider appearance] setThumbImage:[UIImage imageNamed:@"mw_pos"]
+                                forState:UIControlStateSelected];
     
     UIImage *logo = [UIImage imageNamed: @"logo3"];
     UIImageView *logoView = [[UIImageView alloc] initWithImage: logo];
@@ -241,17 +241,17 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     switch ([_streamer status]) {
         case DOUAudioStreamerPlaying:
             [_statusLabel setText:@"Playing"];
-            [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
+            [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"mw_pause"] forState:UIControlStateNormal];
             break;
             
         case DOUAudioStreamerPaused:
             [_statusLabel setText:@"Paused"];
-            [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+            [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"mw_play"] forState:UIControlStateNormal];
             break;
             
         case DOUAudioStreamerIdle:
             [_statusLabel setText:@"Idle"];
-            [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+            [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"mw_play"] forState:UIControlStateNormal];
             break;
             
         case DOUAudioStreamerFinished:
