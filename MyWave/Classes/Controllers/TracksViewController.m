@@ -41,6 +41,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"Tracks";
 }
 
 - (void)didReceiveMemoryWarning {

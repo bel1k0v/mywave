@@ -30,7 +30,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"Remote music";
     
     if  (_vk && [_vk isAuthorized]) {
         [self initSearch];

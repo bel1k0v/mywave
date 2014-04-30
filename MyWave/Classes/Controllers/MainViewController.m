@@ -42,8 +42,8 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
     providers = [[NSArray alloc]initWithObjects:@"my", @"remote", nil];
     
     UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    _imageViewLogo = [[UIImageView alloc]initWithFrame:CGRectMake(15.0f, 20.0f, view.frame.size.width - 85.0f, 54.0f)];
-    _imageViewLogo.image = [UIImage imageNamed:@"logo3"];
+    _imageViewLogo = [[UIImageView alloc]initWithFrame:CGRectMake(15.0f, 30.0f, 52.0f, 24.0f)];
+    _imageViewLogo.image = [UIImage imageNamed:@"logo_white"];
     [view addSubview:_imageViewLogo];
     
     _tableViewProviders = [[UITableView alloc]initWithFrame:CGRectMake(0, 64.0f, view.frame.size.width, view.frame.size.height - 74.0f)
@@ -75,11 +75,11 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
 
     UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewStylePlain reuseIdentifier:CellIdentifier];
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
     cell.backgroundColor = UIColorFromRGB(0x0f3743);
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ music", [[providers objectAtIndex:indexPath.row] capitalizedString]];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@", [[providers objectAtIndex:indexPath.row] capitalizedString]];
     cell.textLabel.textColor = [UIColor whiteColor];
     
     return cell;

@@ -15,7 +15,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"My music";
     
     [self initSearch];
     [self.tableView reloadData];
