@@ -17,4 +17,5 @@
 
 @interface AppHelper : NSObject
 + (BOOL) isNetworkAvailable;
++ (CGFloat) getDeviceHeight;
 @end

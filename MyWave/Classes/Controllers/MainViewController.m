@@ -8,7 +8,7 @@
 
 #import "NavigationController.h"
 #import "MainViewController.h"
-#import "VkMusicViewController.h"
+#import "RemoteMusicViewController.h"
 #import "MyMusicViewController.h"
 #import "JASidePanelController.h"
 #import "UIViewController+JASidePanel.h"
@@ -19,6 +19,7 @@
     
 @private
     NSArray *providers;
+    IBOutlet UIImageView *_imageViewLogo;
     IBOutlet UITableView *_tableViewProviders;
     IBOutlet UIButton *_buttonMyMusic;
     IBOutlet UIButton *_buttonVkMusic;
@@ -38,18 +39,22 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
 }
 
 - (void)loadView {
-    providers = [[NSArray alloc]initWithObjects:@"my", @"vk", nil];
+    providers = [[NSArray alloc]initWithObjects:@"my", @"remote", nil];
     
     UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    _tableViewProviders = [[UITableView alloc]initWithFrame:CGRectMake(0, 64.0, view.frame.size.width, view.frame.size.height - 64.0)
+    _imageViewLogo = [[UIImageView alloc]initWithFrame:CGRectMake(15.0f, 20.0f, view.frame.size.width - 85.0f, 54.0f)];
+    _imageViewLogo.image = [UIImage imageNamed:@"logo3"];
+    [view addSubview:_imageViewLogo];
+    
+    _tableViewProviders = [[UITableView alloc]initWithFrame:CGRectMake(0, 64.0f, view.frame.size.width, view.frame.size.height - 74.0f)
  style:UITableViewStylePlain];
     _tableViewProviders.backgroundColor = UIColorFromRGB(0x0f3743);
     _tableViewProviders.dataSource = self;
     _tableViewProviders.delegate = self;
     [_tableViewProviders setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [view addSubview:_tableViewProviders];
-    view.backgroundColor = UIColorFromRGB(0x0f3743);
     
+    view.backgroundColor = UIColorFromRGB(0x0f3743);
     [self setView:view];
 }
 
@@ -103,12 +108,12 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
         [_vk logout];
 }
 
-- (void)_vkMusicControlPressed:(id)sender
+- (void)_remoteMusicControlPressed:(id)sender
 {
     if (![_vk isAuthorized]) {
         [_vk authenticate];
     } else {
-        VkMusicViewController* musicViewController = [VkMusicViewController new];
+        RemoteMusicViewController* musicViewController = [RemoteMusicViewController new];
         musicViewController->tracks = [[NSMutableArray alloc]initWithArray:[Track vkontakteTracks]];
         [musicViewController setVk:_vk];
         
@@ -140,7 +145,7 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
 
 - (void)vkontakteAuthControllerDidCancelled {
     [self dismissViewControllerAnimated:YES completion:nil];
-    [self _vkMusicControlPressed:self];
+    [self _remoteMusicControlPressed:self];
 }
 
 - (void)vkontakteDidFinishLogin:(Vkontakte *)vkontakte {

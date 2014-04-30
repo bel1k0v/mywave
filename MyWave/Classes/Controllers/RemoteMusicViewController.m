@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 MyWave. All rights reserved.
 //
 
-#import "VkMusicViewController.h"
+#import "RemoteMusicViewController.h"
 #import "NSString+Gender.h"
 #import "Track+Provider.h"
 #import "Track+Search.h"
@@ -14,7 +14,7 @@
 #define MinSearchLength 2
 #define MaxSearchLength 25
 
-@implementation VkMusicViewController
+@implementation RemoteMusicViewController
 
 - (void) setVk:(Vkontakte *)vk {
     _vk = vk;
@@ -30,7 +30,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"Vk music";
+    self.title = @"Remote music";
     
     if  (_vk && [_vk isAuthorized]) {
         [self initSearch];

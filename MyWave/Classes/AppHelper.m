@@ -20,4 +20,8 @@
     }
 }
 
++ (CGFloat) getDeviceHeight {
+    CGRect bounds = [[UIScreen mainScreen] bounds];
+    return bounds.size.height;
+}
 @end

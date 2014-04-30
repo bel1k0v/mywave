@@ -55,6 +55,10 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 
 - (void)loadView {
     UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    float spaceBetweenButtonsAndSliders = 55.0f;
+    if ([AppHelper getDeviceHeight] == 480) {
+        spaceBetweenButtonsAndSliders = 25.0f;
+    }
     view.backgroundColor = UIColorFromRGB(0xFFFFFFF);
     CGFloat topPoint = 84.0;
     if ([[UIDevice currentDevice].systemVersion floatValue] < 7.0f) {
@@ -100,7 +104,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [view addSubview:_elapsedTimeLabel];
     
     _buttonPlayPause = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonPlayPause setFrame:CGRectMake((CGRectGetWidth([view bounds]) - 99.0) / 2 , CGRectGetMaxY([_progressSlider frame]) + 55.0, 99.0, 99.0)];
+    [_buttonPlayPause setFrame:CGRectMake((CGRectGetWidth([view bounds]) - 99.0) / 2 , CGRectGetMaxY([_progressSlider frame]) + spaceBetweenButtonsAndSliders, 99.0, 99.0)];
     [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"mw_play"] forState:UIControlStateNormal];
     [_buttonPlayPause addTarget:self action:@selector(_actionPlayPause:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonPlayPause];
@@ -117,7 +121,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [_buttonPrevious addTarget:self action:@selector(_actionPrevious:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonPrevious];
 
-    _volumeSlider = [[UISlider alloc] initWithFrame:CGRectMake(50.0, CGRectGetMaxY([_buttonPlayPause frame]) + 55.0, CGRectGetWidth([view bounds]) - 100.0, 20.0)];
+    _volumeSlider = [[UISlider alloc] initWithFrame:CGRectMake(50.0, CGRectGetMaxY([_buttonPlayPause frame]) + spaceBetweenButtonsAndSliders, CGRectGetWidth([view bounds]) - 100.0, 20.0)];
     [_volumeSlider addTarget:self action:@selector(_actionSliderVolume:) forControlEvents:UIControlEventValueChanged];
     [view addSubview:_volumeSlider];
     
@@ -138,11 +142,11 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         self.navigationItem.rightBarButtonItem = rightBarItem;
     }
     
-    CGFloat visStart = CGRectGetMaxY([_volumeSlider frame]) + 25;
+    CGFloat visStart = CGRectGetMaxY([_volumeSlider frame]) + 10.0f;
     CGFloat visHeight = CGRectGetHeight([view bounds]) - visStart;
 
     if ([[UIDevice currentDevice].systemVersion floatValue] < 7.0f) {
-        visHeight = visHeight - 64.0;
+        visHeight = visHeight - 66.0;
         [_titleLabel setBackgroundColor:[UIColor clearColor]];
         [_artistLabel setBackgroundColor:[UIColor clearColor]];
         [_statusLabel setBackgroundColor:[UIColor clearColor]];

@@ -33,7 +33,7 @@
 		68787EB21827A8BC00FC3FFF /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EB11827A8BC00FC3FFF /* DBManager.m */; };
 		68787EE21828368600FC3FFF /* MyMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EE11828368600FC3FFF /* MyMusicViewController.m */; };
 		68787EE5182836AE00FC3FFF /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EE4182836AE00FC3FFF /* MainViewController.m */; };
-		68787EE81828373700FC3FFF /* VkMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EE71828373700FC3FFF /* VkMusicViewController.m */; };
+		68787EE81828373700FC3FFF /* RemoteMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EE71828373700FC3FFF /* RemoteMusicViewController.m */; };
 		68787EEA1828374400FC3FFF /* VkMusicViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68787EE91828374400FC3FFF /* VkMusicViewController.xib */; };
 		688453C6172182260092260B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 688453C5172182260092260B /* UIKit.framework */; };
 		688453C8172182260092260B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 688453C7172182260092260B /* Foundation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -92,8 +92,8 @@
 		68787EE11828368600FC3FFF /* MyMusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMusicViewController.m; sourceTree = "<group>"; };
 		68787EE3182836AE00FC3FFF /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		68787EE4182836AE00FC3FFF /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
-		68787EE61828373700FC3FFF /* VkMusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VkMusicViewController.h; sourceTree = "<group>"; };
-		68787EE71828373700FC3FFF /* VkMusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VkMusicViewController.m; sourceTree = "<group>"; };
+		68787EE61828373700FC3FFF /* RemoteMusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoteMusicViewController.h; sourceTree = "<group>"; };
+		68787EE71828373700FC3FFF /* RemoteMusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemoteMusicViewController.m; sourceTree = "<group>"; };
 		68787EE91828374400FC3FFF /* VkMusicViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VkMusicViewController.xib; sourceTree = "<group>"; };
 		688453C2172182260092260B /* MyWave.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyWave.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		688453C5172182260092260B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -189,8 +189,8 @@
 			children = (
 				68365C3A18FD2491005403E8 /* NavigationController.h */,
 				68365C3B18FD2491005403E8 /* NavigationController.m */,
-				68787EE61828373700FC3FFF /* VkMusicViewController.h */,
-				68787EE71828373700FC3FFF /* VkMusicViewController.m */,
+				68787EE61828373700FC3FFF /* RemoteMusicViewController.h */,
+				68787EE71828373700FC3FFF /* RemoteMusicViewController.m */,
 				68787EE3182836AE00FC3FFF /* MainViewController.h */,
 				68787EE4182836AE00FC3FFF /* MainViewController.m */,
 				68787EE01828368600FC3FFF /* MyMusicViewController.h */,
@@ -443,7 +443,7 @@
 				688453F21721848B0092260B /* MBProgressHUD.m in Sources */,
 				683F31E718B2ACBE00D37C05 /* Track.m in Sources */,
 				688453F5172185E70092260B /* VkontakteViewController.m in Sources */,
-				68787EE81828373700FC3FFF /* VkMusicViewController.m in Sources */,
+				68787EE81828373700FC3FFF /* RemoteMusicViewController.m in Sources */,
 				68787EE5182836AE00FC3FFF /* MainViewController.m in Sources */,
 				68787EE21828368600FC3FFF /* MyMusicViewController.m in Sources */,
 				68787D901826533700FC3FFF /* PlayerViewController.m in Sources */,

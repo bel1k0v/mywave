@@ -26,6 +26,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [self.navigationBar setTintColor:[UIColor whiteColor]];
     if ([[UIDevice currentDevice].systemVersion floatValue] > 6.1f)
     {
         NSDictionary *textAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -50,7 +52,7 @@
           nil]];
     }
     
-    [self.navigationBar setTintColor:[UIColor whiteColor]];
+    
     NSDictionary *barButtorTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                              [UIColor whiteColor],
                                              NSForegroundColorAttributeName,
