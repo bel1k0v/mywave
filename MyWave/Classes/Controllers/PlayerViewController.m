@@ -354,10 +354,10 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 }
 
  - (void)viewWillDisappear:(BOOL)animated {
+     
      [_timer invalidate];
      [_streamer stop];
      [self _cancelStreamer];
-     
      [super viewWillDisappear:animated];
  }
 

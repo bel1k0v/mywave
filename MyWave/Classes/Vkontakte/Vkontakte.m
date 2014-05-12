@@ -388,11 +388,11 @@ NSString * const vkRedirectUrl = @"http://oauth.vk.com/blank.html";
 
     NSDictionary *parsedDictionary = [self sendRequest:url withCaptcha:NO];
     NSArray *array = [parsedDictionary objectForKey:@"response"];
-    
+
     if ([parsedDictionary objectForKey:@"response"])
     {
         NSRange range;
-        range.location = 1;
+        range.location = 0;
         range.length = [array count] - 1;
         NSArray *music = [array subarrayWithRange:range];
         return music;

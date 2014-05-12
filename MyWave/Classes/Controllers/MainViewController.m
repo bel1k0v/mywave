@@ -39,7 +39,7 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
 }
 
 - (void)loadView {
-    providers = [[NSArray alloc]initWithObjects:@"my", @"remote", nil];
+    providers = [[NSArray alloc]initWithObjects:@"downloaded", @"vkontakte", nil];
     
     UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     _imageViewLogo = [[UIImageView alloc]initWithFrame:CGRectMake(15.0f, 30.0f, 52.0f, 24.0f)];
@@ -59,15 +59,23 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 50.0f;
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return @"Music on a device";
+    } else {
+        return @"Social accounts";
+    }
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 2;
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -79,14 +87,14 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
     }
     
     cell.backgroundColor = UIColorFromRGB(0x0f3743);
-    cell.textLabel.text = [NSString stringWithFormat:@"%@", [[providers objectAtIndex:indexPath.row] capitalizedString]];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@", [[providers objectAtIndex:indexPath.row + indexPath.section] capitalizedString]];
     cell.textLabel.textColor = [UIColor whiteColor];
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *sel = [NSString stringWithFormat:selectorStringFormat, [providers objectAtIndex:indexPath.row]];
+    NSString *sel = [NSString stringWithFormat:selectorStringFormat, [providers objectAtIndex:indexPath.row + indexPath.section]];
     [self performSelector:NSSelectorFromString(sel) onThread:[NSThread mainThread] withObject:nil waitUntilDone:NO];
 }
 
@@ -108,7 +116,7 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
         [_vk logout];
 }
 
-- (void)_remoteMusicControlPressed:(id)sender
+- (void)_vkontakteMusicControlPressed:(id)sender
 {
     if (![_vk isAuthorized]) {
         [_vk authenticate];
@@ -121,7 +129,7 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
     }
 }
 
-- (void)_myMusicControlPressed:(id)sender
+- (void)_downloadedMusicControlPressed:(id)sender
 {
     MyMusicViewController* musicViewController = [MyMusicViewController new];
     musicViewController->tracks = [[NSMutableArray alloc]initWithArray:[Track myTracks]];
@@ -145,7 +153,7 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
 
 - (void)vkontakteAuthControllerDidCancelled {
     [self dismissViewControllerAnimated:YES completion:nil];
-    [self _remoteMusicControlPressed:self];
+    [self _vkontakteMusicControlPressed:self];
 }
 
 - (void)vkontakteDidFinishLogin:(Vkontakte *)vkontakte {
