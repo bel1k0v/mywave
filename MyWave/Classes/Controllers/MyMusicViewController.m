@@ -10,12 +10,12 @@
 #import "NSString+Gender.h"
 #import "DBManager.h"
 #import "Track+Provider.h"
+#include "AppHelper.h"
 
 @implementation MyMusicViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     [self initSearch];
     [self.tableView reloadData];
 }

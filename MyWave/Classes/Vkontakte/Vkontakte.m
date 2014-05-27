@@ -1,3 +1,10 @@
+//
+//  VkontakteViewController.h
+//  MyWave
+//
+//  Created by Дмитрий on 19.04.13.
+//  Copyright (c) 2013 MyWave. All rights reserved.
+
 #import "Vkontakte.h"
 #import "NSString+URLEncoding.h"
 
@@ -395,6 +402,7 @@ NSString * const vkRedirectUrl = @"http://oauth.vk.com/blank.html";
         range.location = 0;
         range.length = [array count] - 1;
         NSArray *music = [array subarrayWithRange:range];
+        NSLog(@"%@", music);
         return music;
     }
     else

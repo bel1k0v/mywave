@@ -10,6 +10,7 @@
 #import "NSString+Gender.h"
 #import "Track+Provider.h"
 #import "Track+Search.h"
+#import "AppHelper.h"
 
 #define MinSearchLength 2
 #define MaxSearchLength 25
@@ -21,19 +22,25 @@
 }
 
 - (id)initWithStyle:(UITableViewStyle)style {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    
     self = [super initWithStyle:style];
     if (self) {
         _searchCache = [[NSCache alloc] init];
     }
+    
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    if  (_vk && [_vk isAuthorized]) {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    if (_vk && [_vk isAuthorized]) {
         [self initSearch];
+        [_vk getUserInfo];
     }
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setFont:[UIFont fontWithName:BaseFont     size:BaseFontSizeDefault]];
+    
     [self.tableView reloadData];
 }
 

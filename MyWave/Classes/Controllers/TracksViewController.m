@@ -11,6 +11,7 @@
 #import "NSString+HTML.h"
 #import "TracksViewController.h"
 #import "Track+Provider.h"
+#import "AppHelper.h"
 
 @interface TracksViewController ()
 
