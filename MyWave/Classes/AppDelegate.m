@@ -9,7 +9,7 @@
 #import "AppDelegate.h"
 #import "NavigationController.h"
 #import "MainViewController.h"
-#import "MyMusicViewController.h"
+#import "DeviceMusicViewController.h"
 #import "SidePanelController.h"
 #import "AppHelper.h"
 #import "Track+Provider.h"
@@ -20,9 +20,9 @@
 {    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     MainViewController *mainViewController = [MainViewController new];
-    MyMusicViewController *musicViewController = [[MyMusicViewController alloc]initWithNibName:@"MyMusicViewController"
+    DeviceMusicViewController *musicViewController = [[DeviceMusicViewController alloc]initWithNibName:@"MyMusicViewController"
                                                                                         bundle:nil];
-    musicViewController->tracks = [[NSMutableArray alloc]initWithArray:[Track myTracks]];
+    musicViewController->tracks = [[NSMutableArray alloc]initWithArray:[Track deviceTracks]];
     
     NavigationController *navigationController = [NavigationController new];
     [navigationController setViewControllers:@[musicViewController] animated:YES];

@@ -10,12 +10,6 @@
 #import "Vkontakte.h"
 #import "TracksViewController.h"
 
-@interface RemoteMusicViewController : TracksViewController
-{
-    Vkontakte *_vk;
-    NSCache *_searchCache;
-}
-
-- (void) setVk:(Vkontakte *)vk;
+@interface VkontakteMusicViewController : TracksViewController
 
 @end

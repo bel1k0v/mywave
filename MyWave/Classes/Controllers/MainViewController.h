@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "Vkontakte.h"
-#import "DBManager.h"
+#import "TrackDbManager.h"
 
 @interface MainViewController : UIViewController<VkontakteDelegate, UITableViewDelegate, UITableViewDataSource> {
     Vkontakte *_vk;
-    DBManager *_db;
+    TrackDbManager *_db;
 }
 
 @end

@@ -10,8 +10,7 @@
 
 @interface Track (Provider)
 
-+ (NSArray *) myTracks;
++ (NSArray *) deviceTracks;
 + (NSArray *) vkontakteTracks;
-+ (NSArray *) musicLibraryTracks;
 
 @end

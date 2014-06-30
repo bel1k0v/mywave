@@ -6,13 +6,12 @@
 //  Copyright (c) 2013 MyWave. All rights reserved.
 //
 
-#import "MyMusicViewController.h"
+#import "DeviceMusicViewController.h"
 #import "NSString+Gender.h"
-#import "DBManager.h"
 #import "Track+Provider.h"
 #include "AppHelper.h"
 
-@implementation MyMusicViewController
+@implementation DeviceMusicViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -44,8 +43,15 @@
 #pragma mark Content Filtering
 - (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope {
     [searchData removeAllObjects];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"title CONTAINS[c] %@", searchText];
-    searchData = [NSMutableArray arrayWithArray:[self->tracks filteredArrayUsingPredicate:predicate]];
+    
+    NSPredicate *predicateByTitle = [NSPredicate predicateWithFormat:@"title CONTAINS[c] %@  ", searchText];
+    NSPredicate *predicateByArtist = [NSPredicate predicateWithFormat:@"artist CONTAINS[c] %@  ", searchText];
+    NSArray *byTitle = [self->tracks filteredArrayUsingPredicate:predicateByTitle];
+    NSArray *byArtits = [self->tracks filteredArrayUsingPredicate:predicateByArtist];
+    NSMutableSet *set = [NSMutableSet setWithArray:byTitle];
+    [set addObjectsFromArray:byArtits];
+    
+    searchData = [NSMutableArray arrayWithArray:[set allObjects]];
 }
 
 #pragma mark - Search display delegate

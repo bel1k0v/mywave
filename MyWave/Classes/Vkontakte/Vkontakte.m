@@ -346,9 +346,11 @@ NSString * const vkRedirectUrl = @"http://oauth.vk.com/blank.html";
 	NSData *response = [NSURLConnection sendSynchronousRequest:request
 											 returningResponse:nil
 														 error:nil];
+    /*
 	NSString *responseString = [[NSString alloc] initWithData:response
                                                      encoding:NSUTF8StringEncoding];
 	NSLog(@"%@",responseString);
+    */
     
     NSError* error;
     NSDictionary* parsedDictionary = [NSJSONSerialization
@@ -402,7 +404,7 @@ NSString * const vkRedirectUrl = @"http://oauth.vk.com/blank.html";
         range.location = 0;
         range.length = [array count] - 1;
         NSArray *music = [array subarrayWithRange:range];
-        NSLog(@"%@", music);
+
         return music;
     }
     else

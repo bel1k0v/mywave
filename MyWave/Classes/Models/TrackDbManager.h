@@ -6,22 +6,19 @@
 #import <Foundation/Foundation.h>
 #import <sqlite3.h>
 
-@interface DBManager : NSObject
+@interface TrackDbManager : NSObject
 {
     NSString *databasePath;
 }
 
-+ (DBManager*) sharedInstance;
++ (TrackDbManager*) sharedInstance;
 
-// C
 - (BOOL) createDB;
 - (BOOL) saveData:(NSString*)artist title:(NSString*)title
        duration:(NSString*)duration filename:(NSString*)filename;
 
-// D
 - (BOOL) deleteById:(NSString *)registeredNumber;
 
-// S
 - (NSArray*) findById:(NSString*)registerNumber;
 - (NSArray*) findAll;
 - (NSArray*) getSongs;

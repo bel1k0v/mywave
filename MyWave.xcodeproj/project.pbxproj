@@ -11,7 +11,6 @@
 		682CD8E5184E7D0C006000E6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 682CD8E4184E7D0C006000E6 /* Images.xcassets */; };
 		6833F80E184A958A00C156AB /* TrackCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6833F80C184A958A00C156AB /* TrackCell.m */; };
 		68365C3C18FD2491005403E8 /* NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68365C3B18FD2491005403E8 /* NavigationController.m */; };
-		68365C4018FF0858005403E8 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 68365C3F18FF0858005403E8 /* NSString+MD5.m */; };
 		6838F67B18535213005DB7BF /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6838F67A18535213005DB7BF /* libz.dylib */; };
 		683F31E718B2ACBE00D37C05 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 683F31E618B2ACBE00D37C05 /* Track.m */; };
 		683F31EA18B2AD1000D37C05 /* Track+Provider.m in Sources */ = {isa = PBXBuildFile; fileRef = 683F31E918B2AD1000D37C05 /* Track+Provider.m */; };
@@ -30,10 +29,10 @@
 		68787E6E182789F100FC3FFF /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68787E6A182789F100FC3FFF /* SystemConfiguration.framework */; };
 		68787E7018278A1800FC3FFF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68787E6F18278A1800FC3FFF /* MobileCoreServices.framework */; };
 		68787EAC1827A7BF00FC3FFF /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 68787EAB1827A7BF00FC3FFF /* libsqlite3.0.dylib */; };
-		68787EB21827A8BC00FC3FFF /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EB11827A8BC00FC3FFF /* DBManager.m */; };
-		68787EE21828368600FC3FFF /* MyMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EE11828368600FC3FFF /* MyMusicViewController.m */; };
+		68787EB21827A8BC00FC3FFF /* TrackDbManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EB11827A8BC00FC3FFF /* TrackDbManager.m */; };
+		68787EE21828368600FC3FFF /* DeviceMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EE11828368600FC3FFF /* DeviceMusicViewController.m */; };
 		68787EE5182836AE00FC3FFF /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EE4182836AE00FC3FFF /* MainViewController.m */; };
-		68787EE81828373700FC3FFF /* RemoteMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EE71828373700FC3FFF /* RemoteMusicViewController.m */; };
+		68787EE81828373700FC3FFF /* VkontakteMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EE71828373700FC3FFF /* VkontakteMusicViewController.m */; };
 		68787EEA1828374400FC3FFF /* VkMusicViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68787EE91828374400FC3FFF /* VkMusicViewController.xib */; };
 		688453C6172182260092260B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 688453C5172182260092260B /* UIKit.framework */; };
 		688453C8172182260092260B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 688453C7172182260092260B /* Foundation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -58,8 +57,6 @@
 		6833F80C184A958A00C156AB /* TrackCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackCell.m; sourceTree = "<group>"; };
 		68365C3A18FD2491005403E8 /* NavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NavigationController.h; path = ../NavigationController.h; sourceTree = "<group>"; };
 		68365C3B18FD2491005403E8 /* NavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NavigationController.m; path = ../NavigationController.m; sourceTree = "<group>"; };
-		68365C3E18FF0858005403E8 /* NSString+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = "<group>"; };
-		68365C3F18FF0858005403E8 /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
 		6838F67A18535213005DB7BF /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		683F31E518B2ACBE00D37C05 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
 		683F31E618B2ACBE00D37C05 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
@@ -86,14 +83,14 @@
 		68787E6A182789F100FC3FFF /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		68787E6F18278A1800FC3FFF /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		68787EAB1827A7BF00FC3FFF /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
-		68787EB01827A8BC00FC3FFF /* DBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBManager.h; sourceTree = "<group>"; };
-		68787EB11827A8BC00FC3FFF /* DBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBManager.m; sourceTree = "<group>"; };
-		68787EE01828368600FC3FFF /* MyMusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMusicViewController.h; sourceTree = "<group>"; };
-		68787EE11828368600FC3FFF /* MyMusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMusicViewController.m; sourceTree = "<group>"; };
+		68787EB01827A8BC00FC3FFF /* TrackDbManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackDbManager.h; sourceTree = "<group>"; };
+		68787EB11827A8BC00FC3FFF /* TrackDbManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackDbManager.m; sourceTree = "<group>"; };
+		68787EE01828368600FC3FFF /* DeviceMusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceMusicViewController.h; sourceTree = "<group>"; };
+		68787EE11828368600FC3FFF /* DeviceMusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceMusicViewController.m; sourceTree = "<group>"; };
 		68787EE3182836AE00FC3FFF /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		68787EE4182836AE00FC3FFF /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
-		68787EE61828373700FC3FFF /* RemoteMusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoteMusicViewController.h; sourceTree = "<group>"; };
-		68787EE71828373700FC3FFF /* RemoteMusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemoteMusicViewController.m; sourceTree = "<group>"; };
+		68787EE61828373700FC3FFF /* VkontakteMusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VkontakteMusicViewController.h; sourceTree = "<group>"; };
+		68787EE71828373700FC3FFF /* VkontakteMusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VkontakteMusicViewController.m; sourceTree = "<group>"; };
 		68787EE91828374400FC3FFF /* VkMusicViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VkMusicViewController.xib; sourceTree = "<group>"; };
 		688453C2172182260092260B /* MyWave.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyWave.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		688453C5172182260092260B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -162,8 +159,6 @@
 				688453EA172182FF0092260B /* NSString+Gender.m */,
 				683F31EE18B61D1500D37C05 /* NSString+HTML.h */,
 				683F31EF18B61D1500D37C05 /* NSString+HTML.m */,
-				68365C3E18FF0858005403E8 /* NSString+MD5.h */,
-				68365C3F18FF0858005403E8 /* NSString+MD5.m */,
 			);
 			path = NSString;
 			sourceTree = "<group>";
@@ -172,8 +167,8 @@
 			isa = PBXGroup;
 			children = (
 				68F7D4D0184FD27300094192 /* UI */,
-				68787EB01827A8BC00FC3FFF /* DBManager.h */,
-				68787EB11827A8BC00FC3FFF /* DBManager.m */,
+				68787EB01827A8BC00FC3FFF /* TrackDbManager.h */,
+				68787EB11827A8BC00FC3FFF /* TrackDbManager.m */,
 				683F31E518B2ACBE00D37C05 /* Track.h */,
 				683F31E618B2ACBE00D37C05 /* Track.m */,
 				683F31E818B2AD1000D37C05 /* Track+Provider.h */,
@@ -189,12 +184,12 @@
 			children = (
 				68365C3A18FD2491005403E8 /* NavigationController.h */,
 				68365C3B18FD2491005403E8 /* NavigationController.m */,
-				68787EE61828373700FC3FFF /* RemoteMusicViewController.h */,
-				68787EE71828373700FC3FFF /* RemoteMusicViewController.m */,
+				68787EE61828373700FC3FFF /* VkontakteMusicViewController.h */,
+				68787EE71828373700FC3FFF /* VkontakteMusicViewController.m */,
 				68787EE3182836AE00FC3FFF /* MainViewController.h */,
 				68787EE4182836AE00FC3FFF /* MainViewController.m */,
-				68787EE01828368600FC3FFF /* MyMusicViewController.h */,
-				68787EE11828368600FC3FFF /* MyMusicViewController.m */,
+				68787EE01828368600FC3FFF /* DeviceMusicViewController.h */,
+				68787EE11828368600FC3FFF /* DeviceMusicViewController.m */,
 				68787D8D1826533700FC3FFF /* PlayerViewController.h */,
 				68787D8E1826533700FC3FFF /* PlayerViewController.m */,
 				68695FAA18E956470033E3E1 /* SidePanelController.h */,
@@ -433,19 +428,18 @@
 				683F31EA18B2AD1000D37C05 /* Track+Provider.m in Sources */,
 				68695FAC18E956470033E3E1 /* SidePanelController.m in Sources */,
 				68695FAF18E981880033E3E1 /* TracksViewController.m in Sources */,
-				68787EB21827A8BC00FC3FFF /* DBManager.m in Sources */,
+				68787EB21827A8BC00FC3FFF /* TrackDbManager.m in Sources */,
 				688453D2172182260092260B /* main.m in Sources */,
 				688453D6172182260092260B /* AppDelegate.m in Sources */,
-				68365C4018FF0858005403E8 /* NSString+MD5.m in Sources */,
 				688453EB172182FF0092260B /* NSString+Gender.m in Sources */,
 				683F31F018B61D1500D37C05 /* NSString+HTML.m in Sources */,
 				688453EE172183970092260B /* Vkontakte.m in Sources */,
 				688453F21721848B0092260B /* MBProgressHUD.m in Sources */,
 				683F31E718B2ACBE00D37C05 /* Track.m in Sources */,
 				688453F5172185E70092260B /* VkontakteViewController.m in Sources */,
-				68787EE81828373700FC3FFF /* RemoteMusicViewController.m in Sources */,
+				68787EE81828373700FC3FFF /* VkontakteMusicViewController.m in Sources */,
 				68787EE5182836AE00FC3FFF /* MainViewController.m in Sources */,
-				68787EE21828368600FC3FFF /* MyMusicViewController.m in Sources */,
+				68787EE21828368600FC3FFF /* DeviceMusicViewController.m in Sources */,
 				68787D901826533700FC3FFF /* PlayerViewController.m in Sources */,
 				68695FA918E94D100033E3E1 /* AppHelper.m in Sources */,
 				68365C3C18FD2491005403E8 /* NavigationController.m in Sources */,

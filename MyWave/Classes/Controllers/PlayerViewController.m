@@ -5,19 +5,17 @@
 //  Created by Дмитрий on 03.11.13.
 //  Copyright (c) 2013 MyWave. All rights reserved.
 //
+#import <MediaPlayer/MediaPlayer.h>
 
+#import "AppHelper.h"
+#import "Track.h"
 #import "PlayerViewController.h"
 #import "DOUAudioStreamer.h"
 #import "DOUAudioStreamer+Options.h"
 #import "DOUAudioEventLoop.h"
-#import "Track.h"
-#import "NSString+HTML.h"
-#import "NSString+MD5.h"
-#import "DBManager.h"
-#import "AFHTTPRequestOperation.h"
-#import <MediaPlayer/MediaPlayer.h>
-#import "AppHelper.h"
 #import "DOUAudioVisualizer.h"
+
+#import "NSString+HTML.h"
 
 static void *kStatusKVOKey = &kStatusKVOKey;
 static void *kDurationKVOKey = &kDurationKVOKey;
@@ -275,8 +273,6 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 
 - (void)_updateBufferingStatus
 {
-    NSLog(@"%@", [NSString stringWithFormat:@"Received %.2f/%.2f MB (%.2f %%), Speed %.2f MB/s", (double)[_streamer receivedLength] / 1024 / 1024, (double)[_streamer expectedLength] / 1024 / 1024, [_streamer bufferingRatio] * 100.0, (double)[_streamer downloadSpeed] / 1024 / 1024]);
-    
     if ([_streamer bufferingRatio] >= 1.0) {
         NSLog(@"sha256: %@", [_streamer sha256]);
     }
@@ -402,62 +398,17 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 
 - (void)_actionDownload:(id)sender {
     Track *track = [_tracks objectAtIndex:_currentTrackIndex];
-    DBManager *db = [DBManager sharedInstance];
-    if ([db findByTitle:track.title andArtist:track.artist] != nil) {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning"
-                                                        message:@"You already have this track"
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Ok"
-                                              otherButtonTitles:nil];
-        [alert show];
-    } else {
-        NSURL *url = track.audioFileURL;
-        NSString *filename = [[[NSString stringWithFormat:@"%@.%@", track.artist, track.title]MD5] stringByAppendingString:@".mp3"];
-        NSURLRequest *request = [NSURLRequest requestWithURL:url];
-        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *filepath = [[paths objectAtIndex:0] stringByAppendingPathComponent:filename];
-        operation.outputStream = [NSOutputStream outputStreamToFileAtPath:filepath append:NO];
+    [track downloadWithProgressBlock:^(NSUInteger bytesRead, NSInteger totalBytesRead, NSInteger totalBytesExpectedToRead) {
+        float progress = (float)totalBytesRead / totalBytesExpectedToRead;
+        if (progress < 1.0f) {
+            [_statusLabel setText:[NSString stringWithFormat:@"Downloading: %.1f%%", progress * 100.0f]];
+        } else if (progress == 1.0f) {
+            [_statusLabel setText:@"Downloaded"];
+        }
         
-        [operation setDownloadProgressBlock:^(NSUInteger bytesRead, NSInteger totalBytesRead, NSInteger totalBytesExpectedToRead) {
-            float progress = (float)totalBytesRead / totalBytesExpectedToRead;
-            if (progress < 1.0f) {
-                [_statusLabel setText:[NSString stringWithFormat:@"Downloading: %.1f%%", progress * 100.0f]];
-            } else if (progress == 1.0f) {
-                [_statusLabel setText:@"Downloaded"];
-            }
-            
-            NSLog(@"%f", progress);
-        }];
-        
-        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            if (YES == [db saveData:track.artist title:track.title duration:track.duration filename:filename]) {// [Track save:track];
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ok"
-                                                                message:@"Saved"
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"Ok"
-                                                      otherButtonTitles:nil];
-                [alert show];
-            } else {
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                message:@"Please try again later"
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"Ok"
-                                                      otherButtonTitles:nil];
-                [alert show];
-            }
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            [[NSFileManager defaultManager]removeItemAtPath:filepath error:&error];
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                            message:@"Please try again later"
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"Ok"
-                                                  otherButtonTitles:nil];
-            [alert show];
-        }];
-        
-        [operation start];
-    }
+        NSLog(@"%f", progress);
+    }];
+    
 }
 
 @end

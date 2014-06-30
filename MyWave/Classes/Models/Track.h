@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "DOUAudioFile.h"
 #import "Vkontakte.h"
-#import "DBManager.h"
-#import <MediaPlayer/MediaPlayer.h>
+#import "TrackDbManager.h"
+#import "AFHTTPRequestOperation.h"
 
 @interface Track : NSObject <DOUAudioFile>
 
@@ -22,6 +22,7 @@
 
 - (void) deleteFile;
 - (void) deleteDbRecord;
+- (void) downloadWithProgressBlock:(void (^)(NSUInteger bytesRead, NSInteger totalBytesRead, NSInteger totalBytesExpectedToRead))progressBlock;
 
 - (NSString *) getArtist;
 - (NSString *) getTitle;

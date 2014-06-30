@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 MyWave. All rights reserved.
 //
 
-#import "RemoteMusicViewController.h"
+#import "VkontakteMusicViewController.h"
 #import "NSString+Gender.h"
 #import "Track+Provider.h"
 #import "Track+Search.h"
@@ -15,31 +15,32 @@
 #define MinSearchLength 2
 #define MaxSearchLength 25
 
-@implementation RemoteMusicViewController
-
-- (void) setVk:(Vkontakte *)vk {
-    _vk = vk;
+@implementation VkontakteMusicViewController
+{
+    @private
+    Vkontakte *_vk;
+    NSCache *_searchCache;
 }
 
-- (id)initWithStyle:(UITableViewStyle)style {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    
+- (id)initWithStyle:(UITableViewStyle)style
+{
     self = [super initWithStyle:style];
     if (self) {
         _searchCache = [[NSCache alloc] init];
+        _vk = [Vkontakte sharedInstance];
     }
     
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    if (_vk && [_vk isAuthorized]) {
+    if ([_vk isAuthorized]) {
         [self initSearch];
-        [_vk getUserInfo];
+        [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setFont:[UIFont fontWithName:BaseFont
+                                                                                                  size:BaseFontSizeDefault]];
     }
-    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setFont:[UIFont fontWithName:BaseFont     size:BaseFontSizeDefault]];
     
     [self.tableView reloadData];
 }
@@ -49,7 +50,7 @@
 }
 
 #pragma mark - Search display delegate
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *) searchString {
     if (searchString.length > MinSearchLength && searchString.length < MaxSearchLength) {
         NSArray *cachedData = [_searchCache objectForKey:searchString];
         if (cachedData == NULL) {
@@ -59,9 +60,10 @@
         }
         searchData = [[NSMutableArray alloc]initWithArray:cachedData];
         [self.tableView reloadData];
+        
+        return YES;
     }
-    
-    return YES;
+    return NO;
 }
 
 @end

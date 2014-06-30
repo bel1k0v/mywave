@@ -8,8 +8,8 @@
 
 #import "NavigationController.h"
 #import "MainViewController.h"
-#import "RemoteMusicViewController.h"
-#import "MyMusicViewController.h"
+#import "DeviceMusicViewController.h"
+#import "VkontakteMusicViewController.h"
 #import "JASidePanelController.h"
 #import "UIViewController+JASidePanel.h"
 #import "AppHelper.h"
@@ -18,7 +18,7 @@
 @interface MainViewController () {
     
 @private
-    NSArray *providers;
+    NSArray *_providers;
     IBOutlet UIImageView *_imageViewLogo;
     IBOutlet UITableView *_tableViewProviders;
     IBOutlet UIButton *_buttonMyMusic;
@@ -35,12 +35,10 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
     [super viewWillAppear:animated];
     _vk = [Vkontakte sharedInstance];
     _vk.delegate = self;
-    _db = [DBManager sharedInstance];
+    _providers = [[NSArray alloc]initWithObjects:@"device", @"vkontakte", nil];
 }
 
 - (void)loadView {
-    providers = [[NSArray alloc]initWithObjects:@"downloaded", @"vkontakte", nil];
-    
     UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     _imageViewLogo = [[UIImageView alloc]initWithFrame:CGRectMake(15.0f, 30.0f, 52.0f, 24.0f)];
     _imageViewLogo.image = [UIImage imageNamed:@"logo_white"];
@@ -68,17 +66,23 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return @"Music on a device";
+        return @"My Wave";
     } else {
         return @"Social accounts";
     }
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if (section == 0) {
+        return 1;
+    } else
+        return [_providers count] -1;
+    
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     static NSString *CellIdentifier = @"Cell";
 
     UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -87,14 +91,14 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
     }
     
     cell.backgroundColor = UIColorFromRGB(0x0f3743);
-    cell.textLabel.text = [NSString stringWithFormat:@"%@", [[providers objectAtIndex:indexPath.row + indexPath.section] capitalizedString]];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@", [[_providers objectAtIndex:indexPath.row + indexPath.section] capitalizedString]];
     cell.textLabel.textColor = [UIColor whiteColor];
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *sel = [NSString stringWithFormat:selectorStringFormat, [providers objectAtIndex:indexPath.row + indexPath.section]];
+    NSString *sel = [NSString stringWithFormat:selectorStringFormat, [_providers objectAtIndex:indexPath.row + indexPath.section]];
     [self performSelector:NSSelectorFromString(sel) onThread:[NSThread mainThread] withObject:nil waitUntilDone:NO];
 }
 
@@ -118,21 +122,25 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
 
 - (void)_vkontakteMusicControlPressed:(id)sender
 {
-    if (![_vk isAuthorized]) {
-        [_vk authenticate];
+    if (AppHelper.isNetworkAvailable) {
+        if (![_vk isAuthorized]) {
+            [_vk authenticate];
+        } else {
+            VkontakteMusicViewController* musicViewController = [VkontakteMusicViewController new];
+            musicViewController->tracks = [[NSMutableArray alloc]initWithArray:[Track vkontakteTracks]];            
+            [self _changeViewController:musicViewController];
+        }
     } else {
-        RemoteMusicViewController* musicViewController = [RemoteMusicViewController new];
-        musicViewController->tracks = [[NSMutableArray alloc]initWithArray:[Track vkontakteTracks]];
-        [musicViewController setVk:_vk];
-        
-        [self _changeViewController:musicViewController];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Alert!" message:@"Connect your device to wi-fi or 3G/LTE network" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
     }
+    
 }
 
-- (void)_downloadedMusicControlPressed:(id)sender
+- (void)_deviceMusicControlPressed:(id)sender
 {
-    MyMusicViewController* musicViewController = [MyMusicViewController new];
-    musicViewController->tracks = [[NSMutableArray alloc]initWithArray:[Track myTracks]];
+    DeviceMusicViewController* musicViewController = [DeviceMusicViewController new];
+    musicViewController->tracks = [[NSMutableArray alloc]initWithArray:[Track deviceTracks]];
     [self _changeViewController:musicViewController];
 }
 

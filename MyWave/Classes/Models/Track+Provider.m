@@ -7,13 +7,14 @@
 //
 
 #import "Track+Provider.h"
+#import "TrackDbManager.h"
 
 @implementation Track (Provider)
 
-+ (NSArray *) myTracks {
++ (NSArray *) deviceTracks {
     static NSArray *tracks = nil;
     
-    DBManager *db = [DBManager sharedInstance];
+    TrackDbManager *db = [TrackDbManager sharedInstance];
     NSArray *songs = [db getSongs];
     
     NSMutableArray *allTracks = [NSMutableArray array];
@@ -47,34 +48,4 @@
     return tracks;
 }
 
-// NIU
-+ (NSArray *) musicLibraryTracks
-{
-    static NSArray *tracks = nil;
-    
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSMutableArray *allTracks = [NSMutableArray array];
-        for (MPMediaItem *item in [[MPMediaQuery songsQuery] items]) {
-            if ([[item valueForProperty:MPMediaItemPropertyIsCloudItem] boolValue]) {
-                continue;
-            }
-            
-            Track *track = [[Track alloc] init];
-            [track setArtist:[item valueForProperty:MPMediaItemPropertyArtist]];
-            [track setTitle:[item valueForProperty:MPMediaItemPropertyTitle]];
-            [track setAudioFileURL:[item valueForProperty:MPMediaItemPropertyAssetURL]];
-            [allTracks addObject:track];
-        }
-        
-        for (NSUInteger i = 0; i < [allTracks count]; ++i) {
-            NSUInteger j = arc4random_uniform((u_int32_t)[allTracks count]);
-            [allTracks exchangeObjectAtIndex:i withObjectAtIndex:j];
-        }
-        
-        tracks = [allTracks copy];
-    });
-    
-    return tracks;
-}
 @end

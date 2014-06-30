@@ -1,25 +1,25 @@
-//  DBManager.m
+//  TrackDbManager.m
 //  MyWave
 //
 //  Created by Дмитрий on 04.11.13.
 
-#import "DBManager.h"
+#import "TrackDbManager.h"
 
-static DBManager *sharedInstance = nil;
+static TrackDbManager *sharedInstance = nil;
 static sqlite3 *database = nil;
 static sqlite3_stmt *statement = nil;
 
-@implementation DBManager
+@implementation TrackDbManager
 
-+(DBManager*) sharedInstance{
++(TrackDbManager*) sharedInstance{
     if (!sharedInstance) {
         sharedInstance = [[super allocWithZone:NULL]init];
-        [sharedInstance createDB];
+        [sharedInstance createTrackDb];
     }
     return sharedInstance;
 }
 
--(BOOL)createDB{
+-(BOOL)createTrackDb {
     NSString *docsDir;
     NSArray *dirPaths;
     // Get the documents directory
@@ -33,8 +33,8 @@ static sqlite3_stmt *statement = nil;
     NSFileManager *filemgr = [NSFileManager defaultManager];
     if ([filemgr fileExistsAtPath: databasePath ] == NO)
     {
-        const char *dbpath = [databasePath UTF8String];
-        if (sqlite3_open(dbpath, &database) == SQLITE_OK)
+        const char *TrackDbpath = [databasePath UTF8String];
+        if (sqlite3_open(TrackDbpath, &database) == SQLITE_OK)
         {
             char *errMsg;
             const char *sql_stmt =
@@ -59,8 +59,8 @@ static sqlite3_stmt *statement = nil;
 - (BOOL) saveData:(NSString*)artist title:(NSString*)title
          duration:(NSString*)duration filename:(NSString*)filename
 {
-    const char *dbpath = [databasePath UTF8String];
-    if (sqlite3_open(dbpath, &database) == SQLITE_OK)
+    const char *TrackDbpath = [databasePath UTF8String];
+    if (sqlite3_open(TrackDbpath, &database) == SQLITE_OK)
     {
         NSString *insertSQL = [NSString stringWithFormat:@"insert into mp3 (artist, title, duration, filename) values(\"%@\", \"%@\", \"%@\",  \"%@\")", artist, title, duration, filename];
         const char *insert_stmt = [insertSQL UTF8String];
@@ -85,8 +85,8 @@ static sqlite3_stmt *statement = nil;
 - (BOOL) deleteById:(NSString *)registeredNumber
 {
     BOOL result = NO;
-    const char *dbpath = [databasePath UTF8String];
-    if (sqlite3_open(dbpath, &database) == SQLITE_OK)
+    const char *TrackDbpath = [databasePath UTF8String];
+    if (sqlite3_open(TrackDbpath, &database) == SQLITE_OK)
     {
         NSString *deleteSQL = [NSString stringWithFormat:@"delete from mp3 where id = %ld", (long)[registeredNumber integerValue]];
         const char *insert_stmt = [deleteSQL UTF8String];
@@ -110,8 +110,8 @@ static sqlite3_stmt *statement = nil;
 
 - (NSArray *) findAll
 {
-    const char *dbpath = [databasePath UTF8String];
-    if (sqlite3_open(dbpath, &database) == SQLITE_OK)
+    const char *TrackDbpath = [databasePath UTF8String];
+    if (sqlite3_open(TrackDbpath, &database) == SQLITE_OK)
     {
         NSString *querySQL = @"select id, artist, title, duration, filename from mp3 order by id desc limit 200";
         const char *query_stmt = [querySQL UTF8String];
@@ -174,8 +174,8 @@ static sqlite3_stmt *statement = nil;
 
 - (NSArray*) findById:(NSString*)registerNumber
 {
-    const char *dbpath = [databasePath UTF8String];
-    if (sqlite3_open(dbpath, &database) == SQLITE_OK)
+    const char *TrackDbpath = [databasePath UTF8String];
+    if (sqlite3_open(TrackDbpath, &database) == SQLITE_OK)
     {
         NSString *querySQL = [NSString stringWithFormat: @"select artist, title, duration, filename from mp3 where id=\"%@\"",registerNumber];
         const char *query_stmt = [querySQL UTF8String];
@@ -210,8 +210,8 @@ static sqlite3_stmt *statement = nil;
 
 - (NSArray*) findByTitle:(NSString*)title andArtist:(NSString *)artist
 {
-    const char *dbpath = [databasePath UTF8String];
-    if (sqlite3_open(dbpath, &database) == SQLITE_OK)
+    const char *TrackDbpath = [databasePath UTF8String];
+    if (sqlite3_open(TrackDbpath, &database) == SQLITE_OK)
     {
         NSString *querySQL = [NSString stringWithFormat: @"select artist, title, duration, filename from mp3 where title=\"%@\" and artist = \"%@\"", title, artist];
         
