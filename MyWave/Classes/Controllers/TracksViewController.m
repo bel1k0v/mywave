@@ -19,8 +19,7 @@
 
 @implementation TracksViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
+- (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
     }
@@ -79,7 +78,7 @@
     cell.labelTitle.text = [track getTitle];
     cell.labelArtist.text = [track getArtist];
     cell.labelDuration.text = [track getDuration];
-    
+    NSLog(@"");
     return cell;
 }
 

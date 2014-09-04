@@ -15,21 +15,18 @@
 
 @implementation NavigationController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
     }
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     [self.navigationBar setTintColor:[UIColor whiteColor]];
-    if ([[UIDevice currentDevice].systemVersion floatValue] > 6.1f)
-    {
+    if ([[UIDevice currentDevice].systemVersion floatValue] > 6.1f) {
         NSDictionary *textAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                         [UIColor whiteColor],
                                         NSForegroundColorAttributeName,
@@ -63,8 +60,7 @@
                                                 forState:UIControlStateNormal];
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 

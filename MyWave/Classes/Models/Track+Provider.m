@@ -28,8 +28,7 @@
     return tracks;
 }
 
-+ (NSArray *) vkontakteTracks
-{
++ (NSArray *) vkontakteTracks {
     static NSArray *tracks = nil;
     Vkontakte *vk = [Vkontakte sharedInstance];
     if (![vk isAuthorized]) return nil;

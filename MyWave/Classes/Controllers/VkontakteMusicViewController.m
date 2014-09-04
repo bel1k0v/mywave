@@ -15,15 +15,13 @@
 #define MinSearchLength 2
 #define MaxSearchLength 25
 
-@implementation VkontakteMusicViewController
-{
+@implementation VkontakteMusicViewController {
     @private
     Vkontakte *_vk;
     NSCache *_searchCache;
 }
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
+- (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
         _searchCache = [[NSCache alloc] init];
@@ -33,8 +31,7 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     if ([_vk isAuthorized]) {
         [self initSearch];

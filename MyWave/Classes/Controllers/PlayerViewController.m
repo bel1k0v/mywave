@@ -34,6 +34,8 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     UIButton *_buttonNext;
     UIButton *_buttonPrevious;
     UIButton *_buttonDownload;
+    UIButton *_buttonRepeat;
+    UIButton *_buttonShuffle;
     
     UISlider *_progressSlider;
     
@@ -100,6 +102,20 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [_elapsedTimeLabel setTextAlignment:NSTextAlignmentRight];
     [_elapsedTimeLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_elapsedTimeLabel];
+    
+    _buttonRepeat = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_buttonRepeat setFrame:CGRectMake(80, CGRectGetMinY([_progressSlider frame]) + 40.0, 25.0, 25.0)];
+    [_buttonRepeat setBackgroundImage:[UIImage imageNamed:@"mw_repeat"] forState:UIControlStateNormal];
+    [_buttonRepeat setBackgroundImage:[UIImage imageNamed:@"mw_repeat_selected"] forState:UIControlStateSelected];
+    [_buttonRepeat addTarget:self action:@selector(_actionToggle:) forControlEvents:UIControlEventTouchDown];
+    [view addSubview:_buttonRepeat];
+    
+    _buttonShuffle = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_buttonShuffle setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 105.0, CGRectGetMinY([_progressSlider frame]) + 40.0, 25.0, 25.0)];
+    [_buttonShuffle setBackgroundImage:[UIImage imageNamed:@"mw_shuffle"] forState:UIControlStateNormal];
+    [_buttonShuffle setBackgroundImage:[UIImage imageNamed:@"mw_shuffle_selected"] forState:UIControlStateSelected];
+    [_buttonShuffle addTarget:self action:@selector(_actionToggle:) forControlEvents:UIControlEventTouchDown];
+    [view addSubview:_buttonShuffle];
     
     _buttonPlayPause = [UIButton buttonWithType:UIButtonTypeSystem];
     [_buttonPlayPause setFrame:CGRectMake((CGRectGetWidth([view bounds]) - 99.0) / 2 , CGRectGetMaxY([_progressSlider frame]) + spaceBetweenButtonsAndSliders, 99.0, 99.0)];
@@ -168,8 +184,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [self setView:view];
 }
 
-- (void) setNowPlayingTrack:(Track *)track
-{
+- (void) setNowPlayingTrack:(Track *)track {
     if ([MPNowPlayingInfoCenter class]) {
         NSArray *keys = [NSArray arrayWithObjects:MPMediaItemPropertyTitle, MPMediaItemPropertyArtist, MPMediaItemPropertyPlaybackDuration, MPNowPlayingInfoPropertyPlaybackRate, nil];
         NSArray *values = [NSArray arrayWithObjects:[track getTitle], [track getArtist], track.duration, [NSNumber numberWithInt:1], nil];
@@ -258,6 +273,8 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
             
         case DOUAudioStreamerFinished:
             [_statusLabel setText:@"Finished"];
+            if ([_buttonRepeat isSelected]) _currentTrackIndex--;
+            else if ([_buttonShuffle isSelected]) _currentTrackIndex = arc4random_uniform([_tracks count]) -1;
             [self _actionNext:nil];
             break;
             
@@ -271,8 +288,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     }
 }
 
-- (void)_updateBufferingStatus
-{
+- (void)_updateBufferingStatus {
     if ([_streamer bufferingRatio] >= 1.0) {
         NSLog(@"sha256: %@", [_streamer sha256]);
     }
@@ -357,6 +373,11 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
      [super viewWillDisappear:animated];
  }
 
+- (void)_actionToggle:(id)sender {
+    UIButton* button = (UIButton*)sender;
+    button.selected = !button.selected;
+    if (button.selected) button.highlighted = NO;
+}
 
 - (void)_actionPlayPause:(id)sender {
     if ([_streamer status] == DOUAudioStreamerPaused ||

@@ -81,8 +81,7 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
     
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
 
     UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -102,8 +101,7 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
     [self performSelector:NSSelectorFromString(sel) onThread:[NSThread mainThread] withObject:nil waitUntilDone:NO];
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
@@ -120,8 +118,7 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
         [_vk logout];
 }
 
-- (void)_vkontakteMusicControlPressed:(id)sender
-{
+- (void)_vkontakteMusicControlPressed:(id)sender {
     if (AppHelper.isNetworkAvailable) {
         if (![_vk isAuthorized]) {
             [_vk authenticate];
@@ -137,8 +134,7 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
     
 }
 
-- (void)_deviceMusicControlPressed:(id)sender
-{
+- (void)_deviceMusicControlPressed:(id)sender {
     DeviceMusicViewController* musicViewController = [DeviceMusicViewController new];
     musicViewController->tracks = [[NSMutableArray alloc]initWithArray:[Track deviceTracks]];
     [self _changeViewController:musicViewController];

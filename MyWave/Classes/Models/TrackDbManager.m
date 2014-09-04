@@ -5,21 +5,22 @@
 
 #import "TrackDbManager.h"
 
+static NSString *dbName = @"downloaded.db";
 static TrackDbManager *sharedInstance = nil;
 static sqlite3 *database = nil;
 static sqlite3_stmt *statement = nil;
 
 @implementation TrackDbManager
 
-+(TrackDbManager*) sharedInstance{
++ (TrackDbManager*) sharedInstance{
     if (!sharedInstance) {
         sharedInstance = [[super allocWithZone:NULL]init];
-        [sharedInstance createTrackDb];
+        [sharedInstance createDB];
     }
     return sharedInstance;
 }
 
--(BOOL)createTrackDb {
+- (BOOL) createDB {
     NSString *docsDir;
     NSArray *dirPaths;
     // Get the documents directory
@@ -28,7 +29,7 @@ static sqlite3_stmt *statement = nil;
     docsDir = dirPaths[0];
     // Build the path to the database file
     databasePath = [[NSString alloc] initWithString:
-                    [docsDir stringByAppendingPathComponent: @"downloaded.db"]];
+                    [docsDir stringByAppendingPathComponent: dbName]];
     BOOL isSuccess = YES;
     NSFileManager *filemgr = [NSFileManager defaultManager];
     if ([filemgr fileExistsAtPath: databasePath ] == NO)
@@ -57,20 +58,15 @@ static sqlite3_stmt *statement = nil;
 }
 
 - (BOOL) saveData:(NSString*)artist title:(NSString*)title
-         duration:(NSString*)duration filename:(NSString*)filename
-{
+         duration:(NSString*)duration filename:(NSString*)filename {
     const char *TrackDbpath = [databasePath UTF8String];
-    if (sqlite3_open(TrackDbpath, &database) == SQLITE_OK)
-    {
+    if (sqlite3_open(TrackDbpath, &database) == SQLITE_OK) {
         NSString *insertSQL = [NSString stringWithFormat:@"insert into mp3 (artist, title, duration, filename) values(\"%@\", \"%@\", \"%@\",  \"%@\")", artist, title, duration, filename];
         const char *insert_stmt = [insertSQL UTF8String];
         sqlite3_prepare_v2(database, insert_stmt, -1, &statement, NULL);
-        if (sqlite3_step(statement) == SQLITE_DONE)
-        {
+        if (sqlite3_step(statement) == SQLITE_DONE) {
             return YES;
-        }
-        else
-        {
+        } else {
             NSLog(@"Error while preparing statement");
             return NO;
         }
@@ -91,13 +87,10 @@ static sqlite3_stmt *statement = nil;
         NSString *deleteSQL = [NSString stringWithFormat:@"delete from mp3 where id = %ld", (long)[registeredNumber integerValue]];
         const char *insert_stmt = [deleteSQL UTF8String];
         sqlite3_prepare_v2(database, insert_stmt,-1, &statement, NULL);
-        if (sqlite3_step(statement) == SQLITE_DONE)
-        {
+        if (sqlite3_step(statement) == SQLITE_DONE) {
             NSLog(@"Success");
             result = YES;
-        }
-        else
-        {
+        } else {
             NSLog(@"Error delete, %s", sqlite3_errmsg(database));
         }
         
@@ -108,16 +101,13 @@ static sqlite3_stmt *statement = nil;
     return result;
 }
 
-- (NSArray *) findAll
-{
+- (NSArray *) findAll {
     const char *TrackDbpath = [databasePath UTF8String];
-    if (sqlite3_open(TrackDbpath, &database) == SQLITE_OK)
-    {
+    if (sqlite3_open(TrackDbpath, &database) == SQLITE_OK) {
         NSString *querySQL = @"select id, artist, title, duration, filename from mp3 order by id desc limit 200";
         const char *query_stmt = [querySQL UTF8String];
         NSMutableArray *resultArray = [[NSMutableArray alloc]init];
-        if (sqlite3_prepare_v2(database, query_stmt, -1, &statement, NULL) == SQLITE_OK)
-        {
+        if (sqlite3_prepare_v2(database, query_stmt, -1, &statement, NULL) == SQLITE_OK) {
             while (sqlite3_step(statement) == SQLITE_ROW) {
                 NSMutableArray *row = [[NSMutableArray alloc]initWithObjects:nil];
                 NSString *regNum = [[NSString alloc] initWithUTF8String:
@@ -149,15 +139,13 @@ static sqlite3_stmt *statement = nil;
     return nil;
 }
 
-- (NSArray *)getSongs
-{
+- (NSArray *)getSongs {
     NSArray *data = [self findAll];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSMutableArray *songs = [[NSMutableArray alloc]init];
     
-    for(int i = 0; i < [data count]; ++i)
-    {
+    for(int i = 0; i < [data count]; ++i) {
         NSString *regNum = [[data objectAtIndex:i]objectAtIndex:0];
         NSString *artist = [[data objectAtIndex:i]objectAtIndex:1];
         NSString *title = [[data objectAtIndex:i]objectAtIndex:2];

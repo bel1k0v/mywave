@@ -39,7 +39,7 @@
     return durationText;
 }
 
-+ (Track *)createTrackFromVkWithSong:(NSDictionary *) song {
++ (Track *) createTrackFromVkWithSong:(NSDictionary *) song {
     Track *track = [[Track alloc] init];
     [track setArtist:[song objectForKey:@"artist"]];
     [track setTitle:[song objectForKey:@"title"]];
@@ -49,7 +49,7 @@
     return track;
 }
 
-+ (Track *)createTrackFromDbWithSong:(NSDictionary *) song {
++ (Track *) createTrackFromDbWithSong:(NSDictionary *) song {
     Track *track = [[Track alloc] init];
     [track setRegID:[song objectForKey:@"regNum"]];
     [track setArtist:[song objectForKey:@"artist"]];
