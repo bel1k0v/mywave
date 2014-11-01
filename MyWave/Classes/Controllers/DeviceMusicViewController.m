@@ -36,8 +36,7 @@
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
                          withRowAnimation:UITableViewRowAnimationFade];
         [self.tableView reloadData];
-    } else
-        return ;
+    }
 }
 
 #pragma mark Content Filtering

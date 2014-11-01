@@ -19,6 +19,7 @@
     @private
     Vkontakte *_vk;
     NSCache *_searchCache;
+    NSArray *_cachedData;
 }
 
 - (id)initWithStyle:(UITableViewStyle)style {
@@ -49,15 +50,16 @@
 #pragma mark - Search display delegate
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *) searchString {
     if (searchString.length > MinSearchLength && searchString.length < MaxSearchLength) {
-        NSArray *cachedData = [_searchCache objectForKey:searchString];
-        if (cachedData == NULL) {
-            cachedData = [Track vkontakteTracksForSearchString:searchString];
-            if (cachedData != NULL) [_searchCache setObject:cachedData forKey:searchString];
-            else cachedData = [NSArray new];
-        }
-        searchData = [[NSMutableArray alloc]initWithArray:cachedData];
-        [self.tableView reloadData];
-        
+        _cachedData = [_searchCache objectForKey:searchString];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            if (_cachedData == NULL) {
+                _cachedData = [Track vkontakteTracksForSearchString:searchString];
+                if (_cachedData != NULL) [_searchCache setObject:_cachedData forKey:searchString];
+                else _cachedData = [NSArray new];
+            }
+            searchData = [[NSMutableArray alloc]initWithArray:_cachedData];
+            [self.tableView reloadData];
+        });
         return YES;
     }
     return NO;

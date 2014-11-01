@@ -60,7 +60,7 @@
     return track;
 }
 
-- (void) downloadWithProgressBlock:(void (^)(NSUInteger bytesRead, NSInteger totalBytesRead, NSInteger totalBytesExpectedToRead))progressBlock
+- (void) downloadWithProgressBlock:(void (^)(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead))progressBlock
 {
     TrackDbManager *db = [TrackDbManager sharedInstance];
     if ([db findByTitle:self.title andArtist:self.artist] != nil) {
@@ -72,7 +72,8 @@
         [alert show];
     } else {
         NSURL *url = self.audioFileURL;
-        NSString *filename = [[NSString stringWithFormat:@"%@ - %@", self.artist, self.title] stringByAppendingString:@".mp3"];
+        NSString *name = [NSString stringWithFormat:@"%@ - %@", self.artist, self.title];
+        NSString *filename = [name stringByAppendingString:@".mp3"];
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
         AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -83,7 +84,7 @@
         [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
             if (YES == [db saveData:self.artist title:self.title duration:self.duration filename:filename]) {
                 UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ok"
-                                                                message:@"Saved"
+                                                                message:[NSString stringWithFormat:@"%@ saved", name]
                                                                delegate:nil
                                                       cancelButtonTitle:@"Ok"
                                                       otherButtonTitles:nil];

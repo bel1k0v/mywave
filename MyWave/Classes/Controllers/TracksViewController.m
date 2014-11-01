@@ -78,7 +78,6 @@
     cell.labelTitle.text = [track getTitle];
     cell.labelArtist.text = [track getArtist];
     cell.labelDuration.text = [track getDuration];
-    NSLog(@"");
     return cell;
 }
 

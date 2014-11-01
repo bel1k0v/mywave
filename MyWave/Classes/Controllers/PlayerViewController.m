@@ -104,14 +104,14 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [view addSubview:_elapsedTimeLabel];
     
     _buttonRepeat = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_buttonRepeat setFrame:CGRectMake(80, CGRectGetMinY([_progressSlider frame]) + 40.0, 25.0, 25.0)];
+    [_buttonRepeat setFrame:CGRectMake(CGRectGetMinX([_progressSlider frame]) + 20, CGRectGetMinY([_progressSlider frame]) + 40.0, 25.0, 25.0)];
     [_buttonRepeat setBackgroundImage:[UIImage imageNamed:@"mw_repeat"] forState:UIControlStateNormal];
     [_buttonRepeat setBackgroundImage:[UIImage imageNamed:@"mw_repeat_selected"] forState:UIControlStateSelected];
     [_buttonRepeat addTarget:self action:@selector(_actionToggle:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonRepeat];
     
     _buttonShuffle = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_buttonShuffle setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 105.0, CGRectGetMinY([_progressSlider frame]) + 40.0, 25.0, 25.0)];
+    [_buttonShuffle setFrame:CGRectMake(CGRectGetMaxX([_progressSlider frame]) - 45.0, CGRectGetMinY([_progressSlider frame]) + 40.0, 25.0, 25.0)];
     [_buttonShuffle setBackgroundImage:[UIImage imageNamed:@"mw_shuffle"] forState:UIControlStateNormal];
     [_buttonShuffle setBackgroundImage:[UIImage imageNamed:@"mw_shuffle_selected"] forState:UIControlStateSelected];
     [_buttonShuffle addTarget:self action:@selector(_actionToggle:) forControlEvents:UIControlEventTouchDown];
@@ -419,7 +419,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 
 - (void)_actionDownload:(id)sender {
     Track *track = [_tracks objectAtIndex:_currentTrackIndex];
-    [track downloadWithProgressBlock:^(NSUInteger bytesRead, NSInteger totalBytesRead, NSInteger totalBytesExpectedToRead) {
+    [track downloadWithProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         float progress = (float)totalBytesRead / totalBytesExpectedToRead;
         if (progress < 1.0f) {
             [_statusLabel setText:[NSString stringWithFormat:@"Downloading: %.1f%%", progress * 100.0f]];

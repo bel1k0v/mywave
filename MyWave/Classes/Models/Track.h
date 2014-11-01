@@ -22,7 +22,7 @@
 
 - (void) deleteFile;
 - (void) deleteDbRecord;
-- (void) downloadWithProgressBlock:(void (^)(NSUInteger bytesRead, NSInteger totalBytesRead, NSInteger totalBytesExpectedToRead))progressBlock;
+- (void) downloadWithProgressBlock:(void (^)(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead))progressBlock;
 
 - (NSString *) getArtist;
 - (NSString *) getTitle;

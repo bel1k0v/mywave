@@ -22,7 +22,6 @@
 		68787D901826533700FC3FFF /* PlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787D8E1826533700FC3FFF /* PlayerViewController.m */; };
 		68787D9218265B3D00FC3FFF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68ED981417270D190009C2F6 /* AVFoundation.framework */; };
 		68787D9418265B7C00FC3FFF /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68787D9318265B7C00FC3FFF /* CoreMedia.framework */; };
-		68787D991826CA5500FC3FFF /* MyMusicViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68787D971826CA5500FC3FFF /* MyMusicViewController.xib */; };
 		68787E6B182789F100FC3FFF /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68787E67182789F100FC3FFF /* CoreFoundation.framework */; };
 		68787E6C182789F100FC3FFF /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68787E68182789F100FC3FFF /* CoreLocation.framework */; };
 		68787E6D182789F100FC3FFF /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68787E69182789F100FC3FFF /* Security.framework */; };
@@ -33,7 +32,6 @@
 		68787EE21828368600FC3FFF /* DeviceMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EE11828368600FC3FFF /* DeviceMusicViewController.m */; };
 		68787EE5182836AE00FC3FFF /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EE4182836AE00FC3FFF /* MainViewController.m */; };
 		68787EE81828373700FC3FFF /* VkontakteMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EE71828373700FC3FFF /* VkontakteMusicViewController.m */; };
-		68787EEA1828374400FC3FFF /* VkMusicViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68787EE91828374400FC3FFF /* VkMusicViewController.xib */; };
 		688453C6172182260092260B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 688453C5172182260092260B /* UIKit.framework */; };
 		688453C8172182260092260B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 688453C7172182260092260B /* Foundation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		688453CA172182260092260B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 688453C9172182260092260B /* CoreGraphics.framework */; };
@@ -52,6 +50,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		12664B1E6CE25BC801028659 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		682CD8E4184E7D0C006000E6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6833F80B184A958A00C156AB /* TrackCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackCell.h; sourceTree = "<group>"; };
 		6833F80C184A958A00C156AB /* TrackCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackCell.m; sourceTree = "<group>"; };
@@ -76,7 +75,6 @@
 		68787D8D1826533700FC3FFF /* PlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerViewController.h; sourceTree = "<group>"; };
 		68787D8E1826533700FC3FFF /* PlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerViewController.m; sourceTree = "<group>"; };
 		68787D9318265B7C00FC3FFF /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		68787D971826CA5500FC3FFF /* MyMusicViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyMusicViewController.xib; sourceTree = "<group>"; };
 		68787E67182789F100FC3FFF /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		68787E68182789F100FC3FFF /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		68787E69182789F100FC3FFF /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -91,7 +89,6 @@
 		68787EE4182836AE00FC3FFF /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		68787EE61828373700FC3FFF /* VkontakteMusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VkontakteMusicViewController.h; sourceTree = "<group>"; };
 		68787EE71828373700FC3FFF /* VkontakteMusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VkontakteMusicViewController.m; sourceTree = "<group>"; };
-		68787EE91828374400FC3FFF /* VkMusicViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VkMusicViewController.xib; sourceTree = "<group>"; };
 		688453C2172182260092260B /* MyWave.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyWave.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		688453C5172182260092260B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		688453C7172182260092260B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -118,7 +115,7 @@
 		68ED98191729AD8D0009C2F6 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		68ED981B1729ADC90009C2F6 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		68ED9826172B13ED0009C2F6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		BD8C0EDBA8EE446AB9CD421B /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		E2DDFCEDA0B464876B7E6FD9 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		FD2D23D6CB8649B98A0835DC /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -206,7 +203,7 @@
 				688453CB172182260092260B /* MyWave */,
 				688453C4172182260092260B /* Frameworks */,
 				688453C3172182260092260B /* Products */,
-				BD8C0EDBA8EE446AB9CD421B /* Pods.xcconfig */,
+				D6A42706E0E3CD560D0CFF9E /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -249,7 +246,6 @@
 				68695FB018EAE6950033E3E1 /* MyWave.entitlements */,
 				68ED98161729ACF40009C2F6 /* Classes */,
 				682CD8E4184E7D0C006000E6 /* Images.xcassets */,
-				68ED9825172B109B0009C2F6 /* InterfaceBuilder */,
 				688453CC172182260092260B /* Supporting Files */,
 			);
 			path = MyWave;
@@ -302,15 +298,6 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
-		68ED9825172B109B0009C2F6 /* InterfaceBuilder */ = {
-			isa = PBXGroup;
-			children = (
-				68787EE91828374400FC3FFF /* VkMusicViewController.xib */,
-				68787D971826CA5500FC3FFF /* MyMusicViewController.xib */,
-			);
-			path = InterfaceBuilder;
-			sourceTree = "<group>";
-		};
 		68F7D4D0184FD27300094192 /* UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -318,6 +305,15 @@
 				6833F80C184A958A00C156AB /* TrackCell.m */,
 			);
 			path = UI;
+			sourceTree = "<group>";
+		};
+		D6A42706E0E3CD560D0CFF9E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				12664B1E6CE25BC801028659 /* Pods.debug.xcconfig */,
+				E2DDFCEDA0B464876B7E6FD9 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -380,8 +376,6 @@
 			files = (
 				688453D0172182260092260B /* InfoPlist.strings in Resources */,
 				682CD8E5184E7D0C006000E6 /* Images.xcassets in Resources */,
-				68787EEA1828374400FC3FFF /* VkMusicViewController.xib in Resources */,
-				68787D991826CA5500FC3FFF /* MyMusicViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,7 +394,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C4DF46ADB47E46F4BD223201 /* Check Pods Manifest.lock */ = {
@@ -525,7 +519,7 @@
 		};
 		688453E6172182260092260B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BD8C0EDBA8EE446AB9CD421B /* Pods.xcconfig */;
+			baseConfigurationReference = 12664B1E6CE25BC801028659 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -545,7 +539,7 @@
 		};
 		688453E7172182260092260B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BD8C0EDBA8EE446AB9CD421B /* Pods.xcconfig */;
+			baseConfigurationReference = E2DDFCEDA0B464876B7E6FD9 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
