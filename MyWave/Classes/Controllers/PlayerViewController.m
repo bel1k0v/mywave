@@ -429,7 +429,6 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         
         NSLog(@"%f", progress);
     }];
-    
 }
 
 @end
