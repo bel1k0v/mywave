@@ -11,6 +11,6 @@
 @interface Track (Provider)
 
 + (NSArray *) deviceTracks;
-+ (NSArray *) vkontakteTracks;
++ (void) vkontakteTracks:(id) caller;
 
 @end

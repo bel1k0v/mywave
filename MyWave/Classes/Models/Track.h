@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "DOUAudioFile.h"
-#import "Vkontakte.h"
 #import "TrackDbManager.h"
 #import "AFHTTPRequestOperation.h"
 

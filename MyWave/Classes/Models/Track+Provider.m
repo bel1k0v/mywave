@@ -8,6 +8,7 @@
 
 #import "Track+Provider.h"
 #import "TrackDbManager.h"
+#import "VKSdk.h"
 
 @implementation Track (Provider)
 
@@ -28,23 +29,38 @@
     return tracks;
 }
 
-+ (NSArray *) vkontakteTracks {
-    static NSArray *tracks = nil;
-    Vkontakte *vk = [Vkontakte sharedInstance];
-    if (![vk isAuthorized]) return nil;
+// Async operation
++ (void) vkontakteTracks:(id) caller {
+    __block NSArray *tracks = nil;
     
-    NSArray *songs = [vk getUserAudio];
+    VKRequest * audioReq = [VKApi requestWithMethod:@"audio.get" andParameters:@{} andHttpMethod:@"GET"];
     
-    NSMutableArray *allTracks = [NSMutableArray array];
-    for (NSDictionary *song in songs) {
-        Track *track = [self createTrackFromVkWithSong:song];
-        [allTracks addObject:track];
-    }
-    
-    tracks = [allTracks copy];
-
-    
-    return tracks;
+    [audioReq executeWithResultBlock:^(VKResponse * response) {
+        //NSLog(@"Json result: %@", response.json);
+        //NSError* error;
+        NSDictionary* audio = [NSDictionary dictionaryWithObject:response.json forKey:@"response"];
+        //NSLog(@"%@", [audio objectForKey:@"response"]);
+        NSDictionary *songs = [audio objectForKey:@"response"];
+        NSMutableArray *allTracks = [NSMutableArray array];
+        
+        for (NSDictionary *song in [songs objectForKey:@"items"]) {
+            //NSLog(@"Song: %@", song);
+            Track *track = [self createTrackFromVkWithSong:song];
+            [allTracks addObject:track];
+        }
+        
+        tracks = [allTracks copy];
+        
+        [caller performSelectorOnMainThread:@selector(renderTracks:) withObject:tracks waitUntilDone:NO];
+        //NSLog(@"%@",tracks);
+        
+    } errorBlock:^(NSError * error) {
+        if (error.code != VK_API_ERROR) {
+            [error.vkError.request repeat];
+        } else {
+            NSLog(@"VK error: %@", error);
+        } 
+    }];
 }
 
 @end

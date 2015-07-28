@@ -33,8 +33,6 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    _vk = [Vkontakte sharedInstance];
-    _vk.delegate = self;
     _providers = [[NSArray alloc]initWithObjects:@"device", @"vkontakte", nil];
 }
 
@@ -112,21 +110,13 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
 }
 
 - (void)_vkLoginButtonPressed:(id)sender {
-    if (![_vk isAuthorized])
-        [_vk authenticate];
-    else
-        [_vk logout];
+    NSLog(@"Login button presssed");
 }
 
 - (void)_vkontakteMusicControlPressed:(id)sender {
     if (AppHelper.isNetworkAvailable) {
-        if (![_vk isAuthorized]) {
-            [_vk authenticate];
-        } else {
-            VkontakteMusicViewController* musicViewController = [VkontakteMusicViewController new];
-            musicViewController->tracks = [[NSMutableArray alloc]initWithArray:[Track vkontakteTracks]];            
-            [self _changeViewController:musicViewController];
-        }
+        VkontakteMusicViewController* musicViewController = [VkontakteMusicViewController new];
+        [self _changeViewController:musicViewController];
     } else {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Alert!" message:@"Connect your device to wi-fi or 3G/LTE network" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
@@ -149,22 +139,6 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles: nil];
     [alert show];
-}
-
-- (void)showVkontakteAuthController:(UIViewController *)controller {
-    [self presentViewController:controller animated:YES completion:nil];
-}
-
-- (void)vkontakteAuthControllerDidCancelled {
-    [self dismissViewControllerAnimated:YES completion:nil];
-    [self _vkontakteMusicControlPressed:self];
-}
-
-- (void)vkontakteDidFinishLogin:(Vkontakte *)vkontakte {
-    [self vkontakteAuthControllerDidCancelled];
-}
-
-- (void)vkontakteDidFinishLogOut:(Vkontakte *)vkontakte {
 }
 
 @end

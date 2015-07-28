@@ -13,12 +13,20 @@
 #import "SidePanelController.h"
 #import "AppHelper.h"
 #import "Track+Provider.h"
+#import "VKSdk.h"
 
 @implementation AppDelegate
+
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    [VKSdk processOpenURL:url fromApplication:sourceApplication];
+    return YES;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
     MainViewController *mainViewController = [MainViewController new];
     DeviceMusicViewController *musicViewController = [[DeviceMusicViewController alloc]initWithNibName:@"MyMusicViewController"
                                                                                         bundle:nil];

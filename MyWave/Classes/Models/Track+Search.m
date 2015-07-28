@@ -13,10 +13,10 @@
 + (NSArray *)vkontakteTracksForSearchString:(NSString *)q {
     static NSArray *tracks = nil;
     
-    Vkontakte *vk = [Vkontakte sharedInstance];
-    if (![vk isAuthorized]) return nil;
-    
-    NSArray *songs = [vk searchAudio:q];
+//    Vkontakte *vk = [Vkontakte sharedInstance];
+//    if (![vk isAuthorized]) return nil;
+//    
+    NSArray *songs = nil;
     NSMutableArray *allTracks = [NSMutableArray array];
     for (NSDictionary *song in songs) {
         Track *track = [self createTrackFromVkWithSong:song];

@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Vkontakte.h"
 #import "TracksViewController.h"
+#import "VKSdk.h"
 
-@interface VkontakteMusicViewController : TracksViewController
+@interface VkontakteMusicViewController : TracksViewController<VKSdkDelegate>
 
 @end

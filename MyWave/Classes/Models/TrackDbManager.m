@@ -139,21 +139,24 @@ static sqlite3_stmt *statement = nil;
     return nil;
 }
 
-- (NSArray *)getSongs {
-    NSArray *data = [self findAll];
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+- (NSArray *)getSongs
+{
+    NSArray *data                = [self findAll];
+    NSArray *paths               = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSMutableArray *songs = [[NSMutableArray alloc]init];
+    NSMutableArray *songs        = [[NSMutableArray alloc]init];
     
-    for(int i = 0; i < [data count]; ++i) {
-        NSString *regNum = [[data objectAtIndex:i]objectAtIndex:0];
-        NSString *artist = [[data objectAtIndex:i]objectAtIndex:1];
-        NSString *title = [[data objectAtIndex:i]objectAtIndex:2];
+    for (int i = 0; i < [data count]; ++i)
+    {
+        NSString *regNum   = [[data objectAtIndex:i]objectAtIndex:0];
+        NSString *artist   = [[data objectAtIndex:i]objectAtIndex:1];
+        NSString *title    = [[data objectAtIndex:i]objectAtIndex:2];
         NSString *duration = [[data objectAtIndex:i]objectAtIndex:3];
         NSString *songPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, [[data objectAtIndex:i]objectAtIndex:4]];
-        NSArray *keys = [NSArray arrayWithObjects:@"url", @"artist", @"title", @"duration", @"regNum", nil];
-        NSArray *values = [NSArray arrayWithObjects:songPath, artist, title, duration, regNum, nil];
+        NSArray *keys      = [NSArray arrayWithObjects:@"url", @"artist", @"title", @"duration", @"regNum", nil];
+        NSArray *values    = [NSArray arrayWithObjects:songPath, artist, title, duration, regNum, nil];
         NSDictionary *song = [[NSDictionary alloc] initWithObjects:values forKeys:keys];
+        
         [songs addObject:song];
     }
     
