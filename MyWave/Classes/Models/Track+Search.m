@@ -10,20 +10,34 @@
 
 @implementation Track (Search)
 
-+ (NSArray *)vkontakteTracksForSearchString:(NSString *)q {
-    static NSArray *tracks = nil;
++ (void) vkontakteTracksForSearchString:(NSString *)q andCaller:(id) caller {
+
+    __block NSArray *tracks = nil;
     
-//    Vkontakte *vk = [Vkontakte sharedInstance];
-//    if (![vk isAuthorized]) return nil;
-//    
-    NSArray *songs = nil;
-    NSMutableArray *allTracks = [NSMutableArray array];
-    for (NSDictionary *song in songs) {
-        Track *track = [self createTrackFromVkWithSong:song];
-        [allTracks addObject:track];
-    }
-    tracks = [allTracks copy];
+    VKRequest * audioReq = [VKApi requestWithMethod:@"audio.search" andParameters:@{@"q": q} andHttpMethod:@"GET"];
     
-    return tracks;
+    [audioReq executeWithResultBlock:^(VKResponse * response) {
+
+        NSDictionary* audio = [NSDictionary dictionaryWithObject:response.json forKey:@"response"];
+
+        NSDictionary *songs = [audio objectForKey:@"response"];
+        NSMutableArray *allTracks = [NSMutableArray array];
+        
+        for (NSDictionary *song in [songs objectForKey:@"items"]) {
+            Track *track = [self createTrackFromVkWithSong:song];
+            [allTracks addObject:track];
+        }
+        
+        tracks = [allTracks copy];
+        [caller performSelectorOnMainThread:@selector(renderSearchTracks:) withObject:tracks waitUntilDone:NO];
+        
+        
+    } errorBlock:^(NSError * error) {
+        if (error.code != VK_API_ERROR) {
+            [error.vkError.request repeat];
+        } else {
+            NSLog(@"VK error: %@", error);
+        }
+    }];
 }
 @end

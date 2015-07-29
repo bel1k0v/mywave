@@ -168,6 +168,8 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         [_elapsedTimeLabel setBackgroundColor:[UIColor clearColor]];
     }
     _audioVisualizer = [[DOUAudioVisualizer alloc] initWithFrame:CGRectMake(0.0, visStart, CGRectGetWidth([view bounds]), visHeight)];
+    [_audioVisualizer setTintColor:[UIColor brownColor]];
+    [_audioVisualizer setStepCount:10];
     [_audioVisualizer setInterpolationType:DOUAudioVisualizerSmoothInterpolation];
     [view addSubview:_audioVisualizer];
 
@@ -318,7 +320,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     }
 }
 
-- (BOOL) canBecomeFirstResponder {
+- (BOOL)canBecomeFirstResponder {
     return YES;
 }
 
@@ -367,9 +369,9 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 
  - (void)viewWillDisappear:(BOOL)animated {
      
-     [_timer invalidate];
-     [_streamer stop];
-     [self _cancelStreamer];
+     //[_timer invalidate];
+     //[_streamer stop];
+     //[self _cancelStreamer];
      [super viewWillDisappear:animated];
  }
 
@@ -419,6 +421,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 
 - (void)_actionDownload:(id)sender {
     Track *track = [_tracks objectAtIndex:_currentTrackIndex];
+    //@todo prevent to download track twice
     [track downloadWithProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         float progress = (float)totalBytesRead / totalBytesExpectedToRead;
         if (progress < 1.0f) {
@@ -426,8 +429,6 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         } else if (progress == 1.0f) {
             [_statusLabel setText:@"Downloaded"];
         }
-        
-        NSLog(@"%f", progress);
     }];
 }
 

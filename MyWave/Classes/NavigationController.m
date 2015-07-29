@@ -28,13 +28,14 @@
     [self.navigationBar setTintColor:[UIColor whiteColor]];
     if ([[UIDevice currentDevice].systemVersion floatValue] > 6.1f) {
         NSDictionary *textAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        [UIColor whiteColor],
+                                        [UIColor colorWithRed:245.0/255.0 green:245.0/255.0 blue:245.0/255.0 alpha:1.0],
                                         NSForegroundColorAttributeName,
                                         [UIFont fontWithName:BaseFont size:BaseFontSizeHeader],
                                         NSFontAttributeName, nil];
         
         [[UINavigationBar appearance] setTitleTextAttributes: textAttributes];
         [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:0.0902f green:0.6941f blue:0.9647f alpha:1.0f]];
+        //[[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:33.0/255.0 green:33.0/255.0 blue:33.0/255.0 alpha:1.0]];
     }
     else
     { // 6.1, 6.0

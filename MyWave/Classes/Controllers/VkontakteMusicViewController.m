@@ -11,7 +11,6 @@
 #import "Track+Provider.h"
 #import "Track+Search.h"
 #import "AppHelper.h"
-#import "VKSdk.h"
 
 #define MinSearchLength 2
 #define MaxSearchLength 25
@@ -19,15 +18,11 @@
 static NSArray  * SCOPE = nil;
 
 @implementation VkontakteMusicViewController {
-    @private
-    NSCache *_searchCache;
-    NSArray *_cachedData;
 }
 
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
-        _searchCache = [[NSCache alloc] init];
         
         [VKSdk initializeWithDelegate:self andAppId:@"3585088"];
         if ([VKSdk wakeUpSession])
@@ -44,9 +39,18 @@ static NSArray  * SCOPE = nil;
     return self;
 }
 
+- (void) reloadTableView {
+    [self.tableView reloadData];
+}
+
 - (void) renderTracks:(NSArray *)tracks {
     self->tracks = [NSMutableArray arrayWithArray:tracks];
-    [self.tableView reloadData];
+    [self reloadTableView];
+}
+
+- (void) renderSearchTracks:(NSArray *)tracks {
+    self->searchData = [NSMutableArray arrayWithArray:tracks];
+    [self reloadTableView];
 }
 
 - (void)viewDidLoad {
@@ -60,22 +64,11 @@ static NSArray  * SCOPE = nil;
 #pragma mark - Search display delegate
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *) searchString {
     if (searchString.length > MinSearchLength && searchString.length < MaxSearchLength) {
-        _cachedData = [_searchCache objectForKey:searchString];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            if (_cachedData == NULL) {
-                _cachedData = [Track vkontakteTracksForSearchString:[NSString stringWithFormat:@"%@ ", searchString]];
-                if (_cachedData != NULL) [_searchCache setObject:_cachedData forKey:searchString];
-                else _cachedData = [NSArray new];
-            }
-            searchData = [[NSMutableArray alloc]initWithArray:_cachedData];
-            [self.tableView reloadData];
-        });
-    
-        return NO;
+        [Track vkontakteTracksForSearchString:[NSString stringWithFormat:@"%@", searchString] andCaller:self];
+        return YES;
     }
     return NO;
 }
-
 
 - (void)vkSdkNeedCaptchaEnter:(VKError *)captchaError {
     VKCaptchaViewController *vc = [VKCaptchaViewController captchaControllerWithError:captchaError];
@@ -87,7 +80,7 @@ static NSArray  * SCOPE = nil;
 }
 
 - (void)vkSdkReceivedNewToken:(VKAccessToken *)newToken {
-    //[self startWorking];
+    [self reloadTableView];
 }
 
 - (void)vkSdkShouldPresentViewController:(UIViewController *)controller {
@@ -95,7 +88,7 @@ static NSArray  * SCOPE = nil;
 }
 
 - (void)vkSdkAcceptedUserToken:(VKAccessToken *)token {
-    //[self startWorking];
+    [self reloadTableView];
 }
 - (void)vkSdkUserDeniedAccess:(VKError *)authorizationError {
     [[[UIAlertView alloc] initWithTitle:nil message:@"Access denied" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];

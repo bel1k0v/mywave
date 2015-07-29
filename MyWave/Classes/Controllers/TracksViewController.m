@@ -22,6 +22,7 @@
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
+        [self initSearch];
     }
     return self;
 }

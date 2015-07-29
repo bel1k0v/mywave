@@ -8,15 +8,52 @@
 
 #import "Track+Provider.h"
 #import "TrackDbManager.h"
-#import "VKSdk.h"
+#import "FMDatabase.h"
 
 @implementation Track (Provider)
+
++ (NSString *)getDbPath {
+    NSString *docsDir;
+    NSArray *dirPaths;
+    // Get the documents directory
+    dirPaths = NSSearchPathForDirectoriesInDomains
+    (NSDocumentDirectory, NSUserDomainMask, YES);
+    docsDir = dirPaths[0];
+    NSString *dbPath = [[NSString alloc] initWithString:
+                        [docsDir stringByAppendingPathComponent: @"downloaded.db"]];
+    
+    return dbPath;
+}
 
 + (NSArray *) deviceTracks {
     static NSArray *tracks = nil;
     
-    TrackDbManager *db = [TrackDbManager sharedInstance];
-    NSArray *songs = [db getSongs];
+    NSArray *paths               = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSMutableArray *songs        = [[NSMutableArray alloc]init];
+    
+    
+    FMDatabase *db = [FMDatabase databaseWithPath:[self getDbPath]];
+    if (![db open]) {
+        NSLog(@"Connot open db");
+    } else {
+        FMResultSet *result = [db executeQuery:@"select id, artist, title, duration, filename from mp3 order by id desc limit 200"];
+        
+        while ([result next]) {
+            NSString *_id = [NSString stringWithFormat:@"%d", [result intForColumn:@"id"]];
+            NSString *artist = [NSString stringWithUTF8String:[result UTF8StringForColumnName:@"artist"]];
+            NSString *title = [NSString stringWithUTF8String:[result UTF8StringForColumnName:@"title"]];
+            NSString *duration = [NSString stringWithUTF8String:[result UTF8StringForColumnName:@"duration"]];
+            NSString *filename = [NSString stringWithFormat:@"%@/%@", documentsDirectory, [NSString stringWithUTF8String:[result UTF8StringForColumnName:@"filename"]]];
+        
+
+            NSArray *keys      = [NSArray arrayWithObjects:@"url", @"artist", @"title", @"duration", @"regNum", nil];
+            NSArray *values    = [NSArray arrayWithObjects:filename, artist, title, duration, _id, nil];
+            NSDictionary *song = [[NSDictionary alloc] initWithObjects:values forKeys:keys];
+            
+            [songs addObject:song];
+        }
+    }
     
     NSMutableArray *allTracks = [NSMutableArray array];
     for (NSDictionary *song in songs) {
@@ -44,15 +81,13 @@
         NSMutableArray *allTracks = [NSMutableArray array];
         
         for (NSDictionary *song in [songs objectForKey:@"items"]) {
-            //NSLog(@"Song: %@", song);
+            NSLog(@"%@", song);
             Track *track = [self createTrackFromVkWithSong:song];
             [allTracks addObject:track];
         }
         
         tracks = [allTracks copy];
-        
         [caller performSelectorOnMainThread:@selector(renderTracks:) withObject:tracks waitUntilDone:NO];
-        //NSLog(@"%@",tracks);
         
     } errorBlock:^(NSError * error) {
         if (error.code != VK_API_ERROR) {

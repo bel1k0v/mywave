@@ -19,11 +19,11 @@
     
 @private
     NSArray *_providers;
-    IBOutlet UIImageView *_imageViewLogo;
-    IBOutlet UITableView *_tableViewProviders;
-    IBOutlet UIButton *_buttonMyMusic;
-    IBOutlet UIButton *_buttonVkMusic;
-    IBOutlet UIButton *_buttonVkLogin;
+    UIImageView *_imageViewLogo;
+    UITableView *_tableViewProviders;
+    UIButton *_buttonMyMusic;
+    UIButton *_buttonVkMusic;
+    UIButton *_buttonVkLogin;
 }
 @end
 

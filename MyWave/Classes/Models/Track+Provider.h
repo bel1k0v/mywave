@@ -7,6 +7,7 @@
 //
 
 #import "Track.h"
+#import "VKSdk.h"
 
 @interface Track (Provider)
 

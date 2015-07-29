@@ -7,9 +7,10 @@
 //
 
 #import "Track.h"
+#import "VKSdk.h"
 
 @interface Track (Search)
 
-+ (NSArray *)vkontakteTracksForSearchString:(NSString *)q;
++ (void) vkontakteTracksForSearchString:(NSString *)q andCaller:(id) caller;
 
 @end
