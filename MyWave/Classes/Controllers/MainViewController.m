@@ -37,9 +37,9 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
 
 - (void)loadView {
     UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    _imageViewLogo = [[UIImageView alloc]initWithFrame:CGRectMake(15.0f, 30.0f, 52.0f, 24.0f)];
-    _imageViewLogo.image = [UIImage imageNamed:@"logo_white"];
-    [view addSubview:_imageViewLogo];
+    //_imageViewLogo = [[UIImageView alloc]initWithFrame:CGRectMake(15.0f, 30.0f, 52.0f, 24.0f)];
+    //_imageViewLogo.image = [UIImage imageNamed:@"logo_white"];
+    //[view addSubview:_imageViewLogo];
     
     _tableViewProviders = [[UITableView alloc]initWithFrame:CGRectMake(0, 64.0f, view.frame.size.width, view.frame.size.height - 74.0f)
  style:UITableViewStylePlain];
@@ -49,7 +49,7 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
     [_tableViewProviders setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [view addSubview:_tableViewProviders];
     
-    view.backgroundColor = UIColorFromRGB(0xCCCCCC);
+    view.backgroundColor = UIColorFromRGB(0x333333);
     [self setView:view];
 }
 

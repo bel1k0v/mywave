@@ -119,20 +119,20 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [view addSubview:_buttonShuffle];
     
     _buttonPlayPause = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonPlayPause setFrame:CGRectMake((CGRectGetWidth([view bounds]) - 99.0) / 2 , CGRectGetMaxY([_progressSlider frame]) + spaceBetweenButtonsAndSliders, 99.0, 99.0)];
-    [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"mw_play"] forState:UIControlStateNormal];
+    [_buttonPlayPause setFrame:CGRectMake((CGRectGetWidth([view bounds]) - 50.0) / 2 , CGRectGetMaxY([_progressSlider frame]) + spaceBetweenButtonsAndSliders, 50.0, 50.0)];
+    [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"mw_play_2"] forState:UIControlStateNormal];
     [_buttonPlayPause addTarget:self action:@selector(_actionPlayPause:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonPlayPause];
     
     _buttonNext = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonNext setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 20.0 - 60.0, CGRectGetMinY([_buttonPlayPause frame]) + 34.0, 60.0, 31.0)];
-    [_buttonNext setBackgroundImage:[UIImage imageNamed:@"mw_fw"] forState:UIControlStateNormal];
+    [_buttonNext setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 20.0 - 60.0, CGRectGetMinY([_buttonPlayPause frame]), 50.0, 50.0)];
+    [_buttonNext setBackgroundImage:[UIImage imageNamed:@"mw_fF_2_2"] forState:UIControlStateNormal];
     [_buttonNext addTarget:self action:@selector(_actionNext:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonNext];
     
     _buttonPrevious = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonPrevious setFrame:CGRectMake(20, CGRectGetMinY([_buttonPlayPause frame]) + 34.0, 60.0, 31.0)];
-    [_buttonPrevious setBackgroundImage:[UIImage imageNamed:@"mw_bw"] forState:UIControlStateNormal];
+    [_buttonPrevious setFrame:CGRectMake(20, CGRectGetMinY([_buttonPlayPause frame]), 50.0, 50.0)];
+    [_buttonPrevious setBackgroundImage:[UIImage imageNamed:@"mw_rw_2"] forState:UIControlStateNormal];
     [_buttonPrevious addTarget:self action:@selector(_actionPrevious:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonPrevious];
 
@@ -176,10 +176,10 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 
     [[UISlider appearance] setMaximumTrackTintColor:UIColorFromRGB(0xA5A5A5)];
     [[UISlider appearance] setMinimumTrackTintColor:UIColorFromRGB(0x333333)];
-    [[UISlider appearance] setThumbImage:[UIImage imageNamed:@"mw_pos"]
-                                forState:UIControlStateNormal];
-    [[UISlider appearance] setThumbImage:[UIImage imageNamed:@"mw_pos"]
-                                forState:UIControlStateSelected];
+    //[[UISlider appearance] setThumbImage:[UIImage imageNamed:@"mw_pos"]
+    //                            forState:UIControlStateNormal];
+    //[[UISlider appearance] setThumbImage:[UIImage imageNamed:@"mw_pos"]
+    //                            forState:UIControlStateSelected];
     
     UIImage *logo = [UIImage imageNamed: @"logo3"];
     UIImageView *logoView = [[UIImageView alloc] initWithImage: logo];
@@ -210,8 +210,8 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 
 - (void)_resetStreamer {
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    NSTimeInterval currentTime = [app.streamer currentTime];
-    app.streamer = nil;
+    //NSTimeInterval currentTime = [app.streamer currentTime];
+    //app.streamer = nil;
     
     Track *track = [_tracks objectAtIndex:_currentTrackIndex];
     
@@ -219,14 +219,20 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     
     [_titleLabel setText:[track getTitle]];
     [_artistLabel setText:[track getArtist]];
-    _streamer = [DOUAudioStreamer streamerWithAudioFile:track];
+    if (app.currentTrack == track && app.streamer != nil) {
+        _streamer = app.streamer;
+    } else {
+        _streamer = [DOUAudioStreamer streamerWithAudioFile:track];
+    }
+    
     [_streamer addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:kStatusKVOKey];
     [_streamer addObserver:self forKeyPath:@"duration" options:NSKeyValueObservingOptionNew context:kDurationKVOKey];
     [_streamer addObserver:self forKeyPath:@"bufferingRatio" options:NSKeyValueObservingOptionNew context:kBufferingRatioKVOKey];
     
-    [_streamer play];
-    if (app.currentTrack == track) {
-        [_streamer setCurrentTime:currentTime];
+    if (app.currentTrack != track)  {
+        [_streamer play];
+    } else {
+        [self _updateStatus];
     }
     
     [self setNowPlayingTrack:track];
@@ -271,17 +277,17 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     switch ([_streamer status]) {
         case DOUAudioStreamerPlaying:
             [_statusLabel setText:@"Playing"];
-            [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"mw_pause"] forState:UIControlStateNormal];
+            [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"mw_pause_2"] forState:UIControlStateNormal];
             break;
             
         case DOUAudioStreamerPaused:
             [_statusLabel setText:@"Paused"];
-            [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"mw_play"] forState:UIControlStateNormal];
+            [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"mw_play_2"] forState:UIControlStateNormal];
             break;
             
         case DOUAudioStreamerIdle:
             [_statusLabel setText:@"Idle"];
-            [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"mw_play"] forState:UIControlStateNormal];
+            [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"mw_play_2"] forState:UIControlStateNormal];
             break;
             
         case DOUAudioStreamerFinished:
@@ -395,6 +401,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
      [[NSNotificationCenter defaultCenter]
       postNotificationName:@"TestNotificationStreamer"
       object:_streamer];
+     
      [super viewWillDisappear:animated];
  }
 
