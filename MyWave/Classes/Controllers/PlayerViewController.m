@@ -7,6 +7,7 @@
 //
 #import <MediaPlayer/MediaPlayer.h>
 
+#import "AppDelegate.h"
 #import "AppHelper.h"
 #import "Track+Db.h"
 #import "PlayerViewController.h"
@@ -208,9 +209,14 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 }
 
 - (void)_resetStreamer {
-    [self _cancelStreamer];
+    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    NSTimeInterval currentTime = [app.streamer currentTime];
+    app.streamer = nil;
     
     Track *track = [_tracks objectAtIndex:_currentTrackIndex];
+    
+    [self _cancelStreamer];
+    
     [_titleLabel setText:[track getTitle]];
     [_artistLabel setText:[track getArtist]];
     _streamer = [DOUAudioStreamer streamerWithAudioFile:track];
@@ -219,11 +225,15 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [_streamer addObserver:self forKeyPath:@"bufferingRatio" options:NSKeyValueObservingOptionNew context:kBufferingRatioKVOKey];
     
     [_streamer play];
-
+    if (app.currentTrack == track) {
+        [_streamer setCurrentTime:currentTime];
+    }
+    
     [self setNowPlayingTrack:track];
     
     [self _setupHintForStreamer];
 }
+
 
 - (void)_setupHintForStreamer {
     NSUInteger nextIndex = _currentTrackIndex + 1;
@@ -325,6 +335,10 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     return YES;
 }
 
+- (void) doMagic:(Track *)track {
+    
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self _resetStreamer];
@@ -368,11 +382,19 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     }
 }
 
+
+
  - (void)viewWillDisappear:(BOOL)animated {
      
      //[_timer invalidate];
      //[_streamer stop];
      //[self _cancelStreamer];
+     [[NSNotificationCenter defaultCenter]
+      postNotificationName:@"TestNotification"
+      object:self.tracks[self.currentTrackIndex]];
+     [[NSNotificationCenter defaultCenter]
+      postNotificationName:@"TestNotificationStreamer"
+      object:_streamer];
      [super viewWillDisappear:animated];
  }
 

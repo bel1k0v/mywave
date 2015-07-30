@@ -16,6 +16,7 @@
 
 @implementation AppDelegate
 
+
 -(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     [VKSdk processOpenURL:url fromApplication:sourceApplication];
@@ -42,7 +43,35 @@
 
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receiveTestNotification:)
+                                                 name:@"TestNotification"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receiveTestNotification:)
+                                                 name:@"TestNotificationStreamer"
+                                               object:nil];
+    
+    
     return YES;
+}
+
+- (void) receiveTestNotification:(NSNotification *) notification
+{
+    // [notification name] should always be @"TestNotification"
+    // unless you use this method for observation of other notifications
+    // as well.
+    
+    if ([[notification name] isEqualToString:@"TestNotification"]) {
+        NSLog (@"Successfully received the test notification! %@", notification.object);
+        self.currentTrack = notification.object;
+    } else if ([[notification name] isEqualToString:@"TestNotificationStreamer"]) {
+        NSLog (@"Successfully received the test notification! %@", notification.object);
+        self.streamer = notification.object;
+    }
+    
 }
 
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
