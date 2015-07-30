@@ -7,10 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TrackDbManager.h"
 
 @interface MainViewController : UIViewController<UITableViewDelegate, UITableViewDataSource> {
-    TrackDbManager *_db;
 }
 
 @end

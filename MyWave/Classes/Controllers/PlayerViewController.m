@@ -8,7 +8,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 
 #import "AppHelper.h"
-#import "Track.h"
+#import "Track+Db.h"
 #import "PlayerViewController.h"
 #import "DOUAudioStreamer.h"
 #import "DOUAudioStreamer+Options.h"
@@ -174,7 +174,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [view addSubview:_audioVisualizer];
 
     [[UISlider appearance] setMaximumTrackTintColor:UIColorFromRGB(0xA5A5A5)];
-    [[UISlider appearance] setMinimumTrackTintColor:UIColorFromRGB(0x17b1f6)];
+    [[UISlider appearance] setMinimumTrackTintColor:UIColorFromRGB(0x333333)];
     [[UISlider appearance] setThumbImage:[UIImage imageNamed:@"mw_pos"]
                                 forState:UIControlStateNormal];
     [[UISlider appearance] setThumbImage:[UIImage imageNamed:@"mw_pos"]
@@ -198,6 +198,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 
 - (void)_cancelStreamer {
     if (_streamer != nil) {
+        NSLog(@"Streamer is not null, playing %@", _streamer);
         [_streamer pause];
         [_streamer removeObserver:self forKeyPath:@"status"];
         [_streamer removeObserver:self forKeyPath:@"duration"];
@@ -212,13 +213,13 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     Track *track = [_tracks objectAtIndex:_currentTrackIndex];
     [_titleLabel setText:[track getTitle]];
     [_artistLabel setText:[track getArtist]];
-    
     _streamer = [DOUAudioStreamer streamerWithAudioFile:track];
     [_streamer addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:kStatusKVOKey];
     [_streamer addObserver:self forKeyPath:@"duration" options:NSKeyValueObservingOptionNew context:kDurationKVOKey];
     [_streamer addObserver:self forKeyPath:@"bufferingRatio" options:NSKeyValueObservingOptionNew context:kBufferingRatioKVOKey];
     
     [_streamer play];
+
     [self setNowPlayingTrack:track];
     
     [self _setupHintForStreamer];
@@ -238,7 +239,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         [_progressSlider setValue:0.0f animated:NO];
     } else {
         [self _updateCurrentTimeLabel];
-        [self _updateElapsedLabel];
+        [self _updateElapsedTimeLabel];
         [_progressSlider setValue:[_streamer currentTime] / [_streamer duration] animated:YES];
     }
 }
@@ -249,7 +250,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [_currentTimeLabel setText:[NSString stringWithFormat:@"%d:%02d", currentMinutes, currentSeconds]];
 }
 
-- (void)_updateElapsedLabel {
+- (void)_updateElapsedTimeLabel {
     int elapsedTime = (int) floor([_streamer duration]) - (int) floor([_streamer currentTime]);
     int elapsedMinutes = (int) floor(elapsedTime / 60);
     int elapsedSeconds = (int) (elapsedTime - elapsedMinutes * 60);
@@ -412,7 +413,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 - (void)_actionSliderProgress:(id)sender {
     [_streamer setCurrentTime:[_streamer duration] * [_progressSlider value]];
     [self _updateCurrentTimeLabel];
-    [self _updateElapsedLabel];
+    [self _updateElapsedTimeLabel];
 }
 
 - (void)_actionSliderVolume:(id)sender {

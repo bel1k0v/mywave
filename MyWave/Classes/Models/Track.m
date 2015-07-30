@@ -19,10 +19,6 @@
     }
 }
 
-- (void) deleteDbRecord {
-    [[TrackDbManager sharedInstance] deleteById:self.regID];
-}
-
 - (NSString *) getTitle {
     return [NSString htmlEntityDecode:[self.title stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
 }
@@ -58,57 +54,6 @@
     [track setAudioFileURL:[NSURL fileURLWithPath:[song objectForKey:@"url"]]];
     
     return track;
-}
-
-- (void) downloadWithProgressBlock:(void (^)(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead))progressBlock
-{
-    TrackDbManager *db = [TrackDbManager sharedInstance];
-    if ([db findByTitle:self.title andArtist:self.artist] != nil) {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning"
-                                                        message:@"You already have this track"
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Ok"
-                                              otherButtonTitles:nil];
-        [alert show];
-    } else {
-        NSURL *url = self.audioFileURL;
-        NSString *name = [NSString stringWithFormat:@"%@ - %@", self.artist, self.title];
-        NSString *filename = [name stringByAppendingString:@".mp3"];
-        NSURLRequest *request = [NSURLRequest requestWithURL:url];
-        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *filepath = [[paths objectAtIndex:0] stringByAppendingPathComponent:filename];
-        operation.outputStream = [NSOutputStream outputStreamToFileAtPath:filepath append:NO];
-        [operation setDownloadProgressBlock:progressBlock];
-        
-        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            if (YES == [db saveData:self.artist title:self.title duration:self.duration filename:filename]) {
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ok"
-                                                                message:[NSString stringWithFormat:@"%@ saved", name]
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"Ok"
-                                                      otherButtonTitles:nil];
-                [alert show];
-            } else {
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                message:@"Please try again later"
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"Ok"
-                                                      otherButtonTitles:nil];
-                [alert show];
-            }
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            [[NSFileManager defaultManager]removeItemAtPath:filepath error:&error];
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                            message:@"Please try again later"
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"Ok"
-                                                  otherButtonTitles:nil];
-            [alert show];
-        }];
-        
-        [operation start];
-    }
 }
 
 @end

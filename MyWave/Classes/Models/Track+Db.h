@@ -1,0 +1,16 @@
+//
+//  Track+Db.h
+//  MyWave
+//
+//  Created by Дмитрий on 30.07.15.
+//
+//
+
+#import "Track.h"
+
+@interface Track (Db)
+
++ (NSArray *) saved;
+- (BOOL) deleteRec;
+- (void) downloadWithProgressBlock:(void (^)(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead))progressBlock;
+@end

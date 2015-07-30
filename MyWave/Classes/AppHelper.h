@@ -14,8 +14,11 @@
 #define BaseFontSizeDefault 14.0
 #define BaseFontSizeSmall 12.0
 #define BaseFontSizeExtraSmall 10.0
+#define DbName @"downloaded.db"
 
 @interface AppHelper : NSObject
 + (BOOL) isNetworkAvailable;
 + (CGFloat) getDeviceHeight;
++ (NSString *) dbPath;
++ (NSString *) filesDir;
 @end

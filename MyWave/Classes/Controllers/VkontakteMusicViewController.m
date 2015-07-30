@@ -8,8 +8,7 @@
 
 #import "VkontakteMusicViewController.h"
 #import "NSString+Gender.h"
-#import "Track+Provider.h"
-#import "Track+Search.h"
+#import "Track+VkSDK.h"
 #import "AppHelper.h"
 
 #define MinSearchLength 2
@@ -25,12 +24,13 @@ static NSArray  * SCOPE = nil;
     if (self) {
         
         [VKSdk initializeWithDelegate:self andAppId:@"3585088"];
+        
         if ([VKSdk wakeUpSession])
         {
             //Start working
         } else {
             SCOPE = @[VK_PER_FRIENDS, VK_PER_WALL, VK_PER_AUDIO, VK_PER_PHOTOS, VK_PER_NOHTTPS, VK_PER_EMAIL, VK_PER_MESSAGES];
-            [VKSdk authorize:SCOPE];
+            [VKSdk authorize:SCOPE revokeAccess:YES];
         }
         
         [Track vkontakteTracks:self];

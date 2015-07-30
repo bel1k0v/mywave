@@ -10,7 +10,7 @@
 #import "TrackCell.h"
 #import "NSString+HTML.h"
 #import "TracksViewController.h"
-#import "Track+Provider.h"
+#import "Track.h"
 #import "AppHelper.h"
 
 @interface TracksViewController ()

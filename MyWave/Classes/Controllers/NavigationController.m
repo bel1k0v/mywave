@@ -34,7 +34,7 @@
                                         NSFontAttributeName, nil];
         
         [[UINavigationBar appearance] setTitleTextAttributes: textAttributes];
-        [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:0.0902f green:0.6941f blue:0.9647f alpha:1.0f]];
+        [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:0.0033f green:0.0033f blue:0.0033f alpha:1.0f]];
         //[[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:33.0/255.0 green:33.0/255.0 blue:33.0/255.0 alpha:1.0]];
     }
     else

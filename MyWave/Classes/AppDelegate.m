@@ -12,7 +12,6 @@
 #import "DeviceMusicViewController.h"
 #import "SidePanelController.h"
 #import "AppHelper.h"
-#import "Track+Provider.h"
 #import "VKSdk.h"
 
 @implementation AppDelegate
@@ -28,11 +27,9 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     MainViewController *mainViewController = [MainViewController new];
-    DeviceMusicViewController *musicViewController = [[DeviceMusicViewController alloc]initWithNibName:@"MyMusicViewController"
-                                                                                        bundle:nil];
-    musicViewController->tracks = [[NSMutableArray alloc]initWithArray:[Track deviceTracks]];
-    
+    DeviceMusicViewController *musicViewController = [DeviceMusicViewController new];
     NavigationController *navigationController = [NavigationController new];
+    
     [navigationController setViewControllers:@[musicViewController] animated:YES];
     
     self.viewController = [SidePanelController new];

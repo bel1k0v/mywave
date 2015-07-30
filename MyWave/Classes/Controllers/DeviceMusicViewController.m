@@ -8,10 +8,18 @@
 
 #import "DeviceMusicViewController.h"
 #import "NSString+Gender.h"
-#import "Track+Provider.h"
+#import "Track+Db.h"
 #include "AppHelper.h"
 
 @implementation DeviceMusicViewController
+
+-(id)initWithStyle:(UITableViewStyle)style {
+    self = [super initWithStyle:style];
+    if (self) {
+        self->tracks = [NSMutableArray arrayWithArray:[Track saved]];
+    }
+    return  self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -31,7 +39,7 @@
         }
         
         [track deleteFile];
-        [track deleteDbRecord];
+        [track deleteRec];
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
                          withRowAnimation:UITableViewRowAnimationFade];
         [self.tableView reloadData];

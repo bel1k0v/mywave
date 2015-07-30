@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "DOUAudioFile.h"
-#import "TrackDbManager.h"
 #import "AFHTTPRequestOperation.h"
 
 @interface Track : NSObject <DOUAudioFile>
@@ -20,8 +19,6 @@
 @property (nonatomic, strong) NSURL *audioFileURL;
 
 - (void) deleteFile;
-- (void) deleteDbRecord;
-- (void) downloadWithProgressBlock:(void (^)(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead))progressBlock;
 
 - (NSString *) getArtist;
 - (NSString *) getTitle;

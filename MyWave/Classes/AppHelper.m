@@ -10,7 +10,7 @@
 
 @implementation AppHelper
 
-+ (BOOL)isNetworkAvailable {
++ (BOOL) isNetworkAvailable {
     NSURL *scriptUrl = [NSURL URLWithString:@"http://google.com"];
     NSData *data = [NSData dataWithContentsOfURL:scriptUrl];
     if (data) {
@@ -24,4 +24,23 @@
     CGRect bounds = [[UIScreen mainScreen] bounds];
     return bounds.size.height;
 }
+
++ (NSString *) dbPath {
+    NSString *docsDir;
+    NSArray *dirPaths;
+    // Get the documents directory
+    dirPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    docsDir = dirPaths[0];
+    NSString *dbPath = [[NSString alloc] initWithString:
+                        [docsDir stringByAppendingPathComponent: DbName]];
+    
+    return dbPath;
+}
+
++ (NSString *) filesDir {
+    NSArray *paths               = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    return documentsDirectory;
+}
+
 @end

@@ -13,7 +13,6 @@
 #import "JASidePanelController.h"
 #import "UIViewController+JASidePanel.h"
 #import "AppHelper.h"
-#import "Track+Provider.h"
 
 @interface MainViewController () {
     
@@ -44,39 +43,27 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
     
     _tableViewProviders = [[UITableView alloc]initWithFrame:CGRectMake(0, 64.0f, view.frame.size.width, view.frame.size.height - 74.0f)
  style:UITableViewStylePlain];
-    _tableViewProviders.backgroundColor = UIColorFromRGB(0x0f3743);
+    _tableViewProviders.backgroundColor = UIColorFromRGB(0xCCCCCC);
     _tableViewProviders.dataSource = self;
     _tableViewProviders.delegate = self;
     [_tableViewProviders setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [view addSubview:_tableViewProviders];
     
-    view.backgroundColor = UIColorFromRGB(0x0f3743);
+    view.backgroundColor = UIColorFromRGB(0xCCCCCC);
     [self setView:view];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 50.0f;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
-        return @"My Wave";
-    } else {
-        return @"Social accounts";
-    }
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return 1;
-    } else
-        return [_providers count] -1;
-    
+    return [_providers count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -87,15 +74,15 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
-    cell.backgroundColor = UIColorFromRGB(0x0f3743);
-    cell.textLabel.text = [NSString stringWithFormat:@"%@", [[_providers objectAtIndex:indexPath.row + indexPath.section] capitalizedString]];
+    cell.backgroundColor = UIColorFromRGB(0xCCCCCC);
+    cell.textLabel.text = [NSString stringWithFormat:@"%@", [[_providers objectAtIndex:indexPath.row] capitalizedString]];
     cell.textLabel.textColor = [UIColor whiteColor];
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *sel = [NSString stringWithFormat:selectorStringFormat, [_providers objectAtIndex:indexPath.row + indexPath.section]];
+    NSString *sel = [NSString stringWithFormat:selectorStringFormat, [_providers objectAtIndex:indexPath.row]];
     [self performSelector:NSSelectorFromString(sel) onThread:[NSThread mainThread] withObject:nil waitUntilDone:NO];
 }
 
@@ -107,10 +94,6 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
     NavigationController *navigationController = [NavigationController new];
     [navigationController setViewControllers:@[controller]];
     self.sidePanelController.centerPanel = navigationController;
-}
-
-- (void)_vkLoginButtonPressed:(id)sender {
-    NSLog(@"Login button presssed");
 }
 
 - (void)_vkontakteMusicControlPressed:(id)sender {
@@ -126,7 +109,6 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
 
 - (void)_deviceMusicControlPressed:(id)sender {
     DeviceMusicViewController* musicViewController = [DeviceMusicViewController new];
-    musicViewController->tracks = [[NSMutableArray alloc]initWithArray:[Track deviceTracks]];
     [self _changeViewController:musicViewController];
 }
 

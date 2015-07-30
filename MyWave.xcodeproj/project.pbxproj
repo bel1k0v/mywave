@@ -13,9 +13,9 @@
 		68365C3C18FD2491005403E8 /* NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68365C3B18FD2491005403E8 /* NavigationController.m */; };
 		6838F67B18535213005DB7BF /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6838F67A18535213005DB7BF /* libz.dylib */; };
 		683F31E718B2ACBE00D37C05 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 683F31E618B2ACBE00D37C05 /* Track.m */; };
-		683F31EA18B2AD1000D37C05 /* Track+Provider.m in Sources */ = {isa = PBXBuildFile; fileRef = 683F31E918B2AD1000D37C05 /* Track+Provider.m */; };
 		683F31F018B61D1500D37C05 /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 683F31EF18B61D1500D37C05 /* NSString+HTML.m */; };
-		6858D3B81903288B00F648E1 /* Track+Search.m in Sources */ = {isa = PBXBuildFile; fileRef = 6858D3B71903288B00F648E1 /* Track+Search.m */; };
+		6843C7211B696A6A001644F5 /* Track+VkSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 6843C7201B696A6A001644F5 /* Track+VkSDK.m */; };
+		6843C7271B6A3CA9001644F5 /* Track+Db.m in Sources */ = {isa = PBXBuildFile; fileRef = 6843C7261B6A3CA9001644F5 /* Track+Db.m */; };
 		68695FA918E94D100033E3E1 /* AppHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 68695FA818E94D100033E3E1 /* AppHelper.m */; };
 		68695FAC18E956470033E3E1 /* SidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68695FAB18E956470033E3E1 /* SidePanelController.m */; };
 		68695FAF18E981880033E3E1 /* TracksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68695FAE18E981880033E3E1 /* TracksViewController.m */; };
@@ -28,7 +28,6 @@
 		68787E6E182789F100FC3FFF /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68787E6A182789F100FC3FFF /* SystemConfiguration.framework */; };
 		68787E7018278A1800FC3FFF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68787E6F18278A1800FC3FFF /* MobileCoreServices.framework */; };
 		68787EAC1827A7BF00FC3FFF /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 68787EAB1827A7BF00FC3FFF /* libsqlite3.0.dylib */; };
-		68787EB21827A8BC00FC3FFF /* TrackDbManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EB11827A8BC00FC3FFF /* TrackDbManager.m */; };
 		68787EE21828368600FC3FFF /* DeviceMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EE11828368600FC3FFF /* DeviceMusicViewController.m */; };
 		68787EE5182836AE00FC3FFF /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EE4182836AE00FC3FFF /* MainViewController.m */; };
 		68787EE81828373700FC3FFF /* VkontakteMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EE71828373700FC3FFF /* VkontakteMusicViewController.m */; };
@@ -51,17 +50,17 @@
 		682CD8E4184E7D0C006000E6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6833F80B184A958A00C156AB /* TrackCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackCell.h; sourceTree = "<group>"; };
 		6833F80C184A958A00C156AB /* TrackCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackCell.m; sourceTree = "<group>"; };
-		68365C3A18FD2491005403E8 /* NavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NavigationController.h; path = ../NavigationController.h; sourceTree = "<group>"; };
-		68365C3B18FD2491005403E8 /* NavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NavigationController.m; path = ../NavigationController.m; sourceTree = "<group>"; };
+		68365C3A18FD2491005403E8 /* NavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationController.h; sourceTree = "<group>"; };
+		68365C3B18FD2491005403E8 /* NavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationController.m; sourceTree = "<group>"; };
 		6838F67A18535213005DB7BF /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		683F31E518B2ACBE00D37C05 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
 		683F31E618B2ACBE00D37C05 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
-		683F31E818B2AD1000D37C05 /* Track+Provider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Track+Provider.h"; sourceTree = "<group>"; };
-		683F31E918B2AD1000D37C05 /* Track+Provider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Track+Provider.m"; sourceTree = "<group>"; };
-		683F31EE18B61D1500D37C05 /* NSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+HTML.h"; path = "../Vkontakte/NSString+HTML.h"; sourceTree = "<group>"; };
-		683F31EF18B61D1500D37C05 /* NSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+HTML.m"; path = "../Vkontakte/NSString+HTML.m"; sourceTree = "<group>"; };
-		6858D3B61903288B00F648E1 /* Track+Search.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Track+Search.h"; sourceTree = "<group>"; };
-		6858D3B71903288B00F648E1 /* Track+Search.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Track+Search.m"; sourceTree = "<group>"; };
+		683F31EE18B61D1500D37C05 /* NSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+HTML.h"; sourceTree = "<group>"; };
+		683F31EF18B61D1500D37C05 /* NSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+HTML.m"; sourceTree = "<group>"; };
+		6843C71F1B696A6A001644F5 /* Track+VkSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Track+VkSDK.h"; sourceTree = "<group>"; };
+		6843C7201B696A6A001644F5 /* Track+VkSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Track+VkSDK.m"; sourceTree = "<group>"; };
+		6843C7251B6A3CA9001644F5 /* Track+Db.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Track+Db.h"; sourceTree = "<group>"; };
+		6843C7261B6A3CA9001644F5 /* Track+Db.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Track+Db.m"; sourceTree = "<group>"; };
 		68695FA718E94D100033E3E1 /* AppHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppHelper.h; sourceTree = "<group>"; };
 		68695FA818E94D100033E3E1 /* AppHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppHelper.m; sourceTree = "<group>"; };
 		68695FAA18E956470033E3E1 /* SidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidePanelController.h; sourceTree = "<group>"; };
@@ -78,8 +77,6 @@
 		68787E6A182789F100FC3FFF /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		68787E6F18278A1800FC3FFF /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		68787EAB1827A7BF00FC3FFF /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
-		68787EB01827A8BC00FC3FFF /* TrackDbManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackDbManager.h; sourceTree = "<group>"; };
-		68787EB11827A8BC00FC3FFF /* TrackDbManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackDbManager.m; sourceTree = "<group>"; };
 		68787EE01828368600FC3FFF /* DeviceMusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceMusicViewController.h; sourceTree = "<group>"; };
 		68787EE11828368600FC3FFF /* DeviceMusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceMusicViewController.m; sourceTree = "<group>"; };
 		68787EE3182836AE00FC3FFF /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
@@ -96,8 +93,8 @@
 		688453D3172182260092260B /* MyWave-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MyWave-Prefix.pch"; sourceTree = "<group>"; };
 		688453D4172182260092260B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		688453D5172182260092260B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		688453E9172182FF0092260B /* NSString+Gender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Gender.h"; path = "../Vkontakte/NSString+Gender.h"; sourceTree = "<group>"; };
-		688453EA172182FF0092260B /* NSString+Gender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Gender.m"; path = "../Vkontakte/NSString+Gender.m"; sourceTree = "<group>"; };
+		688453E9172182FF0092260B /* NSString+Gender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Gender.h"; sourceTree = "<group>"; };
+		688453EA172182FF0092260B /* NSString+Gender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Gender.m"; sourceTree = "<group>"; };
 		68A3D7A1189D8BC700E9C026 /* libPods-AFNetworking.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-AFNetworking.a"; path = "Pods/build/Debug-iphoneos/libPods-AFNetworking.a"; sourceTree = "<group>"; };
 		68A3D7A318A2B2FF00E9C026 /* NSString+URLEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+URLEncoding.h"; path = "../../Resources/NSString+URLEncoding.h"; sourceTree = "<group>"; };
 		68A3D7A418A2B2FF00E9C026 /* NSString+URLEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+URLEncoding.m"; path = "../../Resources/NSString+URLEncoding.m"; sourceTree = "<group>"; };
@@ -155,14 +152,12 @@
 			isa = PBXGroup;
 			children = (
 				68F7D4D0184FD27300094192 /* UI */,
-				68787EB01827A8BC00FC3FFF /* TrackDbManager.h */,
-				68787EB11827A8BC00FC3FFF /* TrackDbManager.m */,
 				683F31E518B2ACBE00D37C05 /* Track.h */,
 				683F31E618B2ACBE00D37C05 /* Track.m */,
-				683F31E818B2AD1000D37C05 /* Track+Provider.h */,
-				683F31E918B2AD1000D37C05 /* Track+Provider.m */,
-				6858D3B61903288B00F648E1 /* Track+Search.h */,
-				6858D3B71903288B00F648E1 /* Track+Search.m */,
+				6843C71F1B696A6A001644F5 /* Track+VkSDK.h */,
+				6843C7201B696A6A001644F5 /* Track+VkSDK.m */,
+				6843C7251B6A3CA9001644F5 /* Track+Db.h */,
+				6843C7261B6A3CA9001644F5 /* Track+Db.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -388,10 +383,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				683F31EA18B2AD1000D37C05 /* Track+Provider.m in Sources */,
 				68695FAC18E956470033E3E1 /* SidePanelController.m in Sources */,
 				68695FAF18E981880033E3E1 /* TracksViewController.m in Sources */,
-				68787EB21827A8BC00FC3FFF /* TrackDbManager.m in Sources */,
 				688453D2172182260092260B /* main.m in Sources */,
 				688453D6172182260092260B /* AppDelegate.m in Sources */,
 				688453EB172182FF0092260B /* NSString+Gender.m in Sources */,
@@ -402,10 +395,11 @@
 				68787EE21828368600FC3FFF /* DeviceMusicViewController.m in Sources */,
 				68787D901826533700FC3FFF /* PlayerViewController.m in Sources */,
 				68695FA918E94D100033E3E1 /* AppHelper.m in Sources */,
+				6843C7271B6A3CA9001644F5 /* Track+Db.m in Sources */,
+				6843C7211B696A6A001644F5 /* Track+VkSDK.m in Sources */,
 				68365C3C18FD2491005403E8 /* NavigationController.m in Sources */,
 				68A3D7A518A2B2FF00E9C026 /* NSString+URLEncoding.m in Sources */,
 				6833F80E184A958A00C156AB /* TrackCell.m in Sources */,
-				6858D3B81903288B00F648E1 /* Track+Search.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -453,6 +447,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "D549A6F8-8370-4625-AF20-F3F4A5183335";
 				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Debug;
 		};
