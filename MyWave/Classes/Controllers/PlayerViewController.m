@@ -202,10 +202,12 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
                  NSURL *url = [NSURL URLWithString:[images[0] objectForKey:@"url"]];
                  NSURLRequest *request = [NSURLRequest requestWithURL:url];
                  
+                 __strong typeof(self) $elf = self;
+                 
                  [_cover setImageWithURLRequest:request
                                placeholderImage:[UIImage imageNamed:@"cover.jpg"]
                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                            [_cover setImage:image];
+                                            [$elf->_cover setImage:image];
                                         }
                                         failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                                             NSLog(@"%@", error);

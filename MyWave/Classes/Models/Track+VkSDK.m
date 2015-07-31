@@ -12,7 +12,7 @@
 
 + (void) vkontakteTracksForSearchString:(NSString *)q andCaller:(id)caller {
     
-    VKRequest *audioReq = [VKApi requestWithMethod:@"audio.search" andParameters:@{@"q": q} andHttpMethod:@"GET"];
+    VKRequest *audioReq = [VKApi requestWithMethod:@"audio.search" andParameters:@{@"q": q, @"auto_complete": @1, @"sort": @2} andHttpMethod:@"GET"];
     
     [audioReq executeWithResultBlock:^(VKResponse *response) {
         NSArray *tracks = nil;
