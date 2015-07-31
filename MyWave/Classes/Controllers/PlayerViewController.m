@@ -15,6 +15,7 @@
 #import "DOUAudioStreamer+Options.h"
 #import "DOUAudioEventLoop.h"
 #import "DOUAudioVisualizer.h"
+#import "UIImageView+AFNetworking.h"
 
 #import "NSString+HTML.h"
 
@@ -43,6 +44,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     UISlider *_volumeSlider;
     UIImageView *_imageVolumeLow;
     UIImageView *_imageVolumeHigh;
+    UIImageView *_cover;
     
     NSTimer *_timer;
     
@@ -56,10 +58,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 
 - (void)loadView {
     UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    float spaceBetweenButtonsAndSliders = 55.0f;
-    if ([AppHelper getDeviceHeight] == 480) {
-        spaceBetweenButtonsAndSliders = 25.0f;
-    }
+
     view.backgroundColor = UIColorFromRGB(0xFFFFFFF);
     CGFloat topPoint = 84.0;
     if ([[UIDevice currentDevice].systemVersion floatValue] < 7.0f) {
@@ -86,6 +85,23 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [_statusLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_statusLabel];
     
+    _buttonRepeat = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_buttonRepeat setFrame:CGRectMake(20, CGRectGetMinY([_statusLabel frame]), 25.0, 25.0)];
+    [_buttonRepeat setBackgroundImage:[UIImage imageNamed:@"mw_repeat"] forState:UIControlStateNormal];
+    [_buttonRepeat setBackgroundImage:[UIImage imageNamed:@"mw_repeat_selected"] forState:UIControlStateSelected];
+    [_buttonRepeat addTarget:self action:@selector(_actionToggle:) forControlEvents:UIControlEventTouchDown];
+    [view addSubview:_buttonRepeat];
+    
+    _buttonShuffle = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_buttonShuffle setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 45.0, CGRectGetMinY([_statusLabel frame]), 25.0, 25.0)];
+    [_buttonShuffle setBackgroundImage:[UIImage imageNamed:@"mw_shuffle"] forState:UIControlStateNormal];
+    [_buttonShuffle setBackgroundImage:[UIImage imageNamed:@"mw_shuffle_selected"] forState:UIControlStateSelected];
+    [_buttonShuffle addTarget:self action:@selector(_actionToggle:) forControlEvents:UIControlEventTouchDown];
+    [view addSubview:_buttonShuffle];
+    
+    _cover = [[UIImageView alloc]initWithFrame:CGRectMake(0.0, CGRectGetMaxY([_statusLabel frame])+10.0, CGRectGetWidth([view bounds]), CGRectGetWidth([view bounds]))];
+    [view addSubview:_cover];
+    
     _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(50.0, CGRectGetMaxY([_statusLabel frame]) + 25.0, CGRectGetWidth([view bounds]) - 100.0, 20.0)];
     [_progressSlider addTarget:self action:@selector(_actionSliderProgress:) forControlEvents:UIControlEventValueChanged];
     [view addSubview:_progressSlider];
@@ -104,39 +120,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     [_elapsedTimeLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     [view addSubview:_elapsedTimeLabel];
     
-    _buttonRepeat = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_buttonRepeat setFrame:CGRectMake(CGRectGetMinX([_progressSlider frame]) + 20, CGRectGetMinY([_progressSlider frame]) + 40.0, 25.0, 25.0)];
-    [_buttonRepeat setBackgroundImage:[UIImage imageNamed:@"mw_repeat"] forState:UIControlStateNormal];
-    [_buttonRepeat setBackgroundImage:[UIImage imageNamed:@"mw_repeat_selected"] forState:UIControlStateSelected];
-    [_buttonRepeat addTarget:self action:@selector(_actionToggle:) forControlEvents:UIControlEventTouchDown];
-    [view addSubview:_buttonRepeat];
-    
-    _buttonShuffle = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_buttonShuffle setFrame:CGRectMake(CGRectGetMaxX([_progressSlider frame]) - 45.0, CGRectGetMinY([_progressSlider frame]) + 40.0, 25.0, 25.0)];
-    [_buttonShuffle setBackgroundImage:[UIImage imageNamed:@"mw_shuffle"] forState:UIControlStateNormal];
-    [_buttonShuffle setBackgroundImage:[UIImage imageNamed:@"mw_shuffle_selected"] forState:UIControlStateSelected];
-    [_buttonShuffle addTarget:self action:@selector(_actionToggle:) forControlEvents:UIControlEventTouchDown];
-    [view addSubview:_buttonShuffle];
-    
-    _buttonPlayPause = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonPlayPause setFrame:CGRectMake((CGRectGetWidth([view bounds]) - 50.0) / 2 , CGRectGetMaxY([_progressSlider frame]) + spaceBetweenButtonsAndSliders, 50.0, 50.0)];
-    [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"mw_play_2"] forState:UIControlStateNormal];
-    [_buttonPlayPause addTarget:self action:@selector(_actionPlayPause:) forControlEvents:UIControlEventTouchDown];
-    [view addSubview:_buttonPlayPause];
-    
-    _buttonNext = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonNext setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 20.0 - 60.0, CGRectGetMinY([_buttonPlayPause frame]), 50.0, 50.0)];
-    [_buttonNext setBackgroundImage:[UIImage imageNamed:@"mw_fF_2_2"] forState:UIControlStateNormal];
-    [_buttonNext addTarget:self action:@selector(_actionNext:) forControlEvents:UIControlEventTouchDown];
-    [view addSubview:_buttonNext];
-    
-    _buttonPrevious = [UIButton buttonWithType:UIButtonTypeSystem];
-    [_buttonPrevious setFrame:CGRectMake(20, CGRectGetMinY([_buttonPlayPause frame]), 50.0, 50.0)];
-    [_buttonPrevious setBackgroundImage:[UIImage imageNamed:@"mw_rw_2"] forState:UIControlStateNormal];
-    [_buttonPrevious addTarget:self action:@selector(_actionPrevious:) forControlEvents:UIControlEventTouchDown];
-    [view addSubview:_buttonPrevious];
-
-    _volumeSlider = [[UISlider alloc] initWithFrame:CGRectMake(50.0, CGRectGetMaxY([_buttonPlayPause frame]) + spaceBetweenButtonsAndSliders, CGRectGetWidth([view bounds]) - 100.0, 20.0)];
+    _volumeSlider = [[UISlider alloc] initWithFrame:CGRectMake(50.0f, CGRectGetMaxY([view bounds]) - 120.0f, CGRectGetWidth([view bounds]) - 100.0, 20.0)];
     [_volumeSlider addTarget:self action:@selector(_actionSliderVolume:) forControlEvents:UIControlEventValueChanged];
     [view addSubview:_volumeSlider];
     
@@ -168,11 +152,30 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         [_currentTimeLabel setBackgroundColor:[UIColor clearColor]];
         [_elapsedTimeLabel setBackgroundColor:[UIColor clearColor]];
     }
-    _audioVisualizer = [[DOUAudioVisualizer alloc] initWithFrame:CGRectMake(0.0, visStart, CGRectGetWidth([view bounds]), visHeight)];
-    [_audioVisualizer setTintColor:[UIColor brownColor]];
-    [_audioVisualizer setStepCount:10];
-    [_audioVisualizer setInterpolationType:DOUAudioVisualizerSmoothInterpolation];
-    [view addSubview:_audioVisualizer];
+    
+    _buttonPlayPause = [UIButton buttonWithType:UIButtonTypeSystem];
+    [_buttonPlayPause setFrame:CGRectMake(CGRectGetWidth([view bounds]) / 2 - 25.0f, CGRectGetHeight([view bounds]) - 75.0f, 50.0f, 50.0f)];
+    [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"mw_play_2"] forState:UIControlStateNormal];
+    [_buttonPlayPause addTarget:self action:@selector(_actionPlayPause:) forControlEvents:UIControlEventTouchDown];
+    [view addSubview:_buttonPlayPause];
+    
+    _buttonNext = [UIButton buttonWithType:UIButtonTypeSystem];
+    [_buttonNext setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 70.0, CGRectGetMinY([_buttonPlayPause frame]), 50.0, 50.0)];
+    [_buttonNext setBackgroundImage:[UIImage imageNamed:@"mw_fF_2_2"] forState:UIControlStateNormal];
+    [_buttonNext addTarget:self action:@selector(_actionNext:) forControlEvents:UIControlEventTouchDown];
+    [view addSubview:_buttonNext];
+    
+    _buttonPrevious = [UIButton buttonWithType:UIButtonTypeSystem];
+    [_buttonPrevious setFrame:CGRectMake(20, CGRectGetMinY([_buttonPlayPause frame]), 50.0, 50.0)];
+    [_buttonPrevious setBackgroundImage:[UIImage imageNamed:@"mw_rw_2"] forState:UIControlStateNormal];
+    [_buttonPrevious addTarget:self action:@selector(_actionPrevious:) forControlEvents:UIControlEventTouchDown];
+    [view addSubview:_buttonPrevious];
+    
+//    _audioVisualizer = [[DOUAudioVisualizer alloc] initWithFrame:CGRectMake(0.0, visStart, CGRectGetWidth([view bounds]), visHeight)];
+//    [_audioVisualizer setTintColor:[UIColor brownColor]];
+//    [_audioVisualizer setStepCount:10];
+//    [_audioVisualizer setInterpolationType:DOUAudioVisualizerSmoothInterpolation];
+//    [view addSubview:_audioVisualizer];
 
     [[UISlider appearance] setMaximumTrackTintColor:UIColorFromRGB(0xA5A5A5)];
     [[UISlider appearance] setMinimumTrackTintColor:UIColorFromRGB(0x333333)];
@@ -186,6 +189,31 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     self.navigationItem.titleView = logoView;
     [self setView:view];
 }
+     
+ - (void) processArtists:(NSDictionary *)artists {
+     if ([artists objectForKey:@"items"]) {
+         NSArray *items = (NSArray *)[artists objectForKey:@"items"];
+         if ([items count]) {
+             NSDictionary *first = [items objectAtIndex:0];
+             //NSLog(@"%@", first);
+             NSArray *images = (NSArray *)[first objectForKey:@"images"];
+             if ([images count]) {
+                 NSURL *url = [NSURL URLWithString:[images[0] objectForKey:@"url"]];
+                 NSURLRequest *request = [NSURLRequest requestWithURL:url];
+                 
+                 [_cover setImageWithURLRequest:request
+                               placeholderImage:[UIImage imageNamed:@"cover.jpg"]
+                                        success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                            [_cover setImage:image];
+                                        }
+                                        failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                            NSLog(@"%@", error);
+                 }];
+
+             }
+         }
+     }
+ }
 
 - (void) setNowPlayingTrack:(Track *)track {
     if ([MPNowPlayingInfoCenter class]) {
@@ -223,6 +251,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         _streamer = app.streamer;
     } else {
         _streamer = [DOUAudioStreamer streamerWithAudioFile:track];
+        [track loadArtists:self];
     }
     
     [_streamer addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:kStatusKVOKey];
@@ -341,10 +370,6 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     return YES;
 }
 
-- (void) doMagic:(Track *)track {
-    
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self _resetStreamer];
@@ -391,10 +416,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 
 
  - (void)viewWillDisappear:(BOOL)animated {
-     
-     //[_timer invalidate];
-     //[_streamer stop];
-     //[self _cancelStreamer];
+    
      [[NSNotificationCenter defaultCenter]
       postNotificationName:@"TestNotification"
       object:self.tracks[self.currentTrackIndex]];

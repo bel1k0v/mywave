@@ -8,6 +8,7 @@
 
 #import "Track.h"
 #import "NSString+HTML.h"
+#import "AFHTTPRequestOperationManager.h"
 
 @implementation Track
 
@@ -17,6 +18,23 @@
     if (error) {
         NSLog(@"%@",[error description]);
     }
+}
+
+- (void)loadArtists:(id)sender {
+    NSString *url = [NSString stringWithFormat:@"https://api.spotify.com/v1/search?q=%@&type=artist", [self.artist stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]]];
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    [manager.requestSerializer setValue:@"Content-Type" forHTTPHeaderField:@"application/json"];
+    
+    [manager GET:url parameters:nil
+         success:^(AFHTTPRequestOperation *operation, id responseObject) {
+             NSDictionary *artists = (NSDictionary *)[responseObject objectForKey:@"artists"];
+             [sender performSelector:@selector(processArtists:) withObject:artists];
+         }
+         failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+             NSLog(@"Error: %@", error);
+         }];
 }
 
 - (NSString *) getTitle {

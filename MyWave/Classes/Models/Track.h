@@ -27,4 +27,6 @@
 + (Track *) createTrackFromVkWithSong:(NSDictionary *) song;
 + (Track *) createTrackFromDbWithSong:(NSDictionary *) song;
 
+- (void) loadArtists:(id)sender;
+
 @end
