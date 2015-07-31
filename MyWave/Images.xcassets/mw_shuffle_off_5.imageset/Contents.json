@@ -3,16 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "mw_ff_2_2.png"
+      "filename" : "mw_shuffle_off_5.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "mw_ff_2_2@2x.png"
+      "filename" : "mw_shuffle_off_5@2x.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "mw_shuffle_off_5@3x.png"
     }
   ],
   "info" : {

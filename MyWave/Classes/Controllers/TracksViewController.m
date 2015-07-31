@@ -70,6 +70,7 @@
     if (cell == nil) {
         cell = [[TrackCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
+    cell.backgroundColor = UIColorFromRGB(0xE5E5E5);
     
     Track *track = [self->tracks objectAtIndex:indexPath.row];
     if (tableView == self.searchDisplayController.searchResultsTableView) {
