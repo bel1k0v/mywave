@@ -16,6 +16,7 @@
 #import "DOUAudioEventLoop.h"
 #import "DOUAudioVisualizer.h"
 #import "UIImageView+AFNetworking.h"
+#import "LastFm.h"
 
 #import "NSString+HTML.h"
 
@@ -167,16 +168,8 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
         [_buttonDownload setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 85.0, CGRectGetMinY([_statusLabel frame]), 20.0, 20.0)];
         [_buttonDownload setBackgroundImage:[UIImage imageNamed:@"mw_download_5"] forState:UIControlStateNormal];
         [_buttonDownload addTarget:self action:@selector(_actionDownload:) forControlEvents:UIControlEventTouchDown];
-        //UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc]initWithCustomView:_buttonDownload];
-        //self.navigationItem.rightBarButtonItem = rightBarItem;
         [view addSubview:_buttonDownload];
     }
-    
-//    _audioVisualizer = [[DOUAudioVisualizer alloc] initWithFrame:CGRectMake(0.0, visStart, CGRectGetWidth([view bounds]), visHeight)];
-//    [_audioVisualizer setTintColor:[UIColor brownColor]];
-//    [_audioVisualizer setStepCount:10];
-//    [_audioVisualizer setInterpolationType:DOUAudioVisualizerSmoothInterpolation];
-//    [view addSubview:_audioVisualizer];
 
     [[UISlider appearance] setMaximumTrackTintColor:UIColorFromRGB(0xA5A5A5)];
     [[UISlider appearance] setMinimumTrackTintColor:UIColorFromRGB(0x333333)];
@@ -196,7 +189,6 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
          NSArray *items = (NSArray *)[artists objectForKey:@"items"];
          if ([items count]) {
              NSDictionary *first = [items objectAtIndex:0];
-             //NSLog(@"%@", first);
              NSArray *images = (NSArray *)[first objectForKey:@"images"];
              if ([images count]) {
                  NSURL *url = [NSURL URLWithString:[images[0] objectForKey:@"url"]];
@@ -212,10 +204,11 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
                                         failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                                             NSLog(@"%@", error);
                  }];
-
              }
          }
      }
+     
+
  }
 
 - (void) setNowPlayingTrack:(Track *)track {
@@ -250,12 +243,14 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     
     [_titleLabel setText:[track getTitle]];
     [_artistLabel setText:[track getArtist]];
-    if (app.currentTrack == track && app.streamer != nil) {
-        _streamer = app.streamer;
+
+    if (app.currentTrack == track) {
+        _streamer = [[DOUAudioEventLoop sharedEventLoop] currentStreamer];
     } else {
         _streamer = [DOUAudioStreamer streamerWithAudioFile:track];
-        [track loadArtists:self];
     }
+    
+    [track loadArtists:self];
     
     [_streamer addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:kStatusKVOKey];
     [_streamer addObserver:self forKeyPath:@"duration" options:NSKeyValueObservingOptionNew context:kDurationKVOKey];
@@ -423,9 +418,6 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
      [[NSNotificationCenter defaultCenter]
       postNotificationName:@"TestNotification"
       object:self.tracks[self.currentTrackIndex]];
-     [[NSNotificationCenter defaultCenter]
-      postNotificationName:@"TestNotificationStreamer"
-      object:_streamer];
      
      [super viewWillDisappear:animated];
  }

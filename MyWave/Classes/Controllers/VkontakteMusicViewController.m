@@ -14,29 +14,14 @@
 #define MinSearchLength 2
 #define MaxSearchLength 25
 
+//static NSString *const TOKEN_KEY = @"my_application_access_token";
 static NSArray  * SCOPE = nil;
 
 @implementation VkontakteMusicViewController {
 }
 
-- (id)initWithStyle:(UITableViewStyle)style {
-    self = [super initWithStyle:style];
-    if (self) {
-        
-        [VKSdk initializeWithDelegate:self andAppId:@"3585088"];
-        
-        if ([VKSdk wakeUpSession])
-        {
-            //Start working
-        } else {
-            SCOPE = @[VK_PER_FRIENDS, VK_PER_WALL, VK_PER_AUDIO, VK_PER_PHOTOS, VK_PER_NOHTTPS, VK_PER_EMAIL, VK_PER_MESSAGES];
-            [VKSdk authorize:SCOPE revokeAccess:YES];
-        }
-        
-        [Track vkontakteTracks:self];
-    }
-    
-    return self;
+- (void) authorize {
+    [VKSdk authorize:SCOPE revokeAccess:YES];
 }
 
 - (void) reloadTableView {
@@ -53,8 +38,24 @@ static NSArray  * SCOPE = nil;
     [self reloadTableView];
 }
 
-- (void)viewDidLoad {
+- (void)viewDidAppear:(BOOL)animated {
+    SCOPE = @[VK_PER_FRIENDS, VK_PER_WALL, VK_PER_AUDIO, VK_PER_PHOTOS, VK_PER_NOHTTPS, VK_PER_EMAIL, VK_PER_MESSAGES];
+    [super viewDidAppear:animated];
+    [VKSdk initializeWithDelegate:self andAppId:@"3585088"];
+    
+    if ([VKSdk isLoggedIn] && [VKSdk wakeUpSession:SCOPE])
+    {
+        //Start working
+        NSLog(@"Wake up");
+    } else {
+        [self authorize];
+    }
+}
+
+- (void) viewDidLoad {
     [super viewDidLoad];
+    
+    [Track vkontakteTracks:self];
 }
 
 - (BOOL) isTracksRemote {
@@ -76,7 +77,7 @@ static NSArray  * SCOPE = nil;
 }
 
 - (void)vkSdkTokenHasExpired:(VKAccessToken *)expiredToken {
-    [VKSdk authorize:SCOPE revokeAccess:YES];
+    [self authorize];
 }
 
 - (void)vkSdkReceivedNewToken:(VKAccessToken *)newToken {
@@ -84,7 +85,7 @@ static NSArray  * SCOPE = nil;
 }
 
 - (void)vkSdkShouldPresentViewController:(UIViewController *)controller {
-    [self.navigationController.topViewController presentViewController:controller animated:YES completion:nil];
+    [self.navigationController.topViewController presentViewController:controller animated:NO completion:nil];
 }
 
 - (void)vkSdkAcceptedUserToken:(VKAccessToken *)token {

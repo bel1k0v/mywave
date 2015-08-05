@@ -30,7 +30,7 @@
     [manager GET:url parameters:nil
          success:^(AFHTTPRequestOperation *operation, id responseObject) {
              NSDictionary *artists = (NSDictionary *)[responseObject objectForKey:@"artists"];
-             [sender performSelector:@selector(processArtists:) withObject:artists];
+             [sender performSelectorOnMainThread:@selector(processArtists:) withObject:artists waitUntilDone:NO];
          }
          failure:^(AFHTTPRequestOperation *operation, NSError *error) {
              NSLog(@"Error: %@", error);

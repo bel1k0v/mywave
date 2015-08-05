@@ -10,7 +10,6 @@
 		35FCAAB96D754E878723214C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FD2D23D6CB8649B98A0835DC /* libPods.a */; };
 		682CD8E5184E7D0C006000E6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 682CD8E4184E7D0C006000E6 /* Images.xcassets */; };
 		6833F80E184A958A00C156AB /* TrackCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6833F80C184A958A00C156AB /* TrackCell.m */; };
-		68365C3C18FD2491005403E8 /* NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68365C3B18FD2491005403E8 /* NavigationController.m */; };
 		6838F67B18535213005DB7BF /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6838F67A18535213005DB7BF /* libz.dylib */; };
 		683F31E718B2ACBE00D37C05 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 683F31E618B2ACBE00D37C05 /* Track.m */; };
 		683F31F018B61D1500D37C05 /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 683F31EF18B61D1500D37C05 /* NSString+HTML.m */; };
@@ -50,8 +49,6 @@
 		682CD8E4184E7D0C006000E6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6833F80B184A958A00C156AB /* TrackCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackCell.h; sourceTree = "<group>"; };
 		6833F80C184A958A00C156AB /* TrackCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackCell.m; sourceTree = "<group>"; };
-		68365C3A18FD2491005403E8 /* NavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationController.h; sourceTree = "<group>"; };
-		68365C3B18FD2491005403E8 /* NavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationController.m; sourceTree = "<group>"; };
 		6838F67A18535213005DB7BF /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		683F31E518B2ACBE00D37C05 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
 		683F31E618B2ACBE00D37C05 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
@@ -165,8 +162,6 @@
 		68787EB41827AA6C00FC3FFF /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				68365C3A18FD2491005403E8 /* NavigationController.h */,
-				68365C3B18FD2491005403E8 /* NavigationController.m */,
 				68787EE61828373700FC3FFF /* VkontakteMusicViewController.h */,
 				68787EE71828373700FC3FFF /* VkontakteMusicViewController.m */,
 				68787EE3182836AE00FC3FFF /* MainViewController.h */,
@@ -397,7 +392,6 @@
 				68695FA918E94D100033E3E1 /* AppHelper.m in Sources */,
 				6843C7271B6A3CA9001644F5 /* Track+Db.m in Sources */,
 				6843C7211B696A6A001644F5 /* Track+VkSDK.m in Sources */,
-				68365C3C18FD2491005403E8 /* NavigationController.m in Sources */,
 				68A3D7A518A2B2FF00E9C026 /* NSString+URLEncoding.m in Sources */,
 				6833F80E184A958A00C156AB /* TrackCell.m in Sources */,
 			);

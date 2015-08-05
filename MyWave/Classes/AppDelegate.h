@@ -7,15 +7,14 @@
 //
 
 #import "Track.h"
-#include "DOUAudioStreamer.h"
 #import <UIKit/UIKit.h>
+#import "SidePanelController.h"
 #import <Foundation/Foundation.h>
 
 
 @class SidePanelController;
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
-@property (strong, readwrite) DOUAudioStreamer *streamer;
 @property (strong, nonatomic) Track *currentTrack;
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) SidePanelController *viewController;

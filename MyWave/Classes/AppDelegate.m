@@ -7,10 +7,8 @@
 //
 
 #import "AppDelegate.h"
-#import "NavigationController.h"
 #import "MainViewController.h"
 #import "DeviceMusicViewController.h"
-#import "SidePanelController.h"
 #import "AppHelper.h"
 #import "VKSdk.h"
 
@@ -29,8 +27,8 @@
     
     MainViewController *mainViewController = [MainViewController new];
     DeviceMusicViewController *musicViewController = [DeviceMusicViewController new];
-    NavigationController *navigationController = [NavigationController new];
-    
+    UINavigationController *navigationController = [UINavigationController new];
+    [navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     [navigationController setViewControllers:@[musicViewController] animated:YES];
     
     self.viewController = [SidePanelController new];
@@ -49,10 +47,38 @@
                                                  name:@"TestNotification"
                                                object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receiveTestNotification:)
-                                                 name:@"TestNotificationStreamer"
-                                               object:nil];
+    if ([[UIDevice currentDevice].systemVersion floatValue] > 6.1f) {
+        NSDictionary *textAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        [UIColor colorWithRed:245.0/255.0 green:245.0/255.0 blue:245.0/255.0 alpha:1.0],
+                                        NSForegroundColorAttributeName,
+                                        [UIFont fontWithName:BaseFont size:BaseFontSizeHeader],
+                                        NSFontAttributeName, nil];
+        
+        [[UINavigationBar appearance] setTitleTextAttributes: textAttributes];
+        [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:0.0033f green:0.0033f blue:0.0033f alpha:1.0f]];
+    }
+    else
+    { // 6.1, 6.0
+//        self.navigationBar.tintColor = [UIColor colorWithRed:0.0902f green:0.6941f blue:0.9647f alpha:1.0f];
+        // Customize the title text for *all* UINavigationBars
+//        [[UINavigationBar appearance] setTitleTextAttributes:
+//         [NSDictionary dictionaryWithObjectsAndKeys:
+//          [UIColor whiteColor],
+//          UITextAttributeTextColor,
+//          [UIFont fontWithName:BaseFont size:BaseFontSizeHeader],
+//          UITextAttributeFont,
+//          nil]];
+    }
+    
+    
+    NSDictionary *barButtorTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                             [UIColor whiteColor],
+                                             NSForegroundColorAttributeName,
+                                             [UIFont fontWithName:BaseFont size:BaseFontSizeDefault],
+                                             NSFontAttributeName, nil];
+    
+    [[UIBarButtonItem appearance] setTitleTextAttributes:barButtorTextAttributes
+                                                forState:UIControlStateNormal];
     
     
     return YES;
@@ -60,18 +86,10 @@
 
 - (void) receiveTestNotification:(NSNotification *) notification
 {
-    // [notification name] should always be @"TestNotification"
-    // unless you use this method for observation of other notifications
-    // as well.
-    
     if ([[notification name] isEqualToString:@"TestNotification"]) {
         NSLog (@"Successfully received the test notification! %@", notification.object);
         self.currentTrack = notification.object;
-    } else if ([[notification name] isEqualToString:@"TestNotificationStreamer"]) {
-        NSLog (@"Successfully received the test notification! %@", notification.object);
-        self.streamer = notification.object;
     }
-    
 }
 
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window

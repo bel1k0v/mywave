@@ -44,31 +44,37 @@
 
 + (void) vkontakteTracks:(id)caller {
     
-    VKRequest * audioReq = [VKApi requestWithMethod:@"audio.get" andParameters:@{} andHttpMethod:@"GET"];
+    if ([VKSdk isLoggedIn]) {
+        VKRequest * audioReq = [VKApi requestWithMethod:@"audio.get" andParameters:@{} andHttpMethod:@"GET"];
+        
+        [audioReq executeWithResultBlock:^(VKResponse * response) {
+            NSArray *tracks = nil;
+            NSDictionary* audio = [NSDictionary dictionaryWithObject:response.json forKey:@"response"];
+            
+            NSDictionary *songs = [audio objectForKey:@"response"];
+            NSMutableArray *allTracks = [NSMutableArray array];
+            
+            for (NSDictionary *song in [songs objectForKey:@"items"]) {
+                Track *track = [self createTrackFromVkWithSong:song];
+                [allTracks addObject:track];
+            }
+            
+            tracks = [allTracks copy];
+            [caller performSelectorOnMainThread:@selector(renderTracks:) withObject:tracks waitUntilDone:NO];
+            
+        } errorBlock:^(NSError * error) {
+            if (error.code != VK_API_ERROR) {
+                [error.vkError.request repeat];
+            } else {
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Alert" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                [alert show];
+            }
+        }];
+    } else {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Alert" message:@"You're not authorized in vk" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+    }
     
-    [audioReq executeWithResultBlock:^(VKResponse * response) {
-        NSArray *tracks = nil;
-        NSDictionary* audio = [NSDictionary dictionaryWithObject:response.json forKey:@"response"];
-        
-        NSDictionary *songs = [audio objectForKey:@"response"];
-        NSMutableArray *allTracks = [NSMutableArray array];
-        
-        for (NSDictionary *song in [songs objectForKey:@"items"]) {
-            Track *track = [self createTrackFromVkWithSong:song];
-            [allTracks addObject:track];
-        }
-        
-        tracks = [allTracks copy];
-        [caller performSelectorOnMainThread:@selector(renderTracks:) withObject:tracks waitUntilDone:NO];
-        
-    } errorBlock:^(NSError * error) {
-        if (error.code != VK_API_ERROR) {
-            [error.vkError.request repeat];
-        } else {
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Alert" message:@"Vk request error" delegate:self cancelButtonTitle:@"" otherButtonTitles: nil];
-            [alert show];
-        }
-    }];
 }
 
 @end

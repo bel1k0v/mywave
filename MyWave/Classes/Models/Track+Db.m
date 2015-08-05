@@ -22,6 +22,8 @@
     if (![db open]) {
         NSLog(@"Connot open db");
     } else {
+        [db executeStatements:@"create table if not exists mp3 (id integer primary key, artist text, title text, duration integer, filename text)"];
+        
         FMResultSet *result = [db executeQuery:@"select id, artist, title, duration, filename from mp3 order by id desc limit 200"];
         
         while ([result next]) {

@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 MyWave. All rights reserved.
 //
 
-#import "NavigationController.h"
 #import "MainViewController.h"
 #import "DeviceMusicViewController.h"
 #import "VkontakteMusicViewController.h"
@@ -91,8 +90,9 @@ static NSString *selectorStringFormat = @"_%@MusicControlPressed:";
 }
 
 - (void)_changeViewController:(UIViewController *)controller {
-    NavigationController *navigationController = [NavigationController new];
+    UINavigationController *navigationController = [UINavigationController new];
     [navigationController setViewControllers:@[controller]];
+    [navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     self.sidePanelController.centerPanel = navigationController;
 }
 
