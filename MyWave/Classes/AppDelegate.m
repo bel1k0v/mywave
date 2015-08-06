@@ -24,6 +24,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.cache  = [[NSCache alloc]init];
     
     MainViewController *mainViewController = [MainViewController new];
     DeviceMusicViewController *musicViewController = [DeviceMusicViewController new];
@@ -44,7 +45,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveTestNotification:)
-                                                 name:@"TestNotification"
+                                                 name:@"LeavePlayerControllerNotification"
                                                object:nil];
     
     if ([[UIDevice currentDevice].systemVersion floatValue] > 6.1f) {
@@ -86,8 +87,8 @@
 
 - (void) receiveTestNotification:(NSNotification *) notification
 {
-    if ([[notification name] isEqualToString:@"TestNotification"]) {
-        NSLog (@"Successfully received the test notification! %@", notification.object);
+    if ([[notification name] isEqualToString:@"LeavePlayerControllerNotification"]) {
+       // NSLog (@"Successfully received the test notification! %@", notification.object);
         self.currentTrack = notification.object;
     }
 }

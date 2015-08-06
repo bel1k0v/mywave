@@ -15,6 +15,7 @@
 @class SidePanelController;
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
+@property (strong, nonatomic) NSCache *cache;
 @property (strong, nonatomic) Track *currentTrack;
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) SidePanelController *viewController;

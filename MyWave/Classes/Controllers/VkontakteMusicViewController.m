@@ -40,21 +40,15 @@ static NSArray  * SCOPE = nil;
 
 - (void)viewDidAppear:(BOOL)animated {
     SCOPE = @[VK_PER_FRIENDS, VK_PER_WALL, VK_PER_AUDIO, VK_PER_PHOTOS, VK_PER_NOHTTPS, VK_PER_EMAIL, VK_PER_MESSAGES];
-    [super viewDidAppear:animated];
+    
     [VKSdk initializeWithDelegate:self andAppId:@"3585088"];
     
-    if ([VKSdk isLoggedIn] && [VKSdk wakeUpSession:SCOPE])
+    if (![VKSdk wakeUpSession])
     {
-        //Start working
-        NSLog(@"Wake up");
-    } else {
         [self authorize];
     }
-}
-
-- (void) viewDidLoad {
-    [super viewDidLoad];
     
+    [super viewDidAppear:animated];
     [Track vkontakteTracks:self];
 }
 

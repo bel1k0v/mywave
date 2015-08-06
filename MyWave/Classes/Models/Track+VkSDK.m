@@ -6,6 +6,7 @@
 //
 //
 
+#import "AppDelegate.h"
 #import "Track+VkSDK.h"
 
 @implementation Track (VkSDK)
@@ -42,22 +43,36 @@
     }];
 }
 
-+ (void) vkontakteTracks:(id)caller {
++ (NSCache *) cache {
+    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    NSCache *cache = app.cache;
     
-    if ([VKSdk isLoggedIn]) {
+    return cache;
+}
+
++ (void) vkontakteTracks:(id)caller {
+    __block NSMutableArray *allTracks = [NSMutableArray array];
+    __block NSArray *tracks = nil;
+    __block NSCache *cache = [self cache];
+    
+    if ([cache objectForKey:@"user.audio"] != nil) {
+        allTracks = (NSMutableArray *)[cache objectForKey:@"user.audio"];
+        tracks = [allTracks copy];
+        [caller performSelectorOnMainThread:@selector(renderTracks:) withObject:tracks waitUntilDone:NO];
+    } else {
         VKRequest * audioReq = [VKApi requestWithMethod:@"audio.get" andParameters:@{} andHttpMethod:@"GET"];
         
         [audioReq executeWithResultBlock:^(VKResponse * response) {
-            NSArray *tracks = nil;
-            NSDictionary* audio = [NSDictionary dictionaryWithObject:response.json forKey:@"response"];
             
+            NSDictionary* audio = [NSDictionary dictionaryWithObject:response.json forKey:@"response"];
             NSDictionary *songs = [audio objectForKey:@"response"];
-            NSMutableArray *allTracks = [NSMutableArray array];
             
             for (NSDictionary *song in [songs objectForKey:@"items"]) {
                 Track *track = [self createTrackFromVkWithSong:song];
                 [allTracks addObject:track];
             }
+            
+            [cache setObject:allTracks forKey:@"user.audio"];
             
             tracks = [allTracks copy];
             [caller performSelectorOnMainThread:@selector(renderTracks:) withObject:tracks waitUntilDone:NO];
@@ -70,11 +85,7 @@
                 [alert show];
             }
         }];
-    } else {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Alert" message:@"You're not authorized in vk" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-        [alert show];
     }
-    
 }
 
 @end

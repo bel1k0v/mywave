@@ -60,7 +60,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 - (void)loadView {
     UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
-    view.backgroundColor = UIColorFromRGB(0xE5E5E5);
+    view.backgroundColor = UIColorFromRGB(0xF4F4F4);
     CGFloat topPoint = 74.0;
     if ([[UIDevice currentDevice].systemVersion floatValue] < 7.0f) {
         topPoint = 24.0;
@@ -202,7 +202,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
                                             [$elf->_cover setImage:image];
                                         }
                                         failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                            NSLog(@"%@", error);
+                                            NSLog(@"Cover load error: %@", error);
                  }];
              }
          }
@@ -223,7 +223,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 
 - (void)_cancelStreamer {
     if (_streamer != nil) {
-        NSLog(@"Streamer is not null, playing %@", _streamer);
+        //NSLog(@"Streamer is not null, playing %@", _streamer);
         [_streamer pause];
         [_streamer removeObserver:self forKeyPath:@"status"];
         [_streamer removeObserver:self forKeyPath:@"duration"];
@@ -416,7 +416,7 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
  - (void)viewWillDisappear:(BOOL)animated {
     
      [[NSNotificationCenter defaultCenter]
-      postNotificationName:@"TestNotification"
+      postNotificationName:@"LeavePlayerControllerNotification"
       object:self.tracks[self.currentTrackIndex]];
      
      [super viewWillDisappear:animated];

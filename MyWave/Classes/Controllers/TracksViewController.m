@@ -22,6 +22,7 @@
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
+        self.tableView.backgroundColor = UIColorFromRGB(0xF4F4F4);
         [self initSearch];
     }
     return self;
@@ -70,7 +71,7 @@
     if (cell == nil) {
         cell = [[TrackCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-    cell.backgroundColor = UIColorFromRGB(0xE5E5E5);
+    cell.backgroundColor = UIColorFromRGB(0xF4F4F4);
     
     Track *track = [self->tracks objectAtIndex:indexPath.row];
     if (tableView == self.searchDisplayController.searchResultsTableView) {
