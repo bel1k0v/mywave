@@ -7,8 +7,8 @@
 //
 
 #import "AppDelegate.h"
-#import "MainViewController.h"
-#import "DeviceMusicViewController.h"
+#import "LeftViewController.h"
+#import "VkontakteMusicViewController.h"
 #import "AppHelper.h"
 #import "VKSdk.h"
 
@@ -26,15 +26,15 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.cache  = [[NSCache alloc]init];
     
-    MainViewController *mainViewController = [MainViewController new];
-    DeviceMusicViewController *musicViewController = [DeviceMusicViewController new];
+    LeftViewController *leftViewController = [LeftViewController new];
+    VkontakteMusicViewController *musicViewController = [VkontakteMusicViewController new];
     UINavigationController *navigationController = [UINavigationController new];
     [navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     [navigationController setViewControllers:@[musicViewController] animated:YES];
     
     self.viewController = [SidePanelController new];
     self.viewController.shouldDelegateAutorotateToVisiblePanel = NO;
-    self.viewController.leftPanel = mainViewController;
+    self.viewController.leftPanel   = leftViewController;
     self.viewController.centerPanel = navigationController;
     
     [application setStatusBarHidden:NO];
@@ -58,19 +58,6 @@
         [[UINavigationBar appearance] setTitleTextAttributes: textAttributes];
         [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:0.0033f green:0.0033f blue:0.0033f alpha:1.0f]];
     }
-    else
-    { // 6.1, 6.0
-//        self.navigationBar.tintColor = [UIColor colorWithRed:0.0902f green:0.6941f blue:0.9647f alpha:1.0f];
-        // Customize the title text for *all* UINavigationBars
-//        [[UINavigationBar appearance] setTitleTextAttributes:
-//         [NSDictionary dictionaryWithObjectsAndKeys:
-//          [UIColor whiteColor],
-//          UITextAttributeTextColor,
-//          [UIFont fontWithName:BaseFont size:BaseFontSizeHeader],
-//          UITextAttributeFont,
-//          nil]];
-    }
-    
     
     NSDictionary *barButtorTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                              [UIColor whiteColor],
@@ -88,7 +75,6 @@
 - (void) receiveTestNotification:(NSNotification *) notification
 {
     if ([[notification name] isEqualToString:@"LeavePlayerControllerNotification"]) {
-       // NSLog (@"Successfully received the test notification! %@", notification.object);
         self.currentTrack = notification.object;
     }
 }

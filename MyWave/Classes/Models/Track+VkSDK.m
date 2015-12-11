@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "Track+VkSDK.h"
 
+static NSString const* VK_AUDIO_CACHE_KEY = @"user.audio";
+
 @implementation Track (VkSDK)
 
 + (void) vkontakteTracksForSearchString:(NSString *)q andCaller:(id)caller {
@@ -55,8 +57,8 @@
     __block NSArray *tracks = nil;
     __block NSCache *cache = [self cache];
     
-    if ([cache objectForKey:@"user.audio"] != nil) {
-        allTracks = (NSMutableArray *)[cache objectForKey:@"user.audio"];
+    if ([cache objectForKey:VK_AUDIO_CACHE_KEY] != nil) {
+        allTracks = (NSMutableArray *)[cache objectForKey:VK_AUDIO_CACHE_KEY];
         tracks = [allTracks copy];
         [caller performSelectorOnMainThread:@selector(renderTracks:) withObject:tracks waitUntilDone:NO];
     } else {
@@ -72,7 +74,7 @@
                 [allTracks addObject:track];
             }
             
-            [cache setObject:allTracks forKey:@"user.audio"];
+            [cache setObject:allTracks forKey:VK_AUDIO_CACHE_KEY];
             
             tracks = [allTracks copy];
             [caller performSelectorOnMainThread:@selector(renderTracks:) withObject:tracks waitUntilDone:NO];

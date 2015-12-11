@@ -15,6 +15,7 @@
 		683F31F018B61D1500D37C05 /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 683F31EF18B61D1500D37C05 /* NSString+HTML.m */; };
 		6843C7211B696A6A001644F5 /* Track+VkSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 6843C7201B696A6A001644F5 /* Track+VkSDK.m */; };
 		6843C7271B6A3CA9001644F5 /* Track+Db.m in Sources */ = {isa = PBXBuildFile; fileRef = 6843C7261B6A3CA9001644F5 /* Track+Db.m */; };
+		6855E7BF1C1AE7BC00B53101 /* LeftViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6855E7BE1C1AE7BC00B53101 /* LeftViewController.m */; };
 		68695FA918E94D100033E3E1 /* AppHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 68695FA818E94D100033E3E1 /* AppHelper.m */; };
 		68695FAC18E956470033E3E1 /* SidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68695FAB18E956470033E3E1 /* SidePanelController.m */; };
 		68695FAF18E981880033E3E1 /* TracksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68695FAE18E981880033E3E1 /* TracksViewController.m */; };
@@ -28,7 +29,6 @@
 		68787E7018278A1800FC3FFF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68787E6F18278A1800FC3FFF /* MobileCoreServices.framework */; };
 		68787EAC1827A7BF00FC3FFF /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 68787EAB1827A7BF00FC3FFF /* libsqlite3.0.dylib */; };
 		68787EE21828368600FC3FFF /* DeviceMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EE11828368600FC3FFF /* DeviceMusicViewController.m */; };
-		68787EE5182836AE00FC3FFF /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EE4182836AE00FC3FFF /* MainViewController.m */; };
 		68787EE81828373700FC3FFF /* VkontakteMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68787EE71828373700FC3FFF /* VkontakteMusicViewController.m */; };
 		688453C6172182260092260B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 688453C5172182260092260B /* UIKit.framework */; };
 		688453C8172182260092260B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 688453C7172182260092260B /* Foundation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -58,6 +58,8 @@
 		6843C7201B696A6A001644F5 /* Track+VkSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Track+VkSDK.m"; sourceTree = "<group>"; };
 		6843C7251B6A3CA9001644F5 /* Track+Db.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Track+Db.h"; sourceTree = "<group>"; };
 		6843C7261B6A3CA9001644F5 /* Track+Db.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Track+Db.m"; sourceTree = "<group>"; };
+		6855E7BD1C1AE7BC00B53101 /* LeftViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftViewController.h; sourceTree = "<group>"; };
+		6855E7BE1C1AE7BC00B53101 /* LeftViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftViewController.m; sourceTree = "<group>"; };
 		68695FA718E94D100033E3E1 /* AppHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppHelper.h; sourceTree = "<group>"; };
 		68695FA818E94D100033E3E1 /* AppHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppHelper.m; sourceTree = "<group>"; };
 		68695FAA18E956470033E3E1 /* SidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidePanelController.h; sourceTree = "<group>"; };
@@ -76,8 +78,6 @@
 		68787EAB1827A7BF00FC3FFF /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		68787EE01828368600FC3FFF /* DeviceMusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceMusicViewController.h; sourceTree = "<group>"; };
 		68787EE11828368600FC3FFF /* DeviceMusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceMusicViewController.m; sourceTree = "<group>"; };
-		68787EE3182836AE00FC3FFF /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
-		68787EE4182836AE00FC3FFF /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		68787EE61828373700FC3FFF /* VkontakteMusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VkontakteMusicViewController.h; sourceTree = "<group>"; };
 		68787EE71828373700FC3FFF /* VkontakteMusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VkontakteMusicViewController.m; sourceTree = "<group>"; };
 		688453C2172182260092260B /* MyWave.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyWave.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -164,8 +164,6 @@
 			children = (
 				68787EE61828373700FC3FFF /* VkontakteMusicViewController.h */,
 				68787EE71828373700FC3FFF /* VkontakteMusicViewController.m */,
-				68787EE3182836AE00FC3FFF /* MainViewController.h */,
-				68787EE4182836AE00FC3FFF /* MainViewController.m */,
 				68787EE01828368600FC3FFF /* DeviceMusicViewController.h */,
 				68787EE11828368600FC3FFF /* DeviceMusicViewController.m */,
 				68787D8D1826533700FC3FFF /* PlayerViewController.h */,
@@ -174,6 +172,8 @@
 				68695FAB18E956470033E3E1 /* SidePanelController.m */,
 				68695FAD18E981880033E3E1 /* TracksViewController.h */,
 				68695FAE18E981880033E3E1 /* TracksViewController.m */,
+				6855E7BD1C1AE7BC00B53101 /* LeftViewController.h */,
+				6855E7BE1C1AE7BC00B53101 /* LeftViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -386,8 +386,8 @@
 				683F31F018B61D1500D37C05 /* NSString+HTML.m in Sources */,
 				683F31E718B2ACBE00D37C05 /* Track.m in Sources */,
 				68787EE81828373700FC3FFF /* VkontakteMusicViewController.m in Sources */,
-				68787EE5182836AE00FC3FFF /* MainViewController.m in Sources */,
 				68787EE21828368600FC3FFF /* DeviceMusicViewController.m in Sources */,
+				6855E7BF1C1AE7BC00B53101 /* LeftViewController.m in Sources */,
 				68787D901826533700FC3FFF /* PlayerViewController.m in Sources */,
 				68695FA918E94D100033E3E1 /* AppHelper.m in Sources */,
 				6843C7271B6A3CA9001644F5 /* Track+Db.m in Sources */,
@@ -425,7 +425,8 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Dmitrij Belikov (JE7G9NW569)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
+				"CODE_SIGN_RESOURCE_RULES_PATH[sdk=*]" = "";
+				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -477,17 +478,19 @@
 			baseConfigurationReference = 12664B1E6CE25BC801028659 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CODE_SIGN_ENTITLEMENTS = MyWave/MyWave.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_RESOURCE_RULES_PATH[sdk=*]" = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyWave/MyWave-Prefix.pch";
 				INFOPLIST_FILE = "MyWave/MyWave-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = MyWave;
 				PROVISIONING_PROFILE = "D549A6F8-8370-4625-AF20-F3F4A5183335";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -497,17 +500,19 @@
 			baseConfigurationReference = E2DDFCEDA0B464876B7E6FD9 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CODE_SIGN_ENTITLEMENTS = MyWave/MyWave.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_RESOURCE_RULES_PATH[sdk=*]" = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyWave/MyWave-Prefix.pch";
 				INFOPLIST_FILE = "MyWave/MyWave-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = MyWave;
 				PROVISIONING_PROFILE = "D0C3F640-A4DE-478A-857C-9BE4858E250A";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

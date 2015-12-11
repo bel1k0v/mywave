@@ -129,7 +129,7 @@
         AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
         
         NSString    *filepath = [[AppHelper filesDir] stringByAppendingPathComponent:filename];
-        //NSLog(@"filepath %@", filepath);
+        NSLog(@"filepath %@", filepath);
         operation.outputStream = [NSOutputStream outputStreamToFileAtPath:filepath append:NO];
         [operation setDownloadProgressBlock:progressBlock];
         
