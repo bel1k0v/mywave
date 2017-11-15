@@ -287,6 +287,7 @@
 				688453BF172182260092260B /* Frameworks */,
 				688453C0172182260092260B /* Resources */,
 				C463BA2761FA41F283B9E662 /* Copy Pods Resources */,
+				A15C809628BD9C5DE66D127E /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -303,7 +304,7 @@
 		688453BA172182250092260B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					688453C1172182260092260B = {
@@ -341,6 +342,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		A15C809628BD9C5DE66D127E /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		C463BA2761FA41F283B9E662 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -427,6 +443,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				"CODE_SIGN_RESOURCE_RULES_PATH[sdk=*]" = "";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -438,7 +455,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "D549A6F8-8370-4625-AF20-F3F4A5183335";
 				SDKROOT = iphoneos;
@@ -465,7 +482,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "D0C3F640-A4DE-478A-857C-9BE4858E250A";
 				SDKROOT = iphoneos;
@@ -486,8 +503,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyWave/MyWave-Prefix.pch";
 				INFOPLIST_FILE = "MyWave/MyWave-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dmitrij.app.MyWave;
 				PRODUCT_NAME = MyWave;
 				PROVISIONING_PROFILE = "D549A6F8-8370-4625-AF20-F3F4A5183335";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -508,8 +526,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyWave/MyWave-Prefix.pch";
 				INFOPLIST_FILE = "MyWave/MyWave-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dmitrij.app.MyWave;
 				PRODUCT_NAME = MyWave;
 				PROVISIONING_PROFILE = "D0C3F640-A4DE-478A-857C-9BE4858E250A";
 				TARGETED_DEVICE_FAMILY = 1;

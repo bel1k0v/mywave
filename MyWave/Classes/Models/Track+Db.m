@@ -129,12 +129,11 @@
         AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
         
         NSString    *filepath = [[AppHelper filesDir] stringByAppendingPathComponent:filename];
-        NSLog(@"filepath %@", filepath);
+
         operation.outputStream = [NSOutputStream outputStreamToFileAtPath:filepath append:NO];
         [operation setDownloadProgressBlock:progressBlock];
         
         [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            //NSLog(@"%@", responseObject);
             
             if ([self save:filename]) {
                 UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ok"
@@ -153,7 +152,6 @@
             }
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             [self deleteFile];
-            //NSLog(@"Error");
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error"
                                                             message:@"Please try again later"
                                                            delegate:nil

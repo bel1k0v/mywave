@@ -12,5 +12,7 @@
 
 + (NSArray *) saved;
 - (BOOL) deleteRec;
+- (BOOL) isSaved;
+- (BOOL) save;
 - (void) downloadWithProgressBlock:(void (^)(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead))progressBlock;
 @end

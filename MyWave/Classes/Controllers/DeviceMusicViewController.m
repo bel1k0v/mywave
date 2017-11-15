@@ -30,13 +30,6 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) { // Delete track
         Track *track = [self->tracks objectAtIndex:indexPath.row];
-
-        if (tableView == self.searchDisplayController.searchResultsTableView) {
-            track = [searchData objectAtIndex:indexPath.row];
-            [searchData removeObject:track];
-        } else {
-            [self->tracks removeObject:track];
-        }
         
         [track deleteFile];
         [track deleteRec];
@@ -58,19 +51,6 @@
     [set addObjectsFromArray:byArtits];
     
     searchData = [NSMutableArray arrayWithArray:[set allObjects]];
-}
-
-#pragma mark - Search display delegate
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
-    [self filterContentForSearchText:searchString scope:
-     [[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:[self.searchDisplayController.searchBar selectedScopeButtonIndex]]];
-    return YES;
-}
-
--(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption {
-    [self filterContentForSearchText:self.searchDisplayController.searchBar.text scope:
-     [[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:searchOption]];
-    return YES;
 }
 
 @end

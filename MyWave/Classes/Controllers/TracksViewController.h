@@ -8,17 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TracksViewController : UITableViewController<UISearchBarDelegate, UISearchDisplayDelegate>
+@interface TracksViewController : UITableViewController<UISearchBarDelegate, UISearchResultsUpdating>
 {
     @public
     NSMutableArray *tracks;
     @protected
     NSMutableArray *searchData;
-    UISearchBar *searchBar;
-    UISearchDisplayController *searchDisplayController;
 }
 
-- (void) initSearch;
 - (BOOL) isTracksRemote;
 
 @end

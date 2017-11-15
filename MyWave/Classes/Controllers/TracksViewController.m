@@ -13,55 +13,65 @@
 #import "Track.h"
 #import "AppHelper.h"
 
-@interface TracksViewController ()
-
+@interface TracksViewController () <UISearchBarDelegate, UISearchResultsUpdating>
+@property (nonatomic, strong) UISearchController *searchController;
 @end
 
 @implementation TracksViewController
 
-- (id)initWithStyle:(UITableViewStyle)style {
-    self = [super initWithStyle:style];
-    if (self) {
-        self.tableView.backgroundColor = UIColorFromRGB(0xF4F4F4);
-        [self initSearch];
-    }
-    return self;
-}
-
-- (void)initSearch {
-    searchData = [NSMutableArray arrayWithCapacity:[self->tracks count]];
-    searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-    
-    searchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:searchBar
-                                                                contentsController:self];
-    searchDisplayController.delegate = self;
-    searchDisplayController.searchResultsDelegate = self;
-    searchDisplayController.searchResultsDataSource = self;
-    
-    self.tableView.tableHeaderView = searchBar;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"Tracks";
+    self.tableView.backgroundColor = UIColorFromRGB(0xF4F4F4);
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    self.searchController.searchResultsUpdater = self;
+    self.searchController.dimsBackgroundDuringPresentation = NO;
+    self.searchController.searchBar.delegate = self;
+    
+    self.tableView.tableHeaderView = self.searchController.searchBar;
+    self.definesPresentationContext = YES;
+    [self.searchController.searchBar sizeToFit];
+}
+
+#pragma mark -
+#pragma mark === UISearchBarDelegate ===
+#pragma mark -
+
+- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope
+{
+    [self updateSearchResultsForSearchController:self.searchController];
+}
+
+#pragma mark -
+#pragma mark === UISearchResultsUpdating ===
+#pragma mark -
+
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
+{
+    NSString *searchString = searchController.searchBar.text;
+    [self searchForText:searchString];
+    [self.tableView reloadData];
+}
+
+- (void)searchForText:(NSString *)searchText
+{
+    NSLog(@"Search %@", searchText);
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
+#pragma mark -
 #pragma mark - Table view data source
+#pragma mark -
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (tableView == self.searchDisplayController.searchResultsTableView) {
-        return [searchData count];
-    } else {
-        return [self->tracks count];
-    }
+    return [self->tracks count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

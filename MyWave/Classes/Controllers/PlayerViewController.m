@@ -57,130 +57,6 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
 
 @implementation PlayerViewController
 
-//- (void)viewDidLoad {
-//    self.view.backgroundColor = UIColorFromRGB(0xF4F4F4);
-//    CGFloat topPoint = 74.0;
-//    if ([[UIDevice currentDevice].systemVersion floatValue] < 7.0f) {
-//        topPoint = 24.0;
-//    }
-//    _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, topPoint, CGRectGetWidth([self.view bounds]) - 40, 20.0)];
-//    [_titleLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeLead]];
-//    [_titleLabel setTextColor:UIColorFromRGB(0x333333)];
-//    [_titleLabel setTextAlignment:NSTextAlignmentCenter];
-//    [_titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
-//    [self.view addSubview:_titleLabel];
-//    
-//    _artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_titleLabel frame]) + 4.0, CGRectGetWidth([self.view bounds]) - 40, 20.0)];
-//    [_artistLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeDefault]];
-//    [_artistLabel setTextColor:UIColorFromRGB(0x666666)];
-//    [_artistLabel setTextAlignment:NSTextAlignmentCenter];
-//    [_artistLabel setLineBreakMode:NSLineBreakByTruncatingTail];
-//    [self.view addSubview:_artistLabel];
-//    
-//    _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(50.0, CGRectGetMaxY([_artistLabel frame]) + 8.0, CGRectGetWidth([self.view bounds]) - 100.0, 20.0)];
-//    [_progressSlider addTarget:self action:@selector(_actionSliderProgress:) forControlEvents:UIControlEventValueChanged];
-//    [self.view addSubview:_progressSlider];
-//    
-//    _cover = [[UIImageView alloc]initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_progressSlider frame])+10.0, CGRectGetWidth([self.view bounds]) - 40.0, CGRectGetWidth([self.view bounds]) - 40.0)];
-//    [self.view addSubview:_cover];
-//    
-//    _currentTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMinY([_progressSlider frame]), 30.0, 20.0)];
-//    [_currentTimeLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeExtraSmall]];
-//    [_currentTimeLabel setTextColor:UIColorFromRGB(0xA5A5A5)];
-//    [_currentTimeLabel setTextAlignment:NSTextAlignmentLeft];
-//    [_currentTimeLabel setLineBreakMode:NSLineBreakByTruncatingTail];
-//    [self.view addSubview:_currentTimeLabel];
-//    
-//    _elapsedTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth([self.view bounds]) - 50.0, CGRectGetMinY([_progressSlider frame]), 30.0, 20.0)];
-//    [_elapsedTimeLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeExtraSmall]];
-//    [_elapsedTimeLabel setTextColor:UIColorFromRGB(0xA5A5A5)];
-//    [_elapsedTimeLabel setTextAlignment:NSTextAlignmentRight];
-//    [_elapsedTimeLabel setLineBreakMode:NSLineBreakByTruncatingTail];
-//    [self.view addSubview:_elapsedTimeLabel];
-//    
-//    _volumeSlider = [[UISlider alloc] initWithFrame:CGRectMake(50.0f, CGRectGetMaxY([self.view bounds]) - 120.0f, CGRectGetWidth([self.view bounds]) - 100.0, 20.0)];
-//    [_volumeSlider addTarget:self action:@selector(_actionSliderVolume:) forControlEvents:UIControlEventValueChanged];
-//    [self.view addSubview:_volumeSlider];
-//    
-//    _imageVolumeLow = [[UIImageView alloc]initWithFrame:CGRectMake(20.0, CGRectGetMinY([_volumeSlider frame]), 18.0, 22.0)];
-//    [_imageVolumeLow setImage:[UIImage imageNamed:@"mw_speakers_4"]];
-//    [self.view addSubview:_imageVolumeLow];
-//    
-//    _imageVolumeHigh = [[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetWidth([self.view bounds]) - 38.0, CGRectGetMinY([_volumeSlider frame]), 18.0, 22.0)];
-//    [_imageVolumeHigh setImage:[UIImage imageNamed:@"mw_speakers_5"]];
-//    [self.view addSubview:_imageVolumeHigh];
-//    
-//    CGFloat visStart = CGRectGetMaxY([_volumeSlider frame]) + 10.0f;
-//    CGFloat visHeight = CGRectGetHeight([self.view bounds]) - visStart;
-//    
-//    if ([[UIDevice currentDevice].systemVersion floatValue] < 7.0f) {
-//        visHeight = visHeight - 66.0;
-//        [_titleLabel setBackgroundColor:[UIColor clearColor]];
-//        [_artistLabel setBackgroundColor:[UIColor clearColor]];
-//        [_statusLabel setBackgroundColor:[UIColor clearColor]];
-//        [_currentTimeLabel setBackgroundColor:[UIColor clearColor]];
-//        [_elapsedTimeLabel setBackgroundColor:[UIColor clearColor]];
-//    }
-//    
-//    _buttonPlayPause = [UIButton buttonWithType:UIButtonTypeSystem];
-//    [_buttonPlayPause setFrame:CGRectMake(CGRectGetWidth([self.view bounds]) / 2 - 20.0f, CGRectGetHeight([self.view bounds]) - 90.0f, 40.0f, 40.0f)];
-//    [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"mw_play_5"] forState:UIControlStateNormal];
-//    [_buttonPlayPause addTarget:self action:@selector(_actionPlayPause:) forControlEvents:UIControlEventTouchDown];
-//    [self.view addSubview:_buttonPlayPause];
-//    
-//    _buttonNext = [UIButton buttonWithType:UIButtonTypeSystem];
-//    [_buttonNext setFrame:CGRectMake(CGRectGetWidth([self.view bounds]) - 70.0, CGRectGetMinY([_buttonPlayPause frame]), 40.0, 40.0)];
-//    [_buttonNext setBackgroundImage:[UIImage imageNamed:@"mw_forward_4"] forState:UIControlStateNormal];
-//    [_buttonNext addTarget:self action:@selector(_actionNext:) forControlEvents:UIControlEventTouchDown];
-//    [self.view addSubview:_buttonNext];
-//    
-//    _buttonPrevious = [UIButton buttonWithType:UIButtonTypeSystem];
-//    [_buttonPrevious setFrame:CGRectMake(30, CGRectGetMinY([_buttonPlayPause frame]), 40.0, 40.0)];
-//    [_buttonPrevious setBackgroundImage:[UIImage imageNamed:@"mw_rewind_4"] forState:UIControlStateNormal];
-//    [_buttonPrevious addTarget:self action:@selector(_actionPrevious:) forControlEvents:UIControlEventTouchDown];
-//    [self.view addSubview:_buttonPrevious];
-//    
-//    _statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, CGRectGetMaxY([_buttonNext frame]) + 8.0, CGRectGetWidth([self.view bounds]) - 40, 20.0)];
-//    [_statusLabel setFont:[UIFont fontWithName:BaseFont size:BaseFontSizeSmall]];
-//    [_statusLabel setTextColor:UIColorFromRGB(0x333333)];
-//    [_statusLabel setTextAlignment:NSTextAlignmentCenter];
-//    [_statusLabel setLineBreakMode:NSLineBreakByTruncatingTail];
-//    [self.view addSubview:_statusLabel];
-//    
-//    _buttonRepeat = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [_buttonRepeat setFrame:CGRectMake(20, CGRectGetMinY([_statusLabel frame]), 20.0, 20.0)];
-//    [_buttonRepeat setBackgroundImage:[UIImage imageNamed:@"mw_repeat_on_4"] forState:UIControlStateNormal];
-//    [_buttonRepeat setBackgroundImage:[UIImage imageNamed:@"mw_repeat_on_4"] forState:UIControlStateSelected];
-//    [_buttonRepeat addTarget:self action:@selector(_actionToggle:) forControlEvents:UIControlEventTouchDown];
-//    [self.view addSubview:_buttonRepeat];
-//    
-//    _buttonShuffle = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [_buttonShuffle setFrame:CGRectMake(CGRectGetWidth([self.view bounds]) - 45.0, CGRectGetMinY([_statusLabel frame]), 20.0, 20.0)];
-//    [_buttonShuffle setBackgroundImage:[UIImage imageNamed:@"mw_shuffle_off_5"] forState:UIControlStateNormal];
-//    [_buttonShuffle setBackgroundImage:[UIImage imageNamed:@"mw_shuffle_off_5"] forState:UIControlStateSelected];
-//    [_buttonShuffle addTarget:self action:@selector(_actionToggle:) forControlEvents:UIControlEventTouchDown];
-//    [self.view addSubview:_buttonShuffle];
-//    
-//    if (self.tracksFromRemote == YES) {
-//        _buttonDownload = [UIButton buttonWithType:UIButtonTypeCustom];
-//        [_buttonDownload setFrame:CGRectMake(CGRectGetWidth([self.view bounds]) - 85.0, CGRectGetMinY([_statusLabel frame]), 20.0, 20.0)];
-//        [_buttonDownload setBackgroundImage:[UIImage imageNamed:@"mw_download_5"] forState:UIControlStateNormal];
-//        [_buttonDownload addTarget:self action:@selector(_actionDownload:) forControlEvents:UIControlEventTouchDown];
-//        [self.view addSubview:_buttonDownload];
-//    }
-//    
-//    [[UISlider appearance] setMaximumTrackTintColor:UIColorFromRGB(0xA5A5A5)];
-//    [[UISlider appearance] setMinimumTrackTintColor:UIColorFromRGB(0x333333)];
-//    [[UISlider appearance] setThumbImage:[UIImage imageNamed:@"slider-dot"]
-//                                forState:UIControlStateNormal];
-//    [[UISlider appearance] setThumbImage:[UIImage imageNamed:@"slider-dot"]
-//                                forState:UIControlStateSelected];
-//    
-//    UIImage *logo = [UIImage imageNamed: @"logo3"];
-//    UIImageView *logoView = [[UIImageView alloc] initWithImage: logo];
-//    self.navigationItem.titleView = logoView;
-//    [super viewDidLoad];
-//}
 - (void)loadView {
     UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
@@ -250,19 +126,19 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     
     _buttonPlayPause = [UIButton buttonWithType:UIButtonTypeSystem];
     [_buttonPlayPause setFrame:CGRectMake(CGRectGetWidth([view bounds]) / 2 - 20.0f, CGRectGetHeight([view bounds]) - 90.0f, 40.0f, 40.0f)];
-    [_buttonPlayPause setBackgroundImage:[UIImage imageNamed:@"mw_play_5"] forState:UIControlStateNormal];
+    [_buttonPlayPause setTitle:@"play/pause" forState:UIControlStateNormal];
     [_buttonPlayPause addTarget:self action:@selector(_actionPlayPause:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonPlayPause];
     
     _buttonNext = [UIButton buttonWithType:UIButtonTypeSystem];
     [_buttonNext setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 70.0, CGRectGetMinY([_buttonPlayPause frame]), 40.0, 40.0)];
-    [_buttonNext setBackgroundImage:[UIImage imageNamed:@"mw_forward_4"] forState:UIControlStateNormal];
+    [_buttonNext setTitle:@"next"forState:UIControlStateNormal];
     [_buttonNext addTarget:self action:@selector(_actionNext:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonNext];
     
     _buttonPrevious = [UIButton buttonWithType:UIButtonTypeSystem];
     [_buttonPrevious setFrame:CGRectMake(30, CGRectGetMinY([_buttonPlayPause frame]), 40.0, 40.0)];
-    [_buttonPrevious setBackgroundImage:[UIImage imageNamed:@"mw_rewind_4"] forState:UIControlStateNormal];
+    [_buttonPrevious setTitle:@"prev" forState:UIControlStateNormal];
     [_buttonPrevious addTarget:self action:@selector(_actionPrevious:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonPrevious];
     
@@ -275,36 +151,29 @@ static void *kBufferingRatioKVOKey = &kBufferingRatioKVOKey;
     
     _buttonRepeat = [UIButton buttonWithType:UIButtonTypeCustom];
     [_buttonRepeat setFrame:CGRectMake(20, CGRectGetMinY([_statusLabel frame]), 20.0, 20.0)];
-    [_buttonRepeat setBackgroundImage:[UIImage imageNamed:@"mw_repeat_on_4"] forState:UIControlStateNormal];
-    [_buttonRepeat setBackgroundImage:[UIImage imageNamed:@"mw_repeat_on_4"] forState:UIControlStateSelected];
+    [_buttonRepeat setTitle:@"repeat" forState:UIControlStateNormal];
+    [_buttonRepeat setTitle:@"repeated" forState:UIControlStateSelected];
     [_buttonRepeat addTarget:self action:@selector(_actionToggle:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonRepeat];
     
     _buttonShuffle = [UIButton buttonWithType:UIButtonTypeCustom];
     [_buttonShuffle setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 45.0, CGRectGetMinY([_statusLabel frame]), 20.0, 20.0)];
-    [_buttonShuffle setBackgroundImage:[UIImage imageNamed:@"mw_shuffle_off_5"] forState:UIControlStateNormal];
-    [_buttonShuffle setBackgroundImage:[UIImage imageNamed:@"mw_shuffle_off_5"] forState:UIControlStateSelected];
+    [_buttonShuffle setTitle:@"shuffle" forState:UIControlStateNormal];
+    [_buttonShuffle setTitle:@"shuffled" forState:UIControlStateSelected];
     [_buttonShuffle addTarget:self action:@selector(_actionToggle:) forControlEvents:UIControlEventTouchDown];
     [view addSubview:_buttonShuffle];
     
     if (self.tracksFromRemote == YES) {
         _buttonDownload = [UIButton buttonWithType:UIButtonTypeCustom];
         [_buttonDownload setFrame:CGRectMake(CGRectGetWidth([view bounds]) - 85.0, CGRectGetMinY([_statusLabel frame]), 20.0, 20.0)];
-        [_buttonDownload setBackgroundImage:[UIImage imageNamed:@"mw_download_5"] forState:UIControlStateNormal];
+        [_buttonDownload setTitle:@"download" forState:UIControlStateNormal];
         [_buttonDownload addTarget:self action:@selector(_actionDownload:) forControlEvents:UIControlEventTouchDown];
         [view addSubview:_buttonDownload];
     }
 
     [[UISlider appearance] setMaximumTrackTintColor:UIColorFromRGB(0xA5A5A5)];
     [[UISlider appearance] setMinimumTrackTintColor:UIColorFromRGB(0x333333)];
-    [[UISlider appearance] setThumbImage:[UIImage imageNamed:@"slider-dot"]
-                                forState:UIControlStateNormal];
-    [[UISlider appearance] setThumbImage:[UIImage imageNamed:@"slider-dot"]
-                                forState:UIControlStateSelected];
-    
-    UIImage *logo = [UIImage imageNamed: @"logo3"];
-    UIImageView *logoView = [[UIImageView alloc] initWithImage: logo];
-    self.navigationItem.titleView = logoView;
+
     [self setView:view];
 }
 

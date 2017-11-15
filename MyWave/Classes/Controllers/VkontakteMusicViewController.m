@@ -9,6 +9,7 @@
 #import "VkontakteMusicViewController.h"
 #import "NSString+Gender.h"
 #import "Track+VkSDK.h"
+#import "Track+Db.h"
 #import "AppHelper.h"
 
 #define MinSearchLength 2
@@ -17,9 +18,52 @@
 //static NSString *const TOKEN_KEY = @"my_application_access_token";
 static NSArray  * SCOPE = nil;
 
+
 @implementation VkontakteMusicViewController {
 }
 
+- (void)_actionDownloadAll:(id)sender {
+
+    NSMutableArray *dowloadedTracks = [NSMutableArray new];
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    queue.maxConcurrentOperationCount = 4;
+    
+    NSBlockOperation *completionOperation = [NSBlockOperation blockOperationWithBlock:^{
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            for (Track* track in dowloadedTracks)
+            {
+                [track save];
+            }
+            NSLog(@"Complete dowloading");
+        }];
+    }];
+    
+    for (Track* track in tracks)
+    {
+        if ([track isSaved] == NO) {
+            NSURL            *url = track.audioFileURL;
+            NSString        *name = [NSString stringWithFormat:@"%@ - %@", track.artist, track.title];
+            NSString    *filename = [[AppHelper filesDir] stringByAppendingPathComponent:[name stringByAppendingString:@".mp3"]];
+            
+            NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
+                NSData       *data = [NSData dataWithContentsOfURL:url];
+                [data writeToFile:filename atomically:YES];
+            }];
+            [completionOperation addDependency:operation];
+            [dowloadedTracks addObject:track];
+        }
+        
+    }
+    
+    [queue addOperations:completionOperation.dependencies waitUntilFinished:NO];
+    [queue addOperation:completionOperation];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"All" style:UIBarButtonItemStylePlain target:self action:@selector(_actionDownloadAll:)];
+    self.navigationItem.rightBarButtonItem = rightBarButtonItem;
+}
 - (void) authorize {
     [VKSdk authorize:SCOPE revokeAccess:YES];
 }
