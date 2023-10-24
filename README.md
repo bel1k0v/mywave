@@ -1,6 +1,5 @@
 My Wave
 =======
+Music application
 
- - play remote songs
- - search songs
- - save songs on device
+Not supported.
